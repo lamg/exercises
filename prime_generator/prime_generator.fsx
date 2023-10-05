@@ -1,21 +1,21 @@
 open System.Collections.Generic
 
-let calculatePrimes (primeList: List<bool>) (stop: int) =
-    for i in primeList.Count .. stop do
-        primeList.Add true
+let calculatePrimes (cp: List<bool>) (stop: int) =
+    for i in cp.Count .. stop do
+        cp.Add true
 
-    for i in primeList.Count .. (int (sqrt (float stop))) do
-        if primeList.[i] then
+    for i in cp.Count .. (int (sqrt (float stop))) do
+        if cp.[i] then
             for j in i * i .. i .. stop do
-                primeList.[j] <- false
+                cp.[j] <- false
 
-let primes (primeList: List<bool>) start stop =
+let primes (cp: List<bool>) start stop =
     seq {
         for i in start..stop do
-            if i >= primeList.Count then
-                calculatePrimes primeList stop
+            if i >= cp.Count then
+                calculatePrimes cp stop
 
-            if primeList.[i] then
+            if cp.[i] then
                 yield i
     }
 
@@ -27,14 +27,16 @@ let readInts () =
         | _ -> failwith "invalid input"
 
 let printInts = Seq.iter (printfn "%d")
+let mutable cp = List<bool>()
 
-let mutable primeList = List<bool>()
-primeList.Add false
-primeList.Add false
+// cp holds a list of calculated values
+// Seq.forall (fun i -> cp[i] = isPrime i) {0..cp.Count-1}
+cp.Add false // 0 is not prime
+cp.Add false // 1 is not prime
 
 let cases = stdin.ReadLine() |> int
 
 { 1..cases }
 |> Seq.iter (fun _ ->
-    readInts () ||> primes primeList |> printInts
+    readInts () ||> primes cp |> printInts
     printfn "")
