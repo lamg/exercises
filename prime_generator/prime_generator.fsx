@@ -1,6 +1,4 @@
-open System.Collections.Generic
-
-let calculatePrimes (cp: List<bool>) (stop: int) =
+let calculatePrimes (cp: ResizeArray<bool>) (stop: int) =
     for i in cp.Count .. stop do
         cp.Add true
 
@@ -9,7 +7,7 @@ let calculatePrimes (cp: List<bool>) (stop: int) =
             for j in i * i .. i .. stop do
                 cp.[j] <- false
 
-let primes (cp: List<bool>) start stop =
+let primes (cp: ResizeArray<bool>) start stop =
     seq {
         for i in start..stop do
             if i >= cp.Count then
@@ -27,7 +25,7 @@ let readInts () =
         | _ -> failwith "invalid input"
 
 let printInts = Seq.iter (printfn "%d")
-let mutable cp = List<bool>()
+let mutable cp = ResizeArray<bool> ()
 
 // cp holds a list of calculated values
 // Seq.forall (fun i -> cp[i] = isPrime i) {0..cp.Count-1}
