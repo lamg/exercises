@@ -17,3 +17,4 @@ structure Point where
 #check ({ x := 10, y := 20 }:Point)
 
 #check Nat -> Nat
+
