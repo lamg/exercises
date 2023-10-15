@@ -1,10 +1,13 @@
+let sqrt (n: int) = n |> float |> sqrt |> System.Math.Ceiling |> int
+
 let calculatePrimes (cp: ResizeArray<bool>) (stop: int) =
+    let start = cp.Count
     for i in cp.Count .. stop do
         cp.Add true
 
-    for i in cp.Count .. (int (sqrt (float stop))) do
+    for i in 2 .. sqrt stop do
         if cp.[i] then
-            for j in i * i .. i .. stop do
+            for j in start .. i .. stop do
                 cp.[j] <- false
 
 let primes (cp: ResizeArray<bool>) start stop =
