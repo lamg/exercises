@@ -1,3 +1,4 @@
 *.output.txt
 .vscode
 .idea
+primes.txt
