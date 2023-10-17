@@ -22,26 +22,19 @@ let contains (t: 'a BinaryTree) (x: 'a) =
 let insert (t: 'a BinaryTree) (x: 'a) =
     let rec loop t =
         match t with
-        | Leaf y ->
-            if x.CompareTo y < 0 then
-                Node
-                    { value = y
-                      left = Leaf x
-                      right = Leaf y }
-            elif x.CompareTo y > 0 then
-                Node
-                    { value = y
-                      left = Leaf y
-                      right = Leaf x }
-            else
-                t
-        | Node { value = y; left = l; right = r } ->
-            if x.CompareTo y < 0 then
-                Node { value = y; left = loop l; right = r }
-            elif x.CompareTo y > 0 then
-                Node { value = y; left = l; right = loop r }
-            else
-                t
+        | Leaf y when x.CompareTo y < 0 ->
+            Node
+                { value = y
+                  left = Leaf x
+                  right = Leaf y }
+        | Leaf y when x.CompareTo y > 0 ->
+            Node
+                { value = y
+                  left = Leaf y
+                  right = Leaf x }
+        | Node({ value = y; left = l } as n) when x.CompareTo y < 0 -> Node { n with left = loop l }
+        | Node({ value = y; right = r } as n) when x.CompareTo y > 0 -> Node { n with right = loop r }
+        | _ -> t
 
     loop t
 
