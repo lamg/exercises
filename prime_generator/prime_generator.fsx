@@ -1,31 +1,42 @@
+// if searching for prime factors we don't find any before its square root
+// then is not possible that its prime factors are greater than its square root
+// because at least it needs two and the multiplication of two numbers greater than its square root
+// is greater than the number itself
 let sqrt (n: int) = n |> float |> sqrt |> System.Math.Ceiling |> int
 
-let mutable cp = ResizeArray<bool> ()
+// cv holds a list of calculated values
+// Seq.forall (fun i -> cv[i] = isPrime i) {0..cv.Count-1}
+// 0 is not prime
+// 1 is not prime
 
-// cp holds a list of calculated values
-// Seq.forall (fun i -> cp[i] = isPrime i) {0..cp.Count-1}
-cp.Add false // 0 is not prime
-cp.Add false // 1 is not prime
+let mutable cv = Array.init 2 (fun _ -> false)
 
-let calculatePrimes (cp: ResizeArray<bool>) (stop: int) =
-    let start = cp.Count
-    for i in cp.Count .. stop do
-        cp.Add true
+let foreachPrime f start stop =
+    let rec loop i =
+        if i <= stop then
+            if cv[i] then
+                f i
+            loop (i + 1)
+    loop (max 2 start)
 
-    for i in 2 .. sqrt stop do
-        if cp.[i] then
-            for j in i * i .. i .. stop do
-                cp.[j] <- false
+let iter start step stop f =
+    let rec loop i =
+        if i <= stop then
+            f i
+            loop (i + step)
+    loop start
 
-let primes (cp: ResizeArray<bool>) start stop =
-    seq {
-        for i in start..stop do
-            if i >= cp.Count then
-                calculatePrimes cp stop
+let calculatePrimes (stop: int) =
+    let cv' = (Array.init (stop - cv.Length + 1) (fun _ -> true))
+    cv <- Array.append cv cv'
 
-            if cp.[i] then
-                yield i
-    }
+    let markMultiples p = iter (p*p) p stop (fun i -> cv[i] <- false)
+    foreachPrime markMultiples 2 (sqrt stop)
+
+let primes start stop =
+    if stop > cv.Length then
+        calculatePrimes stop
+    foreachPrime (printfn "%d") start stop
 
 let readInts () =
     stdin.ReadLine().Split([| ' ' |], 2)
@@ -34,11 +45,12 @@ let readInts () =
         | [| m; n |] -> (m, n)
         | _ -> failwith "invalid input"
 
-let printInts = Seq.iter (printfn "%d")
 
 let cases = stdin.ReadLine() |> int
 
 { 1..cases }
 |> Seq.iter (fun _ ->
-    readInts () ||> primes cp |> printInts
+    readInts () ||> primes
     printfn "")
+
+// primes 2 100
