@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Check if the script file was passed as an argument
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <script.fsx>"
+    exit 1
+fi
+
+# Set the script file path
+script_file=$(realpath "$1")
+base_file=$(basename "$script_file")
+working_dir=$(dirname "$script_file")
+
+# Set the Docker image name
+image_name="mcr.microsoft.com/dotnet/sdk:8.0"
+
+# Run the script in a Docker container
+docker run --rm -v "$working_dir:/scripts" "$image_name" dotnet fsi "/scripts/$base_file"
