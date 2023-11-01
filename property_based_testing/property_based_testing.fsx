@@ -22,6 +22,8 @@ type Database =
 // 1 for each repost there is a corresponding post
 // 2 for each post there's a corresponding author
 
+// this works like a server processing requests and inserting them in 
+// a database with the desired properties
 let serve (db: Database) (xs: Request seq) =
     let prop0 (o: OriginalPost) (p: Post) = o.id = p.id
     let prop1 (r: Repost) (p: Post) = r.id = p.id
