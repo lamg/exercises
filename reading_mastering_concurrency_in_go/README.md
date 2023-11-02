@@ -1,0 +1,1 @@
+Reading [Mastering Concurrency in Go](https://www.amazon.com/Mastering-Concurrency-Go-Nathan-Kozyra/dp/1783983485)
