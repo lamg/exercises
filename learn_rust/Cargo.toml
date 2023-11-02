@@ -1,0 +1,10 @@
+[package]
+name = "learnrust"
+version = "0.1.0"
+authors = ["Luis Ángel Méndez Gort <gort.andres000@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.4.0"
