@@ -1,0 +1,4 @@
+(library
+ (name convff)
+ (libraries core yojson ppx_yojson_conv_lib)
+ (preprocess (pps ppx_deriving.show ppx_deriving.eq ppx_yojson_conv)))
