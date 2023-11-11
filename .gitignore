@@ -3,6 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+test_dir/
 *.sqlite3
 *.session.sql
 primes.txt
@@ -487,3 +488,4 @@ $RECYCLE.BIN/
 *.lnk
 .gitsecret/keys/random_seed
 !*.secret
+aot_test/README.md
