@@ -1,4 +1,4 @@
-﻿namespace problems;
+﻿namespace Problems;
 
 public partial class Problems
 {
