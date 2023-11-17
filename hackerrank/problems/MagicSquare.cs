@@ -2,7 +2,6 @@
 
 public partial class Problems
 {
-
     public static List<Tuple<int, int>> Combinations(List<int> set)
     {
         var combinations = new List<Tuple<int, int>>();
@@ -13,6 +12,7 @@ public partial class Problems
                 combinations.Add(Tuple.Create(set[i], set[j]));
             }
         }
+
         return combinations;
     }
 
@@ -22,6 +22,7 @@ public partial class Problems
         {
             return new List<List<T>> { xs };
         }
+
         var permutations = new List<List<T>>();
         for (var i = 0; i < xs.Count; i++)
         {
@@ -34,6 +35,7 @@ public partial class Problems
                 permutations.Add(z);
             });
         }
+
         return permutations;
     }
 
@@ -45,15 +47,18 @@ public partial class Problems
         {
             sum += xss[i][i];
         }
+
         var sum2 = 0;
         for (var i = 0; i < n; i++)
         {
             sum2 += xss[i][n - i - 1];
         }
+
         if (sum != sum2)
         {
             return false;
         }
+
         for (var i = 0; i < n; i++)
         {
             var sum3 = 0;
@@ -61,11 +66,13 @@ public partial class Problems
             {
                 sum3 += xss[i][j];
             }
+
             if (sum3 != sum)
             {
                 return false;
             }
         }
+
         for (var i = 0; i < n; i++)
         {
             var sum3 = 0;
@@ -73,17 +80,19 @@ public partial class Problems
             {
                 sum3 += xss[j][i];
             }
+
             if (sum3 != sum)
             {
                 return false;
             }
         }
+
         return true;
     }
 
     public static List<List<int>> CreateSquare(List<int> xs)
     {
-        List<List<int>> square = new List<List<int>>{new() {0, 0, 0}, new() {0, 5, 0}, new() {0, 0, 0}};
+        List<List<int>> square = new List<List<int>> { new() { 0, 0, 0 }, new() { 0, 5, 0 }, new() { 0, 0, 0 } };
         var n = 0;
         for (var i = 0; i < square.Count; i++)
         {
@@ -95,7 +104,6 @@ public partial class Problems
                     n++;
                 }
             }
-
         }
 
         return square;
@@ -111,12 +119,13 @@ public partial class Problems
                 cost += Math.Abs(xs[i][j] - ys[i][j]);
             }
         }
+
         return cost;
     }
 
     public static int MagicSquare(List<List<int>> xss)
     {
-        var permutations = Permutations(new List<int>{1, 2, 3, 4, 6, 7, 8, 9});
+        var permutations = Permutations(new List<int> { 1, 2, 3, 4, 6, 7, 8, 9 });
         var squares = permutations.Select(CreateSquare).Where(IsMagicSquare).ToList();
         var minCost = squares.Select(square => TransformationCost(xss, square)).ToList().Min();
         return minCost;
