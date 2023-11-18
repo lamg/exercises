@@ -18,24 +18,27 @@ public partial class Problems
 
     public static List<int> acmTeam(List<string> topic)
     {
-        var max = 0;
-        var total = 0;
+        // the idea here is to find all the combinations of team members
+        // for each combination, calculate the number of topics they know
+        // keep track of the maximum number of topics and the number of teams that know that many topics
+        var maxTopics = 0; // maximum number of topics known by a team
+        var teams = 0; // number of teams that know the maximum number of topics
         for (var i = 0; i < topic.Count; i++)
         {
             for (var j = i + 1; j < topic.Count; j++)
             {
                 var count = GetTopicCount(topic[i], topic[j]);
-                if (count > max)
+                if (count > maxTopics)
                 {
-                    max = count;
-                    total = 1;
+                    maxTopics = count;
+                    teams = 1;
                 }
-                else if (count == max)
+                else if (count == maxTopics)
                 {
-                    total++;
+                    teams++;
                 }
             }
         }
-        return new List<int> { max, total };
+        return new List<int> { maxTopics, teams };
     }
 }
