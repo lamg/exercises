@@ -68,4 +68,12 @@ public class ProblemsTest
         //     Console.WriteLine();
         // }
     }
+
+    [Fact]
+    public void CountQueensAttackTest()
+    {
+        List<List<int>> obstacles = [];
+        var r = Problems.CountQueensAttack(4, 4, 4, obstacles);
+        Assert.Equal(9, r);
+    }
 }
