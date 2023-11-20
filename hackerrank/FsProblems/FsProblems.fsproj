@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RootNamespace>Problems</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="4HelloWorld.fs" />
+        <Compile Include="RepeatSX.fs" />
+    </ItemGroup>
+
+</Project>
