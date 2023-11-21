@@ -4,7 +4,8 @@ let readInt () =
   stdin.ReadLine() |> Option.ofObj |> Option.map int
 
 let read () =
-  let delimiter = stdin.ReadLine() |> intlet mutable x = readInt ()
+  let delimiter = stdin.ReadLine() |> int
+  let mutable x = readInt ()
 
   while x.IsSome do
     if x.Value < delimiter then
