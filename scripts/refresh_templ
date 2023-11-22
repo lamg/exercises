@@ -1,0 +1,5 @@
+#!/usr/bin/fish
+
+dotnet build -c Release
+dotnet new uninstall wybe.dev.templates
+dotnet new install bin/Release/wybe.dev.templates.1.0.0.nupkg

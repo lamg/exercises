@@ -1,9 +1,6 @@
 #!/bin/bash
 
-dotnet publish -c release --self-contained --runtime linux-x64
-DEST=$HOME/.local/bin/$1
-if [ -f $DEST ]; then
-    rm $DEST
-fi
-
-ln -s $PWD/bin/release/net8.0/linux-x64/publish/$1 $DEST
+dotnet publish -c Release
+dotnet pack
+dotnet tool uninstall -g $1
+dotnet tool install -g $1 --add-source nupkg
