@@ -44,7 +44,7 @@ let propInsertTx () =
         use tx = conn.BeginTransaction()
         let cmd = conn.CreateCommand()
         let! name = Gen.string (Range.linear 0 100) Gen.alpha
-        cmd.CommandText <- $"BEGIN; INSERT INTO users (name) VALUES ('{name}'); COMMIT;"
+        cmd.CommandText <- $"INSERT INTO users (name) VALUES ('{name}')"
         cmd.ExecuteNonQuery() |> ignore
         tx.Commit() |> ignore
         cmd.CommandText <- "SELECT COUNT(*) FROM users"
