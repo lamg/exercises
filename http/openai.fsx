@@ -6,7 +6,13 @@ open OpenAI.ObjectModels
 open OpenAI.ObjectModels.RequestModels
 
 dotenv.net.DotEnv.Load()
-let token = System.Environment.GetEnvironmentVariable("openai_key")
+
+let token =
+    System.Environment.GetEnvironmentVariable "openai_key"
+    |> Option.ofObj
+    |> function
+        | Some x -> x
+        | None -> failwith "environment variable openai_key not found"
 
 let service = new OpenAIService(OpenAI.OpenAiOptions(ApiKey = token))
 
