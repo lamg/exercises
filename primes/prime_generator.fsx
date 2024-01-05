@@ -2,7 +2,8 @@
 // then is not possible that its prime factors are greater than its square root
 // because at least it needs two and the multiplication of two numbers greater than its square root
 // is greater than the number itself
-let sqrt (n: int) = n |> float |> sqrt |> System.Math.Ceiling |> int
+let sqrt (n: int) =
+    n |> float |> sqrt |> System.Math.Ceiling |> int
 
 // cv holds a list of calculated values
 // Seq.forall (fun i -> cv[i] = isPrime i) {0..cv.Count-1}
@@ -16,7 +17,9 @@ let foreachPrime f start stop =
         if i <= stop then
             if cv[i] then
                 f i
+
             loop (i + 1)
+
     loop (max 2 start)
 
 let iter start step stop f =
@@ -24,18 +27,22 @@ let iter start step stop f =
         if i <= stop then
             f i
             loop (i + step)
+
     loop start
 
 let calculatePrimes (stop: int) =
     let cv' = (Array.init (stop - cv.Length + 1) (fun _ -> true))
     cv <- Array.append cv cv'
 
-    let markMultiples p = iter (p*p) p stop (fun i -> cv[i] <- false)
+    let markMultiples p =
+        iter (p * p) p stop (fun i -> cv[i] <- false)
+
     foreachPrime markMultiples 2 (sqrt stop)
 
 let primes start stop =
     if stop > cv.Length then
         calculatePrimes stop
+
     foreachPrime (printfn "%d") start stop
 
 let readInts () =

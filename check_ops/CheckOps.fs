@@ -9,15 +9,15 @@
 open FSharp.Analyzers.SDK
 
 let analyzer (ctx: CliContext) : Async<Message list> =
-        async {
-            return
-                [ { Type = "CheckOps analyzer"
-                    Message = "Forbidden operations are used in this file"
-                    Code = "CO001"
-                    Severity = Error
-                    Range = FSharp.Compiler.Text.Range.Zero
-                    Fixes = [] } ]
-        }
+  async {
+    return
+      [ { Type = "CheckOps analyzer"
+          Message = "Forbidden operations are used in this file"
+          Code = "CO001"
+          Severity = Error
+          Range = FSharp.Compiler.Text.Range.Zero
+          Fixes = [] } ]
+  }
 
 [<CliAnalyzer "CheckOps">]
 let main: Analyzer<CliContext> = analyzer

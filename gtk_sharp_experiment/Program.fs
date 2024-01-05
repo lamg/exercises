@@ -2,14 +2,16 @@
 
 [<EntryPoint>]
 let main argv =
-    Application.Init()
+  Application.Init()
 
-    let app = new Application("org.gtk_sharp_experiment.gtk_sharp_experiment", GLib.ApplicationFlags.None)
-    app.Register(GLib.Cancellable.Current) |> ignore;
+  let app =
+    new Application("org.gtk_sharp_experiment.gtk_sharp_experiment", GLib.ApplicationFlags.None)
 
-    let win = new Main.MainWindow()
-    app.AddWindow(win)
+  app.Register(GLib.Cancellable.Current) |> ignore
 
-    win.Show()
-    Application.Run()
-    0
+  let win = new Main.MainWindow()
+  app.AddWindow(win)
+
+  win.Show()
+  Application.Run()
+  0
