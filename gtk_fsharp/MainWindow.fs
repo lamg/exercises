@@ -2,14 +2,14 @@ module Main
 
 open Gtk
 
-type MainWindow (builder: Builder, baseBuilder: nativeint) =
+type MainWindow (baseBuilder: nativeint) =
   inherit Window(baseBuilder)
 
 let newMainWindow () =
   let builder = new Builder("MainWindow.glade")
-  let window = builder.GetRawOwnedObject("MainWindow")
+  let window = builder.GetRawOwnedObject "MainWindow"
   
-  let m = new MainWindow(builder, window)
+  let m = new MainWindow( window)
   builder.Autoconnect m
   m.DeleteEvent.Add (fun _ -> Application.Quit())
   
