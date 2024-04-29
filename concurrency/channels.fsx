@@ -8,11 +8,11 @@ let c = Channel.CreateUnbounded<string>()
 // between each other
 List.init 10 (fun n -> $"{n}")
 |> List.map (fun x ->
-    async {
-        let v = c.Writer.WriteAsync x
-        do! Async.Sleep 1000
-        return! v.AsTask() |> Async.AwaitTask
-    })
+  async {
+    let v = c.Writer.WriteAsync x
+    do! Async.Sleep 1000
+    return! v.AsTask() |> Async.AwaitTask
+  })
 |> Async.Sequential
 |> Async.Ignore
 |> Async.Start
@@ -23,14 +23,16 @@ List.init 10 (fun n -> $"{n}")
 let mutable next = true
 
 while next do
-    let tks = new CancellationTokenSource(TimeSpan.FromSeconds 2)
-    let v = c.Reader.ReadAsync tks.Token
-    printf "waiting … "
+  let tks = new CancellationTokenSource(TimeSpan.FromSeconds 2)
+  let v = c.Reader.ReadAsync tks.Token
+  printf "waiting … "
 
-    try
-        let r = v.AsTask() |> Async.AwaitTask |> Async.RunSynchronously
-        printfn $"got {r}"
-    with :? Tasks.TaskCanceledException ->
-        next <- false
+  try
+    let r = v.AsTask() |> Async.AwaitTask |> Async.RunSynchronously
+    printfn $"got {r}"
+
+  //tks.Cancel()
+  with :? Tasks.TaskCanceledException ->
+    next <- false
 
 printfn "finished"

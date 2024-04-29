@@ -2,10 +2,10 @@
 // for example, minFree [0..10] = 11, minFree [0;1;3] = 2
 
 let minFree (xs: int seq) =
-    let naturalNumbers = Seq.initInfinite id
-    let notInXs n = not (Seq.contains n xs)
-    let gaps = Seq.filter notInXs naturalNumbers
-    Seq.head gaps
+  let naturalNumbers = Seq.initInfinite id
+  let notInXs n = not (Seq.contains n xs)
+  let gaps = Seq.filter notInXs naturalNumbers
+  Seq.head gaps
 
 // minFree works by finding the difference between a sequence that
 // has all natural numbers and one that can contain gaps between natural numbers.

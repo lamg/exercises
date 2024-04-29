@@ -8,18 +8,18 @@ cp.Add false // 1 is not prime
 // a number cannot have two prime factors greater than its square root
 // if none has found before its square root then is not possible there are prime factors beyond it
 let sqrt (n: int) =
-    n |> float |> sqrt |> System.Math.Ceiling |> int
+  n |> float |> sqrt |> System.Math.Ceiling |> int
 
 let calculatePrimes (cp: ResizeArray<bool>) (stop: int) =
-    let start = cp.Count
+  let start = cp.Count
 
-    for i in start..stop do
-        cp.Add true
+  for i in start..stop do
+    cp.Add true
 
-    for i in 2 .. sqrt stop do
-        if cp[i] then
-            for j in i * i .. i .. stop do
-                cp[j] <- false
+  for i in 2 .. sqrt stop do
+    if cp[i] then
+      for j in i * i .. i .. stop do
+        cp[j] <- false
 
 calculatePrimes cp 98
 printfn "Primes up to 100:"
