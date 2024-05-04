@@ -38,7 +38,7 @@ for i in { 0 .. answer.Length + 1 } do
     if i >= answer.Length then
       agent.Post Stop
     else
-      let! segment = agent.PostAndAsyncReply(AnswerSegment, timeout = 10000)
+      let! segment = agent.PostAndTryAsyncReply(AnswerSegment, timeout = 10000)
       printfn $"segment = {segment}"
   }
   |> Async.RunSynchronously
