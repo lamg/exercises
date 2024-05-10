@@ -1,0 +1,32 @@
+%{
+    open Lib
+%}
+
+%start start
+
+%token TRUE
+%token FALSE
+
+%token AND
+%token OR
+%token IMPLIES
+%token FOLLOWS
+%token EQUIVALES
+%token DIFFERS
+%token NOT
+
+%token EOF
+
+%type <Boolean option> start
+
+%%
+
+start: prog { $1 }
+
+prog:
+    | EOF { None }
+    | expr { Some $1 }
+
+expr:
+    | TRUE { True }
+    | FALSE { False }
