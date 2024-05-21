@@ -1,4 +1,4 @@
-#r "nuget: Betalgo.OpenAI, 7.4.1"
+#r "nuget: Betalgo.OpenAI, 8.2.2"
 #r "nuget: dotenv.net,3.1.3"
 
 open OpenAI.Managers
@@ -25,8 +25,8 @@ let req =
     User = "user-1234"
   )
 
-req.Model <- "dall-e-3"
-req.Quality <- "hd"
+req.Model <- Models.Dall_e_3
+req.Quality <- StaticValues.ImageStatics.Quality.Hd
 
 let resp =
   service.Image.CreateImage req |> Async.AwaitTask |> Async.RunSynchronously
