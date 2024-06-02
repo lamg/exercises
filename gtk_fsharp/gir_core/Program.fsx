@@ -1,4 +1,6 @@
-﻿open System
+﻿#r "nuget: GirCore.Gtk-4.0,0.5.0"
+
+open System
 open Gtk
 
 let label () =
@@ -35,10 +37,6 @@ let onActivateApp (sender: Gio.Application) (_: EventArgs) =
   window.SetChild(box ())
   window.Show()
 
-[<EntryPoint>]
-let main _ =
-  let application = Application.New("org.gir.core", Gio.ApplicationFlags.FlagsNone)
-
-  application.add_OnActivate (new GObject.SignalHandler<Gio.Application>(onActivateApp))
-
-  application.RunWithSynchronizationContext(null)
+let application = Application.New("org.gir.core", Gio.ApplicationFlags.FlagsNone)
+application.add_OnActivate (new GObject.SignalHandler<Gio.Application>(onActivateApp))
+application.RunWithSynchronizationContext(null)
