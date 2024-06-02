@@ -1,4 +1,5 @@
-﻿open Gtk
+﻿open System
+open Gtk
 
 let label () =
   let label = new Label()
@@ -10,7 +11,7 @@ let button (label: Label) =
   button.SetLabel "click me"
   let mutable counter = 0
 
-  let clickHnd (_: Button) (_: System.EventArgs) =
+  let clickHnd (_: Button) (_: EventArgs) =
     label.SetText $"hello {counter}"
     counter <- counter + 1
 
@@ -27,7 +28,7 @@ let box () =
   button l |> box.Append
   box
 
-let handler (sender: Gio.Application) (_: System.EventArgs) =
+let onActivateApp (sender: Gio.Application) (_: EventArgs) =
   let window = ApplicationWindow.New(sender :?> Application)
   window.Title <- "Gtk4 Window"
   window.SetDefaultSize(300, 300)
@@ -38,6 +39,6 @@ let handler (sender: Gio.Application) (_: System.EventArgs) =
 let main _ =
   let application = Application.New("org.gir.core", Gio.ApplicationFlags.FlagsNone)
 
-  application.add_OnActivate (new GObject.SignalHandler<Gio.Application>(handler))
+  application.add_OnActivate (new GObject.SignalHandler<Gio.Application>(onActivateApp))
 
   application.RunWithSynchronizationContext(null)
