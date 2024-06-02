@@ -2,6 +2,8 @@
 module Parser
 type token = 
   | EOF
+  | RIGHT_PAREN
+  | LEFT_PAREN
   | NOT
   | DIFFERS
   | EQUIVALES
@@ -9,10 +11,13 @@ type token =
   | IMPLIES
   | OR
   | AND
+  | VAR of (string)
   | FALSE
   | TRUE
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_RIGHT_PAREN
+    | TOKEN_LEFT_PAREN
     | TOKEN_NOT
     | TOKEN_DIFFERS
     | TOKEN_EQUIVALES
@@ -20,6 +25,7 @@ type tokenId =
     | TOKEN_IMPLIES
     | TOKEN_OR
     | TOKEN_AND
+    | TOKEN_VAR
     | TOKEN_FALSE
     | TOKEN_TRUE
     | TOKEN_end_of_input
@@ -40,4 +46,4 @@ val prodIdxToNonTerminal: int -> nonTerminalId
 
 /// This function gets the name of a token as a string
 val token_to_string: token -> string
-val start : (FSharp.Text.Lexing.LexBuffer<'cty> -> token) -> FSharp.Text.Lexing.LexBuffer<'cty> -> (Boolean option) 
+val start : (FSharp.Text.Lexing.LexBuffer<'cty> -> token) -> FSharp.Text.Lexing.LexBuffer<'cty> -> (Predicate option) 

@@ -19,6 +19,13 @@ type Image =
     revised_prompt: string option
     b64_json: string option }
 
+type DalleResponse = {created: int; data: Image list}
+
+type Base64Png = string
+let storeBase64Png (file:string) (content: Base64Png) =
+  let bs = System.Convert.FromBase64String content
+  System.IO.File.WriteAllBytes(file,bs)
+
 http {
   POST "https://api.openai.com/v1/images/generations"
   AuthorizationBearer token
@@ -27,19 +34,22 @@ http {
 
   jsonSerialize
     {| model = "dall-e-3"
-       prompt = "Logo for blog Structured Programming in F#"
+       prompt = "Logo with complex but structured maze. Background suggests the form of a hedgehog. Shades of purple and violet"
        n = 1
        size = "1024x1024"
        quality = "hd"
-       //response_format = "b64_json"
-       response_format = "url" |}
+       //response_format = "url" 
+       response_format = "b64_json" |}
 }
 |> Request.send
-|> Response.print
-|> printfn "%s"
-// |> Response.expectHttpStatusCode HttpStatusCode.OK
-// |> function
-//   | Ok r ->
-//     let img = Response.deserializeJson<Image>
-//     printfn $"Success: {img}"
-//   | Error e -> printfn "Error: %A" e
+//|> Response.print
+//|> printfn "%s"
+|> Response.expectHttpStatusCode HttpStatusCode.OK
+|> function
+  | Ok r ->
+    match Response.deserializeJson<DalleResponse> r with
+    | {data = [{b64_json = Some content }]} ->
+
+      storeBase64Png "logo.png" content
+    | img -> printfn $"No b64_json in {img}"
+  | Error e -> printfn "Error: %A" e

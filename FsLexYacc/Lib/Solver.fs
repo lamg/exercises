@@ -1,5 +1,5 @@
 module Solver
 
-open Lib
+open Predicate
 
-let solve (b: Boolean) = false
+let solve (b: Predicate) = false
