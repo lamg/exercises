@@ -1,0 +1,1286 @@
+warning: debug option `bin/release/net8.0/source' unknown; try LD_DEBUG=help
+     54659:	find library=libpthread.so.0 [0]; searching
+     54659:	 search path=/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/netcoredeps/glibc-hwcaps/x86-64-v3:/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/netcoredeps/glibc-hwcaps/x86-64-v2:/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/netcoredeps		(RUNPATH from file bin/release/net8.0/source)
+     54659:	  trying file=/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/netcoredeps/glibc-hwcaps/x86-64-v3/libpthread.so.0
+     54659:	  trying file=/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/netcoredeps/glibc-hwcaps/x86-64-v2/libpthread.so.0
+     54659:	  trying file=/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/netcoredeps/libpthread.so.0
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpthread.so.0
+     54659:	
+     54659:	find library=libdl.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libdl.so.2
+     54659:	
+     54659:	find library=libstdc++.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libstdc++.so.6
+     54659:	
+     54659:	find library=libm.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libm.so.6
+     54659:	
+     54659:	find library=libgcc_s.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgcc_s.so.1
+     54659:	
+     54659:	find library=libc.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libc.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib64/ld-linux-x86-64.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libc.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgcc_s.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libm.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libstdc++.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libdl.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpthread.so.0
+     54659:	
+     54659:	
+     54659:	initialize program: bin/release/net8.0/source
+     54659:	
+     54659:	
+     54659:	transferring control: bin/release/net8.0/source
+     54659:	
+     54659:	
+     54659:	calling init: /home/lamg/Installers/dotnet/host/fxr/8.0.6/libhostfxr.so
+     54659:	
+     54659:	
+     54659:	calling init: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libhostpolicy.so
+     54659:	
+     54659:	find library=librt.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/librt.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/librt.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libcoreclr.so
+     54659:	
+     54659:	find library=liblttng-ust.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v3:/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v2:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v3:/usr/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v2:/usr/lib/x86_64-linux-gnu:/lib/glibc-hwcaps/x86-64-v3:/lib/glibc-hwcaps/x86-64-v2:/lib:/usr/lib/glibc-hwcaps/x86-64-v3:/usr/lib/glibc-hwcaps/x86-64-v2:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v3/liblttng-ust.so.0
+     54659:	  trying file=/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v2/liblttng-ust.so.0
+     54659:	  trying file=/lib/x86_64-linux-gnu/liblttng-ust.so.0
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v3/liblttng-ust.so.0
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v2/liblttng-ust.so.0
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/liblttng-ust.so.0
+     54659:	  trying file=/lib/glibc-hwcaps/x86-64-v3/liblttng-ust.so.0
+     54659:	  trying file=/lib/glibc-hwcaps/x86-64-v2/liblttng-ust.so.0
+     54659:	  trying file=/lib/liblttng-ust.so.0
+     54659:	  trying file=/usr/lib/glibc-hwcaps/x86-64-v3/liblttng-ust.so.0
+     54659:	  trying file=/usr/lib/glibc-hwcaps/x86-64-v2/liblttng-ust.so.0
+     54659:	  trying file=/usr/lib/liblttng-ust.so.0
+     54659:	
+     54659:	find library=liblttng-ust-tracepoint.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/liblttng-ust-tracepoint.so.0
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/liblttng-ust-tracepoint.so.0
+     54659:	  trying file=/lib/liblttng-ust-tracepoint.so.0
+     54659:	  trying file=/usr/lib/liblttng-ust-tracepoint.so.0
+     54659:	
+     54659:	find library=liblttng-ust-tracepoint.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/liblttng-ust-tracepoint.so.0
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/liblttng-ust-tracepoint.so.0
+     54659:	  trying file=/lib/liblttng-ust-tracepoint.so.0
+     54659:	  trying file=/usr/lib/liblttng-ust-tracepoint.so.0
+     54659:	
+     54659:	bin/release/net8.0/source: error: symbol lookup error: undefined symbol: DllMain (fatal)
+     54659:	/home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libcoreclr.so: error: symbol lookup error: undefined symbol: PAL_RegisterModule (fatal)
+     54659:	
+     54659:	calling init: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libclrjit.so
+     54659:	
+     54659:	/home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libclrjit.so: error: symbol lookup error: undefined symbol: DllMain (fatal)
+     54659:	bin/release/net8.0/source: error: symbol lookup error: undefined symbol: DllMain (fatal)
+     54659:	
+     54659:	calling init: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libSystem.Native.so
+     54659:	
+     54659:	find library=libgobject-2.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgobject-2.0.so.0
+     54659:	
+     54659:	find library=libglib-2.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libglib-2.0.so.0
+     54659:	
+     54659:	find library=libffi.so.8 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libffi.so.8
+     54659:	
+     54659:	find library=libpcre2-8.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpcre2-8.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpcre2-8.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libffi.so.8
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libglib-2.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgobject-2.0.so.0
+     54659:	
+     54659:	find library=libcairo-gobject.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libcairo-gobject.so.2
+     54659:	
+     54659:	find library=libcairo.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libcairo.so.2
+     54659:	
+     54659:	find library=libz.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libz.so.1
+     54659:	
+     54659:	find library=libpng16.so.16 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpng16.so.16
+     54659:	
+     54659:	find library=libfontconfig.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libfontconfig.so.1
+     54659:	
+     54659:	find library=libfreetype.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libfreetype.so.6
+     54659:	
+     54659:	find library=libX11.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libX11.so.6
+     54659:	
+     54659:	find library=libXext.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXext.so.6
+     54659:	
+     54659:	find library=libXrender.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXrender.so.1
+     54659:	
+     54659:	find library=libxcb.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libxcb.so.1
+     54659:	
+     54659:	find library=libxcb-render.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libxcb-render.so.0
+     54659:	
+     54659:	find library=libxcb-shm.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libxcb-shm.so.0
+     54659:	
+     54659:	find library=libpixman-1.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpixman-1.so.0
+     54659:	
+     54659:	find library=libexpat.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libexpat.so.1
+     54659:	
+     54659:	find library=libbz2.so.1.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libbz2.so.1.0
+     54659:	
+     54659:	find library=libbrotlidec.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libbrotlidec.so.1
+     54659:	
+     54659:	find library=libXau.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXau.so.6
+     54659:	
+     54659:	find library=libXdmcp.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXdmcp.so.6
+     54659:	
+     54659:	find library=libbrotlicommon.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libbrotlicommon.so.1
+     54659:	
+     54659:	find library=libbsd.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libbsd.so.0
+     54659:	
+     54659:	find library=libmd.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libmd.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libmd.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libbsd.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libbrotlicommon.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXdmcp.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXau.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libbrotlidec.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libbz2.so.1.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libexpat.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpixman-1.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libxcb.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libxcb-shm.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libxcb-render.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libX11.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXrender.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXext.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libz.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpng16.so.16
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libfreetype.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libfontconfig.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libcairo.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libcairo-gobject.so.2
+     54659:	
+     54659:	find library=libgio-2.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgio-2.0.so.0
+     54659:	
+     54659:	find library=libgmodule-2.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgmodule-2.0.so.0
+     54659:	
+     54659:	find library=libmount.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libmount.so.1
+     54659:	
+     54659:	find library=libselinux.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libselinux.so.1
+     54659:	
+     54659:	find library=libblkid.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libblkid.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libblkid.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libselinux.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libmount.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgmodule-2.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgio-2.0.so.0
+     54659:	
+     54659:	find library=libgdk_pixbuf-2.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0
+     54659:	
+     54659:	find library=libjpeg.so.8 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libjpeg.so.8
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libjpeg.so.8
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0
+     54659:	
+     54659:	find library=libharfbuzz.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libharfbuzz.so.0
+     54659:	
+     54659:	find library=libgraphite2.so.3 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgraphite2.so.3
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgraphite2.so.3
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libharfbuzz.so.0
+     54659:	
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_blob_get_type (fatal)
+     54659:	find library=libicuuc.so.85 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.85
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.85
+     54659:	  trying file=/lib/libicuuc.so.85
+     54659:	  trying file=/usr/lib/libicuuc.so.85
+     54659:	
+     54659:	find library=libicuuc.so.84 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.84
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.84
+     54659:	  trying file=/lib/libicuuc.so.84
+     54659:	  trying file=/usr/lib/libicuuc.so.84
+     54659:	
+     54659:	find library=libicuuc.so.83 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.83
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.83
+     54659:	  trying file=/lib/libicuuc.so.83
+     54659:	  trying file=/usr/lib/libicuuc.so.83
+     54659:	
+     54659:	find library=libicuuc.so.82 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.82
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.82
+     54659:	  trying file=/lib/libicuuc.so.82
+     54659:	  trying file=/usr/lib/libicuuc.so.82
+     54659:	
+     54659:	find library=libicuuc.so.81 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.81
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.81
+     54659:	  trying file=/lib/libicuuc.so.81
+     54659:	  trying file=/usr/lib/libicuuc.so.81
+     54659:	
+     54659:	find library=libicuuc.so.80 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.80
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.80
+     54659:	  trying file=/lib/libicuuc.so.80
+     54659:	  trying file=/usr/lib/libicuuc.so.80
+     54659:	
+     54659:	find library=libicuuc.so.79 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.79
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.79
+     54659:	  trying file=/lib/libicuuc.so.79
+     54659:	  trying file=/usr/lib/libicuuc.so.79
+     54659:	
+     54659:	find library=libicuuc.so.78 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.78
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.78
+     54659:	  trying file=/lib/libicuuc.so.78
+     54659:	  trying file=/usr/lib/libicuuc.so.78
+     54659:	
+     54659:	find library=libicuuc.so.77 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.77
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.77
+     54659:	  trying file=/lib/libicuuc.so.77
+     54659:	  trying file=/usr/lib/libicuuc.so.77
+     54659:	
+     54659:	find library=libicuuc.so.76 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.76
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.76
+     54659:	  trying file=/lib/libicuuc.so.76
+     54659:	  trying file=/usr/lib/libicuuc.so.76
+     54659:	
+     54659:	find library=libicuuc.so.75 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.75
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libicuuc.so.75
+     54659:	  trying file=/lib/libicuuc.so.75
+     54659:	  trying file=/usr/lib/libicuuc.so.75
+     54659:	
+     54659:	find library=libicuuc.so.74 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicuuc.so.74
+     54659:	
+     54659:	find library=libicudata.so.74 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicudata.so.74
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libicudata.so.74
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libicuuc.so.74
+     54659:	
+     54659:	/lib/x86_64-linux-gnu/libicuuc.so.74: error: symbol lookup error: undefined symbol: u_strlen (fatal)
+     54659:	find library=libicui18n.so.74 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libicui18n.so.74
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libicui18n.so.74
+     54659:	
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_buffer_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_color_line_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_color_stop_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_draw_funcs_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_draw_state_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_face_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_feature_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_font_funcs_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_font_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_glyph_info_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_glyph_position_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_map_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_ot_math_glyph_part_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_ot_math_glyph_variant_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_ot_var_axis_info_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_paint_funcs_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_segment_properties_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_set_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_shape_plan_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_unicode_funcs_get_type (fatal)
+     54659:	/lib/x86_64-linux-gnu/libharfbuzz.so.0: error: symbol lookup error: undefined symbol: hb_gobject_user_data_key_get_type (fatal)
+     54659:	find library=libpango-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpango-1.0.so.0
+     54659:	
+     54659:	find library=libfribidi.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libfribidi.so.0
+     54659:	
+     54659:	find library=libthai.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libthai.so.0
+     54659:	
+     54659:	find library=libdatrie.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libdatrie.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libdatrie.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libthai.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libfribidi.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpango-1.0.so.0
+     54659:	
+     54659:	find library=libgtk-4.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgtk-4.so.1
+     54659:	
+     54659:	find library=libpangocairo-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0
+     54659:	
+     54659:	find library=libepoxy.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libepoxy.so.0
+     54659:	
+     54659:	find library=libgraphene-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgraphene-1.0.so.0
+     54659:	
+     54659:	find library=libXi.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXi.so.6
+     54659:	
+     54659:	find library=libpangoft2-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0
+     54659:	
+     54659:	find library=libvulkan.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libvulkan.so.1
+     54659:	
+     54659:	find library=libtiff.so.6 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libtiff.so.6
+     54659:	
+     54659:	find library=libxkbcommon.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libxkbcommon.so.0
+     54659:	
+     54659:	find library=libwayland-client.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libwayland-client.so.0
+     54659:	
+     54659:	find library=libwayland-egl.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libwayland-egl.so.1
+     54659:	
+     54659:	find library=libXcursor.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXcursor.so.1
+     54659:	
+     54659:	find library=libXdamage.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXdamage.so.1
+     54659:	
+     54659:	find library=libXfixes.so.3 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXfixes.so.3
+     54659:	
+     54659:	find library=libXrandr.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXrandr.so.2
+     54659:	
+     54659:	find library=libXinerama.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libXinerama.so.1
+     54659:	
+     54659:	find library=libcairo-script-interpreter.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libcairo-script-interpreter.so.2
+     54659:	
+     54659:	find library=libwebp.so.7 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libwebp.so.7
+     54659:	
+     54659:	find library=libzstd.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libzstd.so.1
+     54659:	
+     54659:	find library=liblzma.so.5 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/liblzma.so.5
+     54659:	
+     54659:	find library=libLerc.so.4 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libLerc.so.4
+     54659:	
+     54659:	find library=libjbig.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libjbig.so.0
+     54659:	
+     54659:	find library=libdeflate.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libdeflate.so.0
+     54659:	
+     54659:	find library=liblzo2.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/liblzo2.so.2
+     54659:	
+     54659:	find library=libsharpyuv.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libsharpyuv.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libsharpyuv.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/liblzo2.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libdeflate.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libjbig.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libLerc.so.4
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/liblzma.so.5
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libzstd.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libwebp.so.7
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libcairo-script-interpreter.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXinerama.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXrandr.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXfixes.so.3
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXdamage.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXcursor.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libwayland-egl.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libwayland-client.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libxkbcommon.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libtiff.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libvulkan.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpangoft2-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libXi.so.6
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgraphene-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libepoxy.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libpangocairo-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgtk-4.so.1
+     54659:	
+     54659:	bin/release/net8.0/source: error: symbol lookup error: undefined symbol: gtk_progress_get_type (fatal)
+     54659:	bin/release/net8.0/source: error: symbol lookup error: undefined symbol: gtk_misc_get_type (fatal)
+     54659:	find library=libibus-1.0.so.5 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libibus-1.0.so.5
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libibus-1.0.so.5
+     54659:	
+     54659:	
+     54659:	calling init: /usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/immodules/libim-ibus.so
+     54659:	
+     54659:	/usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/immodules/libim-ibus.so: error: symbol lookup error: undefined symbol: g_module_check_init (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/immodules/libim-ibus.so: error: symbol lookup error: undefined symbol: g_module_unload (fatal)
+     54659:	find library=libgstreamer-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstreamer-1.0.so.0
+     54659:	
+     54659:	find library=libgstvideo-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstvideo-1.0.so.0
+     54659:	
+     54659:	find library=libgsttag-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgsttag-1.0.so.0
+     54659:	
+     54659:	find library=libgstpbutils-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstpbutils-1.0.so.0
+     54659:	
+     54659:	find library=libgstgl-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstgl-1.0.so.0
+     54659:	
+     54659:	find library=libgstallocators-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstallocators-1.0.so.0
+     54659:	
+     54659:	find library=libunwind.so.8 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libunwind.so.8
+     54659:	
+     54659:	find library=libdw.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libdw.so.1
+     54659:	
+     54659:	find library=libgstbase-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstbase-1.0.so.0
+     54659:	
+     54659:	find library=liborc-0.4.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/liborc-0.4.so.0
+     54659:	
+     54659:	find library=libgstaudio-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgstaudio-1.0.so.0
+     54659:	
+     54659:	find library=libGL.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libGL.so.1
+     54659:	
+     54659:	find library=libEGL.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libEGL.so.1
+     54659:	
+     54659:	find library=libwayland-cursor.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libwayland-cursor.so.0
+     54659:	
+     54659:	find library=libX11-xcb.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libX11-xcb.so.1
+     54659:	
+     54659:	find library=libgudev-1.0.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgudev-1.0.so.0
+     54659:	
+     54659:	find library=libdrm.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libdrm.so.2
+     54659:	
+     54659:	find library=libgbm.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libgbm.so.1
+     54659:	
+     54659:	find library=libelf.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libelf.so.1
+     54659:	
+     54659:	find library=libGLdispatch.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libGLdispatch.so.0
+     54659:	
+     54659:	find library=libGLX.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libGLX.so.0
+     54659:	
+     54659:	find library=libudev.so.1 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libudev.so.1
+     54659:	
+     54659:	find library=libwayland-server.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libwayland-server.so.0
+     54659:	
+     54659:	find library=libxcb-randr.so.0 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libxcb-randr.so.0
+     54659:	
+     54659:	find library=libcap.so.2 [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	  trying file=/lib/x86_64-linux-gnu/libcap.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libcap.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libxcb-randr.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libwayland-server.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libudev.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libGLdispatch.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libGLX.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libelf.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libdrm.so.2
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgbm.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgudev-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libX11-xcb.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libwayland-cursor.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libEGL.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libGL.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libunwind.so.8
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libdw.so.1
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstreamer-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstbase-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgsttag-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/liborc-0.4.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstaudio-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstallocators-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstvideo-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstgl-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /lib/x86_64-linux-gnu/libgstpbutils-1.0.so.0
+     54659:	
+     54659:	
+     54659:	calling init: /usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/media/libmedia-gstreamer.so
+     54659:	
+     54659:	/usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/media/libmedia-gstreamer.so: error: symbol lookup error: undefined symbol: g_module_check_init (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/media/libmedia-gstreamer.so: error: symbol lookup error: undefined symbol: g_module_unload (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/media/libmedia-gstreamer.so: error: symbol lookup error: undefined symbol: g_io_media_gstreamer_load (fatal)
+     54659:	
+     54659:	calling init: /usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so
+     54659:	
+     54659:	/usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so: error: symbol lookup error: undefined symbol: g_module_check_init (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so: error: symbol lookup error: undefined symbol: g_module_unload (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so: error: symbol lookup error: undefined symbol: g_io_dconfsettings_load (fatal)
+     54659:	find library=libgvfscommon.so [0]; searching
+     54659:	 search path=/usr/lib/x86_64-linux-gnu/gvfs/glibc-hwcaps/x86-64-v3:/usr/lib/x86_64-linux-gnu/gvfs/glibc-hwcaps/x86-64-v2:/usr/lib/x86_64-linux-gnu/gvfs		(RUNPATH from file /usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so)
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/gvfs/glibc-hwcaps/x86-64-v3/libgvfscommon.so
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/gvfs/glibc-hwcaps/x86-64-v2/libgvfscommon.so
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/gvfs/libgvfscommon.so
+     54659:	
+     54659:	
+     54659:	calling init: /usr/lib/x86_64-linux-gnu/gvfs/libgvfscommon.so
+     54659:	
+     54659:	
+     54659:	calling init: /usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so
+     54659:	
+     54659:	/usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so: error: symbol lookup error: undefined symbol: g_module_check_init (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so: error: symbol lookup error: undefined symbol: g_module_unload (fatal)
+     54659:	/usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so: error: symbol lookup error: undefined symbol: g_io_gvfsdbus_load (fatal)
+     54659:	find library=GtkSource.so [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/GtkSource.so
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/GtkSource.so
+     54659:	  trying file=/lib/GtkSource.so
+     54659:	  trying file=/usr/lib/GtkSource.so
+     54659:	
+     54659:	find library=libGtkSource.so [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libGtkSource.so
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libGtkSource.so
+     54659:	  trying file=/lib/libGtkSource.so
+     54659:	  trying file=/usr/lib/libGtkSource.so
+     54659:	
+     54659:	find library=GtkSource [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/GtkSource
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/GtkSource
+     54659:	  trying file=/lib/GtkSource
+     54659:	  trying file=/usr/lib/GtkSource
+     54659:	
+     54659:	find library=libGtkSource [0]; searching
+     54659:	 search cache=/etc/ld.so.cache
+     54659:	 search path=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib		(system search path)
+     54659:	  trying file=/lib/x86_64-linux-gnu/libGtkSource
+     54659:	  trying file=/usr/lib/x86_64-linux-gnu/libGtkSource
+     54659:	  trying file=/lib/libGtkSource
+     54659:	  trying file=/usr/lib/libGtkSource
+     54659:	
+UnhandledException - unhandled exception: System.DllNotFoundException: Unable to load shared library 'GtkSource' or one of its dependencies. In order to help diagnose loading problems, consider using a tool like strace. If you're using glibc, consider setting the LD_DEBUG environment variable: 
+/home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/GtkSource.so: cannot open shared object file: No such file or directory
+/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/GtkSource.so: cannot open shared object file: No such file or directory
+/home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libGtkSource.so: cannot open shared object file: No such file or directory
+/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/libGtkSource.so: cannot open shared object file: No such file or directory
+/home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/GtkSource: cannot open shared object file: No such file or directory
+/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/GtkSource: cannot open shared object file: No such file or directory
+/home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libGtkSource: cannot open shared object file: No such file or directory
+/home/lamg/src/exercises/gtk_fsharp/gir_core/source/bin/release/net8.0/libGtkSource: cannot open shared object file: No such file or directory
+
+   at GtkSource.Internal.Buffer.New(IntPtr table)
+   at GtkSource.Buffer.New(TextTagTable table)
+   at Program.sourceView() in /home/lamg/src/exercises/gtk_fsharp/gir_core/source/Program.fs:line 6
+   at Program.box() in /home/lamg/src/exercises/gtk_fsharp/gir_core/source/Program.fs:line 21
+   at Program.onActivateApp(Application sender, EventArgs _arg1) in /home/lamg/src/exercises/gtk_fsharp/gir_core/source/Program.fs:line 28
+   at Program.main@34.Invoke(Application delegateArg0, EventArgs delegateArg1)
+   at GObject.Signal`1.<>c__DisplayClass11_0.<Connect>b__0(Value returnValue, Value[] parameters)
+   at GObject.Closure.InternalCallback(IntPtr closure, IntPtr returnValuePtr, UInt32 nParamValues, IntPtr paramValuesData, IntPtr invocationHint, IntPtr userData)
+     54659:	
+     54659:	calling fini:  [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /home/lamg/Installers/dotnet/host/fxr/8.0.6/libhostfxr.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libhostpolicy.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libcoreclr.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libclrjit.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libdl.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpthread.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /home/lamg/Installers/dotnet/shared/Microsoft.NETCore.App/8.0.6/libSystem.Native.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/librt.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libicui18n.so.74 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libicuuc.so.74 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libicudata.so.74 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/immodules/libim-ibus.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libibus-1.0.so.5 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /usr/lib/x86_64-linux-gnu/gtk-4.0/4.0.0/media/libmedia-gstreamer.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgtk-4.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libcairo-script-interpreter.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/liblzo2.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXinerama.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXrandr.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXdamage.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXcursor.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXfixes.so.3 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libxkbcommon.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libtiff.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libdeflate.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libjbig.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libLerc.so.4 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libstdc++.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgcc_s.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libwebp.so.7 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libsharpyuv.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libvulkan.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXi.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgraphene-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libepoxy.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libjpeg.so.8 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libcairo-gobject.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libcairo.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpixman-1.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libxcb-shm.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libxcb-render.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXrender.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXext.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libfontconfig.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpango-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libharfbuzz.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgraphite2.so.3 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libfreetype.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libbrotlidec.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libbrotlicommon.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpng16.so.16 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libthai.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libdatrie.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libfribidi.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstpbutils-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstgl-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libwayland-egl.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstvideo-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstallocators-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstaudio-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/liborc-0.4.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgsttag-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstbase-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgstreamer-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libdw.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libbz2.so.1.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libunwind.so.8 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/liblzma.so.5 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libGL.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libEGL.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libwayland-cursor.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libX11-xcb.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgudev-1.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgbm.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libexpat.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libdrm.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libelf.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libzstd.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libGLX.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libX11.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libGLdispatch.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libudev.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libwayland-server.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libwayland-client.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libxcb-randr.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libxcb.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXdmcp.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libbsd.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libmd.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libXau.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libcap.so.2 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /usr/lib/x86_64-linux-gnu/gio/modules/libdconfsettings.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /usr/lib/x86_64-linux-gnu/gvfs/libgvfscommon.so [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgio-2.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libmount.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libselinux.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libblkid.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libz.so.1 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libgobject-2.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libffi.so.8 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libglib-2.0.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libpcre2-8.so.0 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libm.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib/x86_64-linux-gnu/libc.so.6 [0]
+     54659:	
+     54659:	
+     54659:	calling fini: /lib64/ld-linux-x86-64.so.2 [0]
+     54659:	
