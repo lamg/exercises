@@ -21,6 +21,7 @@ open GtkSource
 // it should be looking for libgtksourceview-5.so instead
 
 let sourceView () =
+  GtkSource.Module.Initialize()
   let buf = Buffer.New(null)
 
   let view = GtkSource.View.NewWithBuffer(buf)

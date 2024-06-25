@@ -6,6 +6,7 @@ open Gtk
 open GtkSource
 
 let sourceView () =
+  Module.Initialize()
   let buf = Buffer.New(null)
 
   let view = GtkSource.View.NewWithBuffer(buf)
