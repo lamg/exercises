@@ -83,7 +83,7 @@ let listBox () =
     item.Append descrLabel
     l.Append item
 
-  let onActivate l (e: ListBox.RowActivatedSignalArgs) =
+  let onActivate (l: ListBox) (e: ListBox.RowActivatedSignalArgs) =
 
     printfn $"activated {e.Row.Child.Name} row"
 
@@ -92,14 +92,38 @@ let listBox () =
   l
 
 let fontButton () =
-  let button = new FontButton()
+  let box = new Box()
+  box.SetOrientation Orientation.Vertical
+  box.SetHomogeneous true
+
+  let font = new FontButton()
 
   let onFontSet _ _ =
-    printfn
-      $"selected font = {button.FontDesc.GetFamily()} {button.FontDesc.GetVariant()} {button.FontDesc.GetWeight()}"
+    printfn $"selected font = {font.FontDesc.GetFamily()} {font.FontDesc.GetVariant()} {font.FontDesc.GetWeight()}"
 
-  button.add_OnFontSet (GObject.SignalHandler<FontButton> onFontSet)
-  button
+  font.add_OnFontSet (GObject.SignalHandler<FontButton> onFontSet)
+
+  let check = new CheckButton()
+
+  let onToggled (c: CheckButton) _ = printfn $"toggled {c.Active}"
+  check.add_OnToggled (GObject.SignalHandler<CheckButton> onToggled)
+
+  let toggle = new ToggleButton()
+
+  let onToggleToggle (t: ToggleButton) _ =
+    if t.Active then
+      t.Label <- "active"
+    else
+      t.Label <- "inactive"
+
+    printfn $"toggled {t.Active}"
+
+  toggle.add_OnToggled (GObject.SignalHandler<ToggleButton> onToggleToggle)
+
+  box.Append font
+  box.Append check
+  box.Append toggle
+  box
 
 let newControls () =
   [ listBox () :> Widget; sourceView (); fontButton () ]
