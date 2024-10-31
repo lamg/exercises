@@ -13,16 +13,17 @@ type Message =
   | SetCounter of int
 
 let update message model =
-  match message with
-  | Increment ->
+  let change =
+    match message with
+    | Increment -> (+) 1
+    | Decrement -> (+) -1
+    | SetCounter v -> (fun _ -> v)
+
+  let model =
     { model with
-        counter = model.counter + 1 },
-    Cmd.none
-  | Decrement ->
-    { model with
-        counter = model.counter - 1 },
-    Cmd.none
-  | SetCounter value -> { model with counter = value }, Cmd.none
+        counter = change model.counter }
+
+  model, Cmd.none
 
 
 type Main = Template<"wwwroot/main.html">
