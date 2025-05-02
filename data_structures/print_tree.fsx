@@ -1,96 +1,37 @@
-type Branch<'a, 'b> =
-  { value: 'a
-    children: Tree<'a, 'b> seq }
-
-and Tree<'a, 'b> =
-  | Branch of Branch<'a, 'b>
-  | Leaf of 'b
-
-type PrinterContext<'a, 'b> =
-  abstract member branchToString: 'a -> string
-  abstract member leafToString: 'b -> string
-
 // the trick:
-// when you are in node N, wich children XS
-// connect N directly to each X in XS
-// each X in XS produces a list of lines,
-// indent each one and include them in the result for N
+// each node must be connected directly to its direct children (with visible characters)
+// and indirectly (through indentation) to its children's descendants
 
-let printTree (ctx: PrinterContext<'a, 'b>) (t: Tree<'a, 'b>) =
+type Tree<'a> =
+  | Leaf of 'a
+  | Branch of 'a * list<Tree<'a>>
+
+let printTree (t: Tree<'a>) =
   let connectIndent (isLast: bool) (child: string, grandChild: string list) =
-    let childConn, colConn = if isLast then "└── ", "   " else "├── ", "│   "
+    let childConn, colConn = if isLast then "└── ", "   " else "├── ", "│   "
     let connected = childConn + child
     let indented = grandChild |> List.map (fun x -> colConn + x)
     connected :: indented
 
   let rec treeToLines t =
     match t with
-    | Branch { value = v; children = xs } ->
+    | Branch(v, xs) ->
       let l = Seq.length xs
 
-      let root = ctx.branchToString v
+      let root = v.ToString()
 
       let children =
         xs
-        |> Seq.mapi (fun i c -> treeToLines c |> connectIndent (i = l - 1))
-        |> Seq.concat
-        |> Seq.toList
+        |> List.mapi (fun i c -> treeToLines c |> connectIndent (i = l - 1))
+        |> List.concat
 
-      (root, children)
-    | Leaf v -> ctx.leafToString v, []
+      root, children
+    | Leaf v -> v.ToString(), []
 
   let r, chl = treeToLines t
-  r :: chl |> String.concat "\n"
+  r :: chl
 
-type Operator =
-  | And
-  | Or
-  | Equivales
+let tree = Branch(10, [ Branch(15, [ Leaf 12; Leaf 18 ]) ])
 
-type Identifier = string
-
-type Expression = Tree<Operator, Identifier>
-
-let binary op x y =
-  Branch { value = op; children = [ x; y ] }
-
-let andOp x y : Expression = binary And x y
-let orOp x y : Expression = binary Or x y
-let equivOp x y : Expression = binary Equivales x y
-
-
-let x = Leaf "x"
-let y = Leaf "y"
-let z = Leaf "z"
-
-let original = "((x ≡ y) ∨ (y ≡ z)) ∧ z"
-let expr = andOp (orOp (equivOp x y) (equivOp y z)) z
-
-let ctx =
-  { new PrinterContext<Operator, Identifier> with
-
-      member _.branchToString op =
-        match op with
-        | And -> "∧"
-        | Or -> "∨"
-        | Equivales -> "≡"
-
-      member _.leafToString l = l }
-
-printfn $"expression: {original}\n"
-printfn $"tree:\n{printTree ctx expr}"
-
-(*
-expression: ((x ≡ y) ∨ (y ≡ z)) ∧ z
-
-tree:
-∧
-├── ∨
-│   ├── ≡
-│   │   ├── x
-│   │   └── y
-│   └── ≡
-│      ├── y
-│      └── z
-└── z
-*)
+for x in printTree tree do
+  printfn $"{x}"
