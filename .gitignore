@@ -13,6 +13,7 @@ primes.txt
 .idea
 .vscode
 global.json
+*.agdai
 
 # User-specific files
 *.rsuser
