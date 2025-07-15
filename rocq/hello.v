@@ -162,3 +162,113 @@ Module TuplePlayground.
    all_zero (bits B₀ B₁ B₀ B₁) = false.
   Proof. reflexivity. Qed.
 End TuplePlayground.
+
+Module NatPlayground.
+  Inductive nat : Type :=
+    | zero
+    | succ (n: nat).
+  
+  Definition pred (n: nat): nat :=
+    match n with
+    | zero => zero 
+    | succ n => n
+    end.
+  
+  Definition minustwo (n : nat) : nat :=
+    match n with
+    | zero => zero
+    | succ zero => zero
+    | succ (succ n) => n
+    end.      
+  
+  
+  Fixpoint is_even (n: nat): bool :=
+    match n with
+    | zero => true
+    | succ(succ n) => is_even n
+    | _ => false
+    end.
+  
+  Definition one: nat := succ zero.
+  Definition three: nat := succ (succ (succ (zero))).
+  Definition four : nat := succ (succ (succ (succ zero))). 
+  Definition five: nat := succ four.
+  Definition two :nat  := succ (succ zero).
+  Definition nine: nat := succ(  succ (succ (succ (succ (succ (succ (succ (succ zero)))))))).  
+  
+  Example four_minus_two_is_two:
+    minustwo four = two.
+  Proof. simpl. reflexivity. Qed. 
+  
+  Example four_is_even:
+    is_even four = true.
+  Proof. reflexivity. Qed.
+
+  Example three_is_not_even:
+    is_even three = false.
+  Proof. reflexivity. Qed.
+    
+  Definition is_odd (n:nat) := negb (is_even n).
+
+  Example three_is_odd:
+    is_odd three = true.
+  Proof. reflexivity. Qed.    
+  
+  Fixpoint plus (n:nat) (m:nat): nat :=
+    match n with
+    | zero => m
+    | succ n => succ (plus n m)
+  end.
+
+  Example two_plus_two_is_four:
+    plus two two = four.
+  Proof. reflexivity. Qed.
+
+  Fixpoint mult (n m :nat ): nat :=
+    match n with
+    | zero => zero
+    | succ n => plus m (mult n m)
+  end.
+  
+  Example three_times_three_is_nine:
+    mult three three = nine.
+  Proof. reflexivity. Qed.
+  
+  Fixpoint minus (n m : nat) :=
+    match n, m with
+    | zero, _ => zero
+    | _ , zero => n
+    | succ n, succ m => minus n m
+    end.
+  
+  Example three_minus_one_is_two :
+    minus three one = two.
+  Proof. reflexivity. Qed.
+
+  Fixpoint exp (base power: nat) :=
+    match power with
+    | zero => one
+    | succ p => mult base (exp base p)
+    end.
+  
+  Example square_of_three_is_nine: 
+    exp three two = nine.
+  Proof. reflexivity. Qed.
+  
+  Fixpoint factorial (n: nat) :=
+    match n with
+    | zero => one
+    | succ n' => mult n (factorial n')
+  end.
+
+  Example factorial_three_is_six:
+    factorial three = plus three three.
+  Proof. reflexivity. Qed.
+  
+  Definition ten := mult five two.
+  Definition twelve := plus ten two.
+
+  Example factorial_five_is_120:
+    factorial five = mult ten twelve.
+  Proof. reflexivity. Qed. 
+End NatPlayground.
