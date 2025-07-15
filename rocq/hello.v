@@ -61,5 +61,12 @@ Example or_notation:
 Proof. simpl. reflexivity. Qed.
 
 Example and_notation:
-  true && false = true.
+  true && false = false.
+Proof. simpl. reflexivity. Qed.
+
+Definition negb' (b: bool): bool :=
+  if b then false else true.
+
+Example negs_are_equal:
+  negb = negb'.
 Proof. simpl. reflexivity. Qed.
