@@ -270,5 +270,121 @@ Module NatPlayground.
 
   Example factorial_five_is_120:
     factorial five = mult ten twelve.
-  Proof. reflexivity. Qed. 
+  Proof. reflexivity. Qed.
+    
+  Notation "x + y" := (plus x y).
+  Notation "x - y" := (minus x y).
+  Notation "x * y" := (mult x y).
+  
+  Check one + two: nat.
+  
+  Fixpoint eqb (n m: nat) :=
+    match n, m with
+    | zero, zero => true
+    | succ n', succ m' => eqb n' m'
+    | _, _ => false
+    end.
+  
+  Example two_differs_from_three:
+    eqb two three = false.
+  Proof. reflexivity. Qed.
+  
+  Fixpoint leb (n m :nat) :=
+    match n, m with
+    | zero, _ => true
+    | succ n', succ m' => leb n' m'
+    | _, _ => false
+    end.
+  
+  Example two_leb_three:
+    leb two three = true.
+  Proof. reflexivity. Qed.
+  
+  Example not_three_leb_two:
+    leb three two = false.
+  Proof. reflexivity. Qed.
+  
+  Notation "x =? y" := (eqb x y) (at level 70): nat_scope.
+  Notation "x <=? y" := (leb x y) (at level 70): nat_scope.
+
+  Example notation_test:
+    three <=? two = false.
+  Proof. reflexivity. Qed.
+  
+  Definition ltb (n m : nat) := andb (n <=? m) (negb (n =? m)).
+
+  Example ltb_two_three:
+    ltb two three = true.
+  Proof. reflexivity. Qed.
+
+  Example ltw_two_two:
+    ltb two two = false.
+  Proof. reflexivity. Qed.
+
+  Example ltw_four_two:
+    ltb four two = false.
+  Proof. reflexivity. Qed.
+  
+  Theorem plus_zero_n:
+    forall n:nat, zero + n = n.
+  Proof. intros n. simpl. reflexivity. Qed. 
+  
+  Theorem mult_zero_n:
+    forall n: nat, zero * n = zero.
+  Proof. intros n. reflexivity. Qed.
+
+  Theorem plus_id_example:
+    forall n m : nat, 
+    n = m -> n + n = m + m.
+  Proof. intros n m. intros antecedent. rewrite antecedent. reflexivity. Qed.
+
+  Theorem plus_id_exercise:
+    forall n m p: nat,
+      n = m -> m = p -> n + m = m + p.
+    Proof.
+      intros n m p.
+      intros antecedent0.
+      intros antecedent1.
+      rewrite antecedent0.
+      rewrite antecedent1.
+      reflexivity.
+    Qed.
+  
+  Check mult_zero_n.
+  
+  Theorem mult_n_zero: 
+    forall n:nat, 
+    n * zero = zero.
+  Proof. Admitted. 
+  
+  Theorem mult_n_succ_m:
+    forall n m: nat,
+    n * m + n = n * succ m.
+  Proof. Admitted.
+
+  Theorem mult_n_zero_m_zero:
+    forall p q: nat,
+    (p * zero) + (q * zero) = zero.
+    Proof.
+      intros p q.
+      rewrite mult_n_zero.
+      rewrite mult_n_zero.
+      reflexivity.
+    Qed.
+  
+  Lemma one_is_succ_zero:
+    one = succ zero.
+  Proof. reflexivity. Qed.
+
+  Theorem mult_p_one:
+    forall p:nat,
+    p * one = p.
+  Proof.
+    intros p.
+    rewrite one_is_succ_zero.
+    rewrite <- mult_n_succ_m.
+    rewrite mult_n_zero.
+    simpl.
+    reflexivity.
 End NatPlayground.
+
