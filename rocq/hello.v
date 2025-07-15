@@ -128,3 +128,37 @@ Definition is_red (c: color): bool :=
   | primary red => true
   | _ => false
   end.
+
+Example blue_is_not_red:
+ (is_red (primary blue) = false).
+Proof. simpl. reflexivity. Qed.
+
+Module Playground.
+  Definition foo: rgb := blue.
+End Playground.
+
+Definition foo : bool := true.
+
+Check Playground.foo: rgb.
+Check foo:bool.
+
+Module TuplePlayground.
+  Inductive bit: Type :=
+    | B₁
+    | B₀.
+
+  Inductive nybble: Type := 
+  | bits (b₀ b₁ b₂ b₃ : bit).
+
+  Check (bits B₀ B₁ B₀ B₁: nybble).
+
+  Definition all_zero (nb: nybble) :=
+    match nb with
+    | bits B₀ B₀ B₀ B₀ => true
+    | _ => false
+    end.
+
+  Example not_all_zero:
+   all_zero (bits B₀ B₁ B₀ B₁) = false.
+  Proof. reflexivity. Qed.
+End TuplePlayground.
