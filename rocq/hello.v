@@ -386,5 +386,18 @@ Module NatPlayground.
     rewrite mult_n_zero.
     simpl.
     reflexivity.
+  
+  (* proof by case analysis *)
+
+  Theorem plus_one_neq_zero:
+    forall n: nat,
+    (n + one) =? zero = false.
+    Proof.
+      intros n.
+      destruct n as [| n' ] eqn:E.
+      reflexivity.
+      reflexivity.
+    Qed.
+  
 End NatPlayground.
 
