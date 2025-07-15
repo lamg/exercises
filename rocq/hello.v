@@ -18,8 +18,6 @@ Definition next_working_day (d:day) : day :=
   | sunday => monday
   end.
 
-Compute (next_working_day saturday).
-
 Example test_next_working_day:
   (next_working_day (next_working_day saturday)) = tuesday.
 Proof. simpl. reflexivity. Qed.
@@ -40,5 +38,28 @@ Definition andb (x: bool) (y: bool): bool :=
   | false => false
   end.
 
-Compute (andb (negb true) false).
+Definition orb (x: bool) (y: bool): bool :=
+  match x with
+  | true => true
+  | false => x
+  end.
 
+Example not_true_and_false:
+  (andb (negb true) false) = false.
+Proof. simpl. reflexivity. Qed.
+
+Example true_or_false:
+  orb true false = true.
+Proof. simpl. reflexivity. Qed.
+
+Notation "x && y" := (andb x y).
+
+Notation "x || y" := (orb x y).
+
+Example or_notation:
+  true || false = true.
+Proof. simpl. reflexivity. Qed.
+
+Example and_notation:
+  true && false = true.
+Proof. simpl. reflexivity. Qed.
