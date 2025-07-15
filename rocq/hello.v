@@ -58,7 +58,7 @@ Notation "x || y" := (orb x y).
 
 Example or_notation:
   true || false = true.
-Proof. simpl. reflexivity. Qed.
+Proof.  reflexivity. Qed.
 
 Example and_notation:
   true && false = false.
@@ -82,3 +82,13 @@ Example invert_white :
   invert white = black.
 Proof. reflexivity. Qed.
 
+Definition nandb (b1:bool) (b2:bool) : bool
+  := negb (andb b1 b2).
+Example test_nandb1: (nandb true false) = true.
+Proof reflexivity.
+Example test_nandb2: (nandb false false) = true.
+(* FILL IN HERE *) Admitted.
+Example test_nandb3: (nandb false true) = true.
+(* FILL IN HERE *) Admitted.
+Example test_nandb4: (nandb true true) = false.
+(* FILL IN HERE *) Admitted.
