@@ -103,3 +103,28 @@ Example test_andb33: (andb3 true false true) = false.
 Proof. reflexivity. Qed.
 Example test_andb34: (andb3 true true false) = false.
 Proof. reflexivity. Qed.
+
+Check (negb true):bool.
+
+Check negb: bool -> bool.
+
+Inductive rgb: Type :=
+  | red 
+  | green
+  | blue.
+
+Inductive color: Type :=
+  | bw (b: black_white)
+  | primary (p: rgb).
+
+Definition monochrome (c: color): bool :=
+  match c with
+  | bw _ => true
+  | _ => false
+  end.
+
+Definition is_red (c: color): bool :=
+  match c with
+  | primary red => true
+  | _ => false
+  end.
