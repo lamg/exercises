@@ -240,7 +240,7 @@ Module NatPlayground.
     | _ , zero => n
     | succ n, succ m => minus n m
     end.
-  
+   
   Example three_minus_one_is_two :
     minus three one = two.
   Proof. reflexivity. Qed.
@@ -303,9 +303,17 @@ Module NatPlayground.
   Example not_three_leb_two:
     leb three two = false.
   Proof. reflexivity. Qed.
+
+  Fixpoint gt(n m :nat) :=
+    match n,m with
+    | succ n', zero => true
+    | succ n', succ m' => gt n' m'
+    | _, _ => false
+  end.
   
   Notation "x =? y" := (eqb x y) (at level 70): nat_scope.
   Notation "x <=? y" := (leb x y) (at level 70): nat_scope.
+  (* Notation "x > y" := (gt x y) (at level 70): nat_scope. *)
 
   Example notation_test:
     three <=? two = false.
@@ -472,5 +480,48 @@ Module NatPlayground.
     - reflexivity.
     - reflexivity.
   Qed.
+
+  Theorem andb_is_commutative'' :
+    forall x y, andb x y =  andb y x.
+  Proof.
+    intros [] [].
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+  Qed.
+
+  Theorem zero_nbeq_plus_one:
+    forall n,
+    zero =? (n + one) = false.
+  Proof.
+    intros [|n'].
+    - reflexivity.
+    - reflexivity.
+  Qed.
+
+  (* gcd terminates but Rocq doesn't know how *)
+  (* Fixpoint gcd (m n : nat) := *)
+  (*   if m =? n then *)
+  (*     m *)
+  (*   else *)
+  (*     if gt m n then gcd (m - n) n *)
+  (*     else gcd m (n - m). *)
+  (*   . *)
+  (* end. *)
+
+
+  Theorem identity_fn_applied_twice:
+    forall f: bool -> bool,
+    (forall x, f x = x) ->
+    forall b, f (f b) = b.
+  Proof.
+    intro f.
+    intro x.
+    intro a.
+    intro b.
+  
+  Qed.
+
 End NatPlayground.
 
