@@ -386,7 +386,7 @@ Module NatPlayground.
     rewrite mult_n_zero.
     simpl.
     reflexivity.
-  
+  Qed.  
   (* proof by case analysis *)
 
   Theorem plus_one_neq_zero:
