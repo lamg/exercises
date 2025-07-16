@@ -386,7 +386,8 @@ Module NatPlayground.
     rewrite mult_n_zero.
     simpl.
     reflexivity.
-  Qed.  
+  Qed.
+
   (* proof by case analysis *)
 
   Theorem plus_one_neq_zero:
@@ -398,6 +399,30 @@ Module NatPlayground.
       - reflexivity.
       - reflexivity.
     Qed.
+  
+  Theorem negb_is_involutive:
+    forall b: bool,
+    negb (negb b) = b.
+  Proof. 
+    intros b.
+    destruct b eqn:E.
+    - reflexivity.
+    - reflexivity.
+  Qed.
+  
+  Theorem andb_is_commutative:
+    forall x y: bool,
+    andb x y = andb y x.
+  Proof.
+    intros x y.
+    destruct x eqn:E.
+    - destruct y eqn:F.
+      + reflexivity.
+      + reflexivity.
+    - destruct y eqn:F.
+      + reflexivity.
+      + reflexivity.
+  Qed.
 
 End NatPlayground.
 
