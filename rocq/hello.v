@@ -423,6 +423,27 @@ Module NatPlayground.
       + reflexivity.
       + reflexivity.
   Qed.
+  
+  Theorem andb3_exchange :
+    forall x y z, andb (andb x y) z = andb (andb x z) y.
+  Proof.
+    intros x y z.
+    destruct x eqn:E.
+    - destruct y eqn:F.
+      + destruct z eqn:G.
+        ++ reflexivity.
+        ++ reflexivity.
+      + destruct z eqn:G.
+        ++ reflexivity.
+        ++ reflexivity.
+    - destruct y eqn: F.
+      + destruct z eqn:G.
+        ++ reflexivity.
+        ++ reflexivity.
+      + destruct z eqn:G.
+        ++ reflexivity.
+        ++ reflexivity.
+    Qed.
 
 End NatPlayground.
 
