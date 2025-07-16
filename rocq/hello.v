@@ -395,9 +395,9 @@ Module NatPlayground.
     Proof.
       intros n.
       destruct n as [| n' ] eqn:E.
-      reflexivity.
-      reflexivity.
+      - reflexivity.
+      - reflexivity.
     Qed.
-  
+
 End NatPlayground.
 
