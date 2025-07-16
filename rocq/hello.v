@@ -451,15 +451,13 @@ Module NatPlayground.
     intros x y.
     destruct x eqn:E.
     - destruct y eqn:F.
-      + simpl.
-        ++ reflexivity.
+      + reflexivity.
       + simpl.
         ++ intro a.
            +++ rewrite a.
                ++++ reflexivity.
     - destruct y eqn:F.
-      + simpl.
-        ++ reflexivity.
+      + reflexivity.
       + simpl.
         ++ intro a.
            +++ rewrite a.
@@ -467,5 +465,12 @@ Module NatPlayground.
   Qed.
   
 
+  Theorem plus_one_neq_zero':
+    forall n, n + one =? zero = false.
+  Proof.
+    intros [|n].
+    - reflexivity.
+    - reflexivity.
+  Qed.
 End NatPlayground.
 
