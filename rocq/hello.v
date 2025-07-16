@@ -41,7 +41,7 @@ Definition andb (x: bool) (y: bool): bool :=
 Definition orb (x: bool) (y: bool): bool :=
   match x with
   | true => true
-  | false => x
+  | false => y
   end.
 
 Example not_true_and_false:
@@ -51,6 +51,7 @@ Proof. simpl. reflexivity. Qed.
 Example true_or_false:
   orb true false = true.
 Proof. simpl. reflexivity. Qed.
+
 
 Notation "x && y" := (andb x y).
 
@@ -537,6 +538,18 @@ Module NatPlayground.
     rewrite negb_is_involutive.
     reflexivity.
   Qed.
-
+  
+  Theorem andb_eq_orb:
+    forall x y,
+    (andb x y = orb x y) ->
+    x = y.
+  Proof.
+    intros x y.
+    destruct x eqn:E.
+    - simpl.
+      + intro a. rewrite a. reflexivity.
+    - simpl.
+      + intro a. rewrite a. reflexivity.
+  Qed.
 End NatPlayground.
 
