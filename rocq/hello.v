@@ -517,10 +517,25 @@ Module NatPlayground.
     forall b, f (f b) = b.
   Proof.
     intro f.
-    intro x.
     intro a.
     intro b.
-  
+    rewrite a.
+    rewrite a.
+    reflexivity.
+  Qed.
+
+  Theorem negation_fn_applied_twice:
+    forall f: bool -> bool,
+    (forall x, f x = negb x) ->
+    forall b, f (f b) = b.
+  Proof.
+    intro f.
+    intro a.
+    intro b.
+    rewrite a.
+    rewrite a.
+    rewrite negb_is_involutive.
+    reflexivity.
   Qed.
 
 End NatPlayground.
