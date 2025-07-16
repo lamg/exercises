@@ -445,5 +445,27 @@ Module NatPlayground.
         ++ reflexivity.
     Qed.
 
+  Theorem andb_true_elim2:
+    forall x y, andb x y = true -> y = true.
+  Proof.
+    intros x y.
+    destruct x eqn:E.
+    - destruct y eqn:F.
+      + simpl.
+        ++ reflexivity.
+      + simpl.
+        ++ intro a.
+           +++ rewrite a.
+               ++++ reflexivity.
+    - destruct y eqn:F.
+      + simpl.
+        ++ reflexivity.
+      + simpl.
+        ++ intro a.
+           +++ rewrite a.
+               ++++ reflexivity. 
+  Qed.
+  
+
 End NatPlayground.
 
