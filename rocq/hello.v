@@ -704,7 +704,6 @@ Module LateDays.
     intros a.
     destruct g eqn:E.
     rewrite <-a.
-    simpl.
     destruct l,m eqn:F.
     - reflexivity.
     - reflexivity.
