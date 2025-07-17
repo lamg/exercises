@@ -652,5 +652,43 @@ Module LateDays.
     - reflexivity.
     - rewrite <- a. reflexivity.
   Qed.
+  
+  Definition lower_grade (g : grade) : grade :=
+    match g with
+    | Grade F Minus => Grade F Minus
+    | Grade l Minus => Grade (lower_letter l) Plus
+    | Grade l Plus => Grade l Natural
+    | Grade l Natural => Grade l Minus
+  end.
+  
+  Example lower_grade_A_Plus :
+    lower_grade (Grade A Plus) = (Grade A Natural).
+  Proof.
+    reflexivity.
+  Qed.
+  
+  Example lower_grade_A_Natural :
+    lower_grade (Grade A Natural) = (Grade A Minus).
+  Proof. reflexivity. Qed.
+ 
+  Example lower_grade_A_Minus :
+    lower_grade (Grade A Minus) = (Grade B Plus).
+  Proof. reflexivity. Qed.
+ 
+  Example lower_grade_B_Plus :
+    lower_grade (Grade B Plus) = (Grade B Natural).
+  Proof. reflexivity. Qed.
+  
+  Example lower_grade_F_Natural :
+    lower_grade (Grade F Natural) = (Grade F Minus).
+  Proof. reflexivity. Qed.
+ 
+  Example lower_grade_twice :
+    lower_grade (lower_grade (Grade B Minus)) = (Grade C Natural).
+  Proof. reflexivity. Qed.
+
+  Example lower_grade_thrice :
+    lower_grade (lower_grade (lower_grade (Grade B Minus))) = (Grade C Minus).
+  Proof. reflexivity. Qed.
 
 End LateDays.
