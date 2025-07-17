@@ -15,6 +15,13 @@ primes.txt
 global.json
 *.agdai
 
+## Coq files
+*.vo
+*.vok
+*.vos
+*.glob
+*.aux
+
 # User-specific files
 *.rsuser
 *.suo
