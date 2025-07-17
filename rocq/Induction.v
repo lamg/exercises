@@ -86,3 +86,25 @@ Theorem eqb_refl:
     - simpl. reflexivity.
     - simpl. rewrite ind. reflexivity.
   Qed.
+
+Theorem even_succ : 
+  forall n : nat,
+  even (succ n) = negb (even n).
+  Proof.
+    intros n.
+    induction n as [|n' ind].
+    - simpl. reflexivity.
+    - rewrite ind. rewrite negb_is_involutive. simpl. reflexivity.
+  Qed.
+
+Theorem mult_zero_plus' : 
+  forall n m : nat,
+  (n + zero + zero) * m = n * m.
+  Proof.
+    intros n m.
+    assert (H: n + zero + zero = n).
+      rewrite add_commutativity. simpl. rewrite add_commutativity. 
+      reflexivity.
+    rewrite H.
+    reflexivity. 
+  Qed.

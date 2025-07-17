@@ -183,10 +183,10 @@ Module NatPlayground.
     end.      
   
   
-  Fixpoint is_even (n: nat): bool :=
+  Fixpoint even (n: nat): bool :=
     match n with
     | zero => true
-    | succ(succ n) => is_even n
+    | succ(succ n) => even n
     | _ => false
     end.
   
@@ -201,18 +201,18 @@ Module NatPlayground.
     minustwo four = two.
   Proof. simpl. reflexivity. Qed. 
   
-  Example four_is_even:
-    is_even four = true.
+  Example four_even:
+    even four = true.
   Proof. reflexivity. Qed.
 
   Example three_is_not_even:
-    is_even three = false.
+    even three = false.
   Proof. reflexivity. Qed.
     
-  Definition is_odd (n:nat) := negb (is_even n).
+  Definition odd (n:nat) := negb (even n).
 
-  Example three_is_odd:
-    is_odd three = true.
+  Example three_odd:
+    odd three = true.
   Proof. reflexivity. Qed.    
   
   Fixpoint plus (n:nat) (m:nat): nat :=
