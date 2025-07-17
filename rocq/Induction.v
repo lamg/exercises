@@ -61,3 +61,28 @@ Theorem add_assoc :
     - simpl. rewrite ind. reflexivity.
   Qed.
 
+Fixpoint double (n:nat) :=
+  match n with
+  | zero => zero
+  | succ n' => succ (succ (double n'))
+  end.
+
+Lemma double_plus:
+  forall n,
+  double n  = n + n.
+  Proof.
+    intros n.
+    induction n as [|n' ind].
+    - simpl. reflexivity.
+    - simpl. rewrite ind. rewrite plus_n_succ_m. reflexivity. 
+  Qed.
+
+Theorem eqb_refl: 
+  forall n : nat,
+  (n =? n) = true.
+  Proof.
+    intros n.
+    induction n as [|n' ind].
+    - simpl. reflexivity.
+    - simpl. rewrite ind. reflexivity.
+  Qed.
