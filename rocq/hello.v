@@ -702,9 +702,8 @@ Module LateDays.
   Proof.
     intros g.
     intros a.
-    destruct g eqn:E.
     rewrite <-a.
-    destruct l,m eqn:F.
+    destruct g,l,m eqn:E.
     - reflexivity.
     - reflexivity.
     - reflexivity.
