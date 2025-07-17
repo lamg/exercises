@@ -534,6 +534,7 @@ Module NatPlayground.
   Qed.
   
   Theorem andb_eq_orb:
+
     forall x y,
     (andb x y = orb x y) ->
     x = y.
@@ -583,4 +584,49 @@ Module LateDays.
     - reflexivity.
     - reflexivity.
   Qed.
+
+  Definition modifier_comparison (m₀ m₁ : modifier) : comparison :=
+    match m₀, m₁ with
+    | Plus, Plus => Eq
+    | Plus, _ => Gt
+    | Natural, Plus => Lt
+    | Natural, Natural => Eq
+    | Natural, _ => Gt
+    | Minus, (Plus | Natural) => Lt
+    | Minus, Minus => Eq
+  end.
+
+  Definition grade_comparison (g₀ g₁ : grade) :=
+    match g₀, g₁ with
+    | Grade l₀ m₀, Grade l₁ m₁ =>
+      match letter_comparison l₀ l₁ with
+      | Eq => modifier_comparison m₀ m₁
+      | r => r
+      end
+  end.
+
+  Example test_grade_comparison1 :
+    (grade_comparison (Grade A Minus) (Grade B Plus)) = Gt.
+  Proof.
+    reflexivity.
+  Qed.
+
+  Example test_grade_comparison2 :
+    (grade_comparison (Grade A Minus) (Grade A Plus)) = Lt.
+  Proof.
+    reflexivity.
+  Qed.
+  
+  Example test_grade_comparison3 :
+    (grade_comparison (Grade F Plus) (Grade F Plus)) = Eq.
+  Proof.
+    reflexivity.
+  Qed.
+
+  Example test_grade_comparison4 :
+    (grade_comparison (Grade B Minus) (Grade C Plus)) = Gt.
+  Proof.
+    reflexivity.
+  Qed.
+
 End LateDays.
