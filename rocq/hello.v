@@ -770,3 +770,51 @@ Module LateDays.
     reflexivity.
   Qed.
 End LateDays.
+
+Module BinaryNumerals.
+  Inductive bin : Type :=
+  | Z
+  | B0 (n : bin)
+  | B1 (n : bin).
+
+  Fixpoint incr (m: bin) :=
+    match m with
+    | B0 b => B1 b
+    | B1 b => B0 (incr b)
+    | Z => B1 Z
+  end.
+
+  Import NatPlayground.
+
+  Fixpoint bin_to_nat (m:bin):nat :=
+    match m with
+    | Z => zero
+    | B0 b => two * bin_to_nat b
+    | B1 b => one + (two * bin_to_nat b)
+  end.
+
+  Example test_bin_incr1 : 
+    (incr (B1 Z)) = B0 (B1 Z).
+  Proof. reflexivity. Qed.
+
+  Example test_bin_incr2 : 
+    (incr (B0 (B1 Z))) = B1 (B1 Z).
+  Proof. reflexivity. Qed.
+  
+  Example test_bin_incr3 : 
+    (incr (B1 (B1 Z))) = B0 (B0 (B1 Z)).
+  Proof. reflexivity. Qed.
+  
+  Example test_bin_incr4 : 
+    bin_to_nat (B0 (B1 Z)) = two.
+  Proof. reflexivity. Qed.
+  
+  Example test_bin_incr5 :
+    bin_to_nat (incr (B1 Z)) = one + bin_to_nat (B1 Z).
+  Proof. reflexivity. Qed.
+  
+  Example test_bin_incr6 :
+    bin_to_nat (incr (incr (B1 Z))) = two + bin_to_nat (B1 Z).
+  Proof. reflexivity. Qed.
+
+End BinaryNumerals.
