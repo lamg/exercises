@@ -15,7 +15,7 @@ Definition next_working_day (d:day) : day :=
   | thursday => friday
   | friday => monday
   | saturday => monday
-  | sunday => monday
+| sunday => monday
   end.
 
 Example test_next_working_day:
@@ -694,5 +694,37 @@ Module LateDays.
   Theorem lower_grade_F_Minus : 
     lower_grade (Grade F Minus) = (Grade F Minus).
   Proof. reflexivity. Qed.
+  
+  Theorem lower_grade_lowers :
+    forall (g : grade),
+    grade_comparison (Grade F Minus) g = Lt ->
+    grade_comparison (lower_grade g) g = Lt.
+  Proof.
+    intros g.
+    intros a.
+    destruct g eqn:E.
+    simpl.
+    destruct l eqn:F.
+    - rewrite <-a. simpl. destruct m eqn:G.
+      + reflexivity.
+      + reflexivity.
+      + reflexivity.
+    - rewrite <-a. simpl. destruct m eqn:G.
+      + reflexivity.
+      + reflexivity.
+      + reflexivity.
+    - rewrite <-a. simpl. destruct m eqn:G.
+      + reflexivity.
+      + reflexivity.
+      + reflexivity.
+    - rewrite <-a. simpl. destruct m eqn:G.
+      + reflexivity.
+      + reflexivity.
+      + reflexivity.
+    - rewrite <-a. simpl. destruct m eqn:G.
+      + reflexivity.
+      + reflexivity.
+      + reflexivity.
+  Qed.
 
 End LateDays.
