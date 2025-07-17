@@ -20,3 +20,29 @@ _ = refl
   ≡⟨⟩
   suc m + (n + p)
   ∎
+
++-unit-right : ∀ (m : ℕ) → m + zero ≡ m
++-unit-right zero = refl
++-unit-right (suc m) =
+  begin
+  suc m + zero
+  ≡⟨⟩
+  suc (m + zero)
+  ≡⟨ cong suc (+-unit-right m) ⟩
+  suc m
+  ∎
+
++-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
++-suc zero n = refl
++-suc (suc m) n =
+  begin
+  suc m + suc n
+  ≡⟨⟩
+  suc (m + suc n)
+  ≡⟨ cong suc (+-suc m n) ⟩
+  suc (suc (m + n))
+  ∎
+
++-symmetry : ∀ (m n : ℕ) → m + n ≡ n + m
++-symmetry zero n =  {! !}
++-symmetry (suc m) n = {!!}
