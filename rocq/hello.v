@@ -755,4 +755,18 @@ Module LateDays.
     rewrite a.
     reflexivity.
   Qed.
+
+  Theorem grade_lowered_once :
+    forall (late_days : nat) (g : grade),
+    (late_days <? nine = false) ->
+    (late_days <? seventeen = true) ->
+    (apply_late_policy late_days g) = (lower_grade g).
+  Proof.
+    intros late_days g.
+    intros a b.
+    rewrite apply_late_policy_unfold.
+    rewrite a.
+    rewrite b.
+    reflexivity.
+  Qed.
 End LateDays.
