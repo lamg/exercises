@@ -314,14 +314,15 @@ Module NatPlayground.
   
   Notation "x =? y" := (eqb x y) (at level 70): nat_scope.
   Notation "x <=? y" := (leb x y) (at level 70): nat_scope.
-  (* Notation "x > y" := (gt x y) (at level 70): nat_scope. *)
+  Notation "x >? y" := (gt x y) (at level 70): nat_scope.
 
   Example notation_test:
     three <=? two = false.
   Proof. reflexivity. Qed.
   
   Definition ltb (n m : nat) := andb (n <=? m) (negb (n =? m)).
-
+  Notation "x <? y" := (ltb x y) (at level 70): nat_scope.
+  
   Example ltb_two_three:
     ltb two three = true.
   Proof. reflexivity. Qed.
@@ -720,5 +721,38 @@ Module LateDays.
     - reflexivity.
     - reflexivity.
   Qed.
+  
+  Import NatPlayground.
+  Definition seventeen := twelve + five.
+  Definition twentyone := seventeen + four.
+  
+  Definition apply_late_policy (late_days : nat) (g : grade) : grade :=
+    if late_days <? nine then g
+    else if late_days <? seventeen then lower_grade g
+    else if late_days <? twentyone then lower_grade (lower_grade g)
+    else lower_grade (lower_grade (lower_grade g)).
+  
+  Theorem apply_late_policy_unfold :
+    forall (late_days : nat) (g : grade),
+    (apply_late_policy late_days g)
+    =
+    if late_days <? nine then g
+    else if late_days <? seventeen then lower_grade g
+    else if late_days <? twentyone then lower_grade (lower_grade g)
+    else lower_grade (lower_grade (lower_grade g)).
+   Proof.
+    intros. reflexivity.
+  Qed.
 
+  Theorem no_penalty_for_mostly_on_time :
+    forall (late_days : nat) (g : grade),
+    (late_days <? nine = true) ->
+    apply_late_policy late_days g = g.
+  Proof.
+    intros late_days g.
+    intro a.
+    rewrite apply_late_policy_unfold.
+    rewrite a.
+    reflexivity.
+  Qed.
 End LateDays.
