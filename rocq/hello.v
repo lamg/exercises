@@ -690,5 +690,9 @@ Module LateDays.
   Example lower_grade_thrice :
     lower_grade (lower_grade (lower_grade (Grade B Minus))) = (Grade C Minus).
   Proof. reflexivity. Qed.
+  
+  Theorem lower_grade_F_Minus : 
+    lower_grade (Grade F Minus) = (Grade F Minus).
+  Proof. reflexivity. Qed.
 
 End LateDays.
