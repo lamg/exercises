@@ -703,29 +703,24 @@ Module LateDays.
     intros g.
     intros a.
     destruct g eqn:E.
-    simpl.
     rewrite <-a.
-    destruct l eqn:F.
-    - destruct m eqn:G.
-      + reflexivity.
-      + reflexivity.
-      + reflexivity.
-    - destruct m eqn:G. 
-      + reflexivity.
-      + reflexivity.
-      + reflexivity.
-    - destruct m eqn:G. 
-      + reflexivity.
-      + reflexivity.
-      + reflexivity.
-    - destruct m eqn:G. 
-      + reflexivity.
-      + reflexivity.
-      + reflexivity.
-   - destruct m eqn:G. 
-      + reflexivity.
-      + reflexivity.
-      + reflexivity.
+    simpl.
+    destruct l,m eqn:F.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
   Qed.
 
 End LateDays.
