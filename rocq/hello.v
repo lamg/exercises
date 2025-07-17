@@ -547,3 +547,40 @@ Module NatPlayground.
   Qed.
 End NatPlayground.
 
+Module LateDays.
+  Inductive letter: Type := A | B | C | D | F.
+  Inductive modifier: Type := Plus | Natural | Minus.
+
+  Inductive grade: Type := Grade (l: letter) (m: modifier).
+
+  Inductive comparison: Type := Eq | Lt | Gt.
+
+  Definition letter_comparison (l1 l2 : letter) : comparison :=
+  match l1, l2 with
+  | A, A => Eq
+  | A, _ => Gt
+  | B, A => Lt
+  | B, B => Eq
+  | B, _ => Gt
+  | C, (A | B) => Lt
+  | C, C => Eq
+  | C, _ => Gt
+  | D, (A | B | C) => Lt
+  | D, D => Eq
+  | D, _ => Gt
+  | F, (A | B | C | D) => Lt
+  | F, F => Eq
+  end.
+
+  Theorem letter_comparison_eq:
+    forall l, letter_comparison l l = Eq.
+  Proof.
+    intros l.
+    destruct l eqn:E.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+    - reflexivity.
+  Qed.
+End LateDays.
