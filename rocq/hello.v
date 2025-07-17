@@ -704,24 +704,25 @@ Module LateDays.
     intros a.
     destruct g eqn:E.
     simpl.
+    rewrite <-a.
     destruct l eqn:F.
-    - rewrite <-a. simpl. destruct m eqn:G.
+    - destruct m eqn:G.
       + reflexivity.
       + reflexivity.
       + reflexivity.
-    - rewrite <-a. simpl. destruct m eqn:G.
+    - destruct m eqn:G. 
       + reflexivity.
       + reflexivity.
       + reflexivity.
-    - rewrite <-a. simpl. destruct m eqn:G.
+    - destruct m eqn:G. 
       + reflexivity.
       + reflexivity.
       + reflexivity.
-    - rewrite <-a. simpl. destruct m eqn:G.
+    - destruct m eqn:G. 
       + reflexivity.
       + reflexivity.
       + reflexivity.
-    - rewrite <-a. simpl. destruct m eqn:G.
+   - destruct m eqn:G. 
       + reflexivity.
       + reflexivity.
       + reflexivity.
