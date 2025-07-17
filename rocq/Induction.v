@@ -1,4 +1,3 @@
-
 From LF Require Export Basics.
 
 Import NatPlayground.

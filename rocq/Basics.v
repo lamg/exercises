@@ -441,18 +441,18 @@ Module NatPlayground.
     destruct x eqn:E.
     - destruct y eqn:F.
       + destruct z eqn:G.
-        ++ reflexivity.
-        ++ reflexivity.
+        * reflexivity.
+        * reflexivity.
       + destruct z eqn:G.
-        ++ reflexivity.
-        ++ reflexivity.
+        * reflexivity.
+        * reflexivity.
     - destruct y eqn: F.
       + destruct z eqn:G.
-        ++ reflexivity.
-        ++ reflexivity.
+        * reflexivity.
+        * reflexivity.
       + destruct z eqn:G.
-        ++ reflexivity.
-        ++ reflexivity.
+        * reflexivity.
+        * reflexivity.
     Qed.
 
   Theorem andb_true_elim2:
