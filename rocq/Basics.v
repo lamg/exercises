@@ -1,3 +1,4 @@
+Require Import Coq.Init.Nat.
 Inductive day : Type :=
   | monday
   | tuesday
@@ -21,10 +22,6 @@ Definition next_working_day (d:day) : day :=
 Example test_next_working_day:
   (next_working_day (next_working_day saturday)) = tuesday.
 Proof. simpl. reflexivity. Qed.
-
-Inductive bool: Type :=
-  | true
-  | false.
 
 Definition negb (b: bool): bool :=
   match b with
@@ -153,194 +150,172 @@ Module TuplePlayground.
 
   Check (bits B₀ B₁ B₀ B₁: nybble).
 
-  Definition all_zero (nb: nybble) :=
+  Definition all_O (nb: nybble) :=
     match nb with
     | bits B₀ B₀ B₀ B₀ => true
     | _ => false
     end.
 
-  Example not_all_zero:
-   all_zero (bits B₀ B₁ B₀ B₁) = false.
+  Example not_all_O:
+   all_O (bits B₀ B₁ B₀ B₁) = false.
   Proof. reflexivity. Qed.
 End TuplePlayground.
 
 Module NatPlayground.
-  Inductive nat : Type :=
-    | zero
-    | succ (n: nat).
-  
   Definition pred (n: nat): nat :=
     match n with
-    | zero => zero 
-    | succ n => n
+    | O => O 
+    | S n => n
     end.
   
-  Definition minustwo (n : nat) : nat :=
+  Definition minus2 (n : nat) : nat :=
     match n with
-    | zero => zero
-    | succ zero => zero
-    | succ (succ n) => n
+    | O => O
+    | S O => O
+    | S (S n) => n
     end.      
   
   
   Fixpoint even (n: nat): bool :=
     match n with
-    | zero => true
-    | succ(succ n) => even n
+    | O => true
+    | S(S n) => even n
     | _ => false
     end.
-  
-  Definition one: nat := succ zero.
-  Definition three: nat := succ (succ (succ (zero))).
-  Definition four : nat := succ (succ (succ (succ zero))). 
-  Definition five: nat := succ four.
-  Definition two :nat  := succ (succ zero).
-  Definition nine: nat := succ(  succ (succ (succ (succ (succ (succ (succ (succ zero)))))))).  
-  
-  Example four_minus_two_is_two:
-    minustwo four = two.
+     
+  Example four_minus_2_is_2:
+    minus2 4 = 2.
   Proof. simpl. reflexivity. Qed. 
   
   Example four_even:
-    even four = true.
+    even 4 = true.
   Proof. reflexivity. Qed.
 
   Example three_is_not_even:
-    even three = false.
+    even 3 = false.
   Proof. reflexivity. Qed.
     
   Definition odd (n:nat) := negb (even n).
 
   Example three_odd:
-    odd three = true.
+    odd 3 = true.
   Proof. reflexivity. Qed.    
   
   Fixpoint plus (n:nat) (m:nat): nat :=
     match n with
-    | zero => m
-    | succ n => succ (plus n m)
+    | O => m
+    | S n => S (plus n m)
   end.
 
-  Example two_plus_two_is_four:
-    plus two two = four.
+  Example two_plus_2_is_four:
+    plus 2 2 = 4.
   Proof. reflexivity. Qed.
 
   Fixpoint mult (n m :nat ): nat :=
     match n with
-    | zero => zero
-    | succ n => plus m (mult n m)
+    | O => O
+    | S n => plus m (mult n m)
   end.
   
-  Example three_times_three_is_nine:
-    mult three three = nine.
+  Example three_times_3_is_nine:
+    mult 3 3 = 9.
   Proof. reflexivity. Qed.
   
   Fixpoint minus (n m : nat) :=
     match n, m with
-    | zero, _ => zero
-    | _ , zero => n
-    | succ n, succ m => minus n m
+    | O, _ => O
+    | _ , O => n
+    | S n, S m => minus n m
     end.
    
-  Example three_minus_one_is_two :
-    minus three one = two.
+  Example three_minus_one_is_2 :
+    minus 3 1 = 2.
   Proof. reflexivity. Qed.
 
   Fixpoint exp (base power: nat) :=
     match power with
-    | zero => one
-    | succ p => mult base (exp base p)
+    | O => one
+    | S p => mult base (exp base p)
     end.
   
-  Example square_of_three_is_nine: 
-    exp three two = nine.
+  Example square_of_3_is_nine: 
+    exp 3 2 = 9.
   Proof. reflexivity. Qed.
   
   Fixpoint factorial (n: nat) :=
     match n with
-    | zero => one
-    | succ n' => mult n (factorial n')
+    | O => one
+    | S n' => mult n (factorial n')
   end.
 
-  Example factorial_three_is_six:
-    factorial three = plus three three.
+  Example factorial_3_is_six:
+    factorial 3 = plus 3 3.
   Proof. reflexivity. Qed.
   
-  Definition ten := mult five two.
-  Definition twelve := plus ten two.
 
-  Example factorial_five_is_120:
-    factorial five = mult ten twelve.
+  Example factorial_5_is_120:
+    factorial 5 = 120.
   Proof. reflexivity. Qed.
     
-  Notation "x + y" := (plus x y).
-  Notation "x - y" := (minus x y).
-  Notation "x * y" := (mult x y).
   
-  Check one + two: nat.
+  Check 1 + 2: nat.
   
   Fixpoint eqb (n m: nat) :=
     match n, m with
-    | zero, zero => true
-    | succ n', succ m' => eqb n' m'
+    | O, O => true
+    | S n', S m' => eqb n' m'
     | _, _ => false
     end.
   
-  Example two_differs_from_three:
-    eqb two three = false.
+  Example two_differs_from_3:
+    eqb 2 3 = false.
   Proof. reflexivity. Qed.
   
   Fixpoint leb (n m :nat) :=
     match n, m with
-    | zero, _ => true
-    | succ n', succ m' => leb n' m'
+    | O, _ => true
+    | S n', S m' => leb n' m'
     | _, _ => false
     end.
   
-  Example two_leb_three:
-    leb two three = true.
+  Example two_leb_3:
+    leb 2 3 = true.
   Proof. reflexivity. Qed.
   
-  Example not_three_leb_two:
-    leb three two = false.
+  Example not_3_leb_2:
+    leb 3 2 = false.
   Proof. reflexivity. Qed.
 
   Fixpoint gt(n m :nat) :=
     match n,m with
-    | succ n', zero => true
-    | succ n', succ m' => gt n' m'
+    | S n', O => true
+    | S n', S m' => gt n' m'
     | _, _ => false
   end.
   
-  Notation "x =? y" := (eqb x y) (at level 70): nat_scope.
-  Notation "x <=? y" := (leb x y) (at level 70): nat_scope.
-  Notation "x >? y" := (gt x y) (at level 70): nat_scope.
 
   Example notation_test:
-    three <=? two = false.
+    3 <=? 2 = false.
   Proof. reflexivity. Qed.
   
-  Definition ltb (n m : nat) := andb (n <=? m) (negb (n =? m)).
-  Notation "x <? y" := (ltb x y) (at level 70): nat_scope.
-  
-  Example ltb_two_three:
-    ltb two three = true.
+  Example ltb_2_3:
+    ltb 2 3 = true.
   Proof. reflexivity. Qed.
 
-  Example ltw_two_two:
-    ltb two two = false.
+  Example ltw_2_2:
+    ltb 2 2 = false.
   Proof. reflexivity. Qed.
 
-  Example ltw_four_two:
-    ltb four two = false.
+  Example ltw_four_2:
+    ltb 4 2 = false.
   Proof. reflexivity. Qed.
   
-  Theorem plus_zero_n:
-    forall n:nat, zero + n = n.
+  Theorem plus_0_n:
+    forall n:nat, 0 + n = n.
   Proof. intros n. simpl. reflexivity. Qed. 
   
-  Theorem mult_zero_n:
-    forall n: nat, zero * n = zero.
+  Theorem mult_0_n:
+    forall n: nat, O * n = O.
   Proof. intros n. reflexivity. Qed.
 
   Theorem plus_id_example:
@@ -360,49 +335,44 @@ Module NatPlayground.
       reflexivity.
     Qed.
   
-  Check mult_zero_n.
+  Check mult_0_n.
   
-  Theorem mult_n_zero: 
+  Theorem mult_n_0: 
     forall n:nat, 
-    n * zero = zero.
+    n * 0 = 0.
   Proof. Admitted. 
   
-  Theorem mult_n_succ_m:
+  Theorem mult_n_S_m:
     forall n m: nat,
-    n * m + n = n * succ m.
+    n * m + n = n * S m.
   Proof. Admitted.
 
-  Theorem mult_n_zero_m_zero:
+  Theorem mult_n_0_m_0:
     forall p q: nat,
-    (p * zero) + (q * zero) = zero.
+    (p * 0) + (q * 0) = 0.
     Proof.
       intros p q.
-      rewrite mult_n_zero.
-      rewrite mult_n_zero.
+      rewrite mult_n_0.
+      rewrite mult_n_0.
       reflexivity.
     Qed.
   
-  Lemma one_is_succ_zero:
-    one = succ zero.
-  Proof. reflexivity. Qed.
-
   Theorem mult_p_one:
     forall p:nat,
-    p * one = p.
+    p * 1 = p.
   Proof.
     intros p.
-    rewrite one_is_succ_zero.
-    rewrite <- mult_n_succ_m.
-    rewrite mult_n_zero.
+    rewrite <- mult_n_S_m.
+    rewrite mult_n_0.
     simpl.
     reflexivity.
   Qed.
 
   (* proof by case analysis *)
 
-  Theorem plus_one_neq_zero:
+  Theorem plus_one_neq_0:
     forall n: nat,
-    (n + one) =? zero = false.
+    (n + 1) =? 0 = false.
     Proof.
       intros n.
       destruct n as [| n' ] eqn:E.
@@ -469,8 +439,8 @@ Module NatPlayground.
   Qed.
  
 
-  Theorem plus_one_neq_zero':
-    forall n, n + one =? zero = false.
+  Theorem plus_one_neq_0':
+    forall n, n + 1 =? 0 = false.
   Proof.
     intros [|n].
     - reflexivity.
@@ -489,7 +459,7 @@ Module NatPlayground.
 
   Theorem zero_nbeq_plus_one:
     forall n,
-    zero =? (n + one) = false.
+    0 =? (n + 1) = false.
   Proof.
     intros [|n'].
     - reflexivity.
@@ -535,7 +505,6 @@ Module NatPlayground.
   Qed.
   
   Theorem andb_eq_orb:
-
     forall x y,
     (andb x y = orb x y) ->
     x = y.
@@ -547,6 +516,7 @@ Module NatPlayground.
     - simpl.
       + intro a. rewrite a. reflexivity.
   Qed.
+
 End NatPlayground.
 
 Module LateDays.
@@ -723,22 +693,20 @@ Module LateDays.
   Qed.
   
   Import NatPlayground.
-  Definition seventeen := twelve + five.
-  Definition twentyone := seventeen + four.
   
   Definition apply_late_policy (late_days : nat) (g : grade) : grade :=
-    if late_days <? nine then g
-    else if late_days <? seventeen then lower_grade g
-    else if late_days <? twentyone then lower_grade (lower_grade g)
+    if late_days <? 9 then g
+    else if late_days <? 17 then lower_grade g
+    else if late_days <? 21 then lower_grade (lower_grade g)
     else lower_grade (lower_grade (lower_grade g)).
   
   Theorem apply_late_policy_unfold :
     forall (late_days : nat) (g : grade),
     (apply_late_policy late_days g)
     =
-    if late_days <? nine then g
-    else if late_days <? seventeen then lower_grade g
-    else if late_days <? twentyone then lower_grade (lower_grade g)
+    if late_days <? 9 then g
+    else if late_days <? 17 then lower_grade g
+    else if late_days <? 21 then lower_grade (lower_grade g)
     else lower_grade (lower_grade (lower_grade g)).
    Proof.
     intros. reflexivity.
@@ -746,7 +714,7 @@ Module LateDays.
 
   Theorem no_penalty_for_mostly_on_time :
     forall (late_days : nat) (g : grade),
-    (late_days <? nine = true) ->
+    (late_days <? 9 = true) ->
     apply_late_policy late_days g = g.
   Proof.
     intros late_days g.
@@ -758,8 +726,8 @@ Module LateDays.
 
   Theorem grade_lowered_once :
     forall (late_days : nat) (g : grade),
-    (late_days <? nine = false) ->
-    (late_days <? seventeen = true) ->
+    (late_days <? 9 = false) ->
+    (late_days <? 17 = true) ->
     (apply_late_policy late_days g) = (lower_grade g).
   Proof.
     intros late_days g.
@@ -788,9 +756,9 @@ Module BinaryNumerals.
 
   Fixpoint bin_to_nat (m:bin):nat :=
     match m with
-    | Z => zero
-    | B0 b => two * bin_to_nat b
-    | B1 b => one + (two * bin_to_nat b)
+    | Z => O
+    | B0 b => 2 * bin_to_nat b
+    | B1 b => one + (2 * bin_to_nat b)
   end.
 
   Example test_bin_incr1 : 
@@ -806,7 +774,7 @@ Module BinaryNumerals.
   Proof. reflexivity. Qed.
   
   Example test_bin_incr4 : 
-    bin_to_nat (B0 (B1 Z)) = two.
+    bin_to_nat (B0 (B1 Z)) = 2.
   Proof. reflexivity. Qed.
   
   Example test_bin_incr5 :
@@ -814,7 +782,7 @@ Module BinaryNumerals.
   Proof. reflexivity. Qed.
   
   Example test_bin_incr6 :
-    bin_to_nat (incr (incr (B1 Z))) = two + bin_to_nat (B1 Z).
+    bin_to_nat (incr (incr (B1 Z))) = 2 + bin_to_nat (B1 Z).
   Proof. reflexivity. Qed.
 
 End BinaryNumerals.

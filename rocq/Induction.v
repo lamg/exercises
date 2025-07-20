@@ -1,10 +1,11 @@
 From LF Require Export Basics.
 
 Import NatPlayground.
+Require Import Coq.Init.Nat.
 
-Theorem add_zero_right : 
+Theorem add_0_right : 
   forall n:nat,
-  n + zero = n.
+  n + 0 = n.
   Proof.
     intros n.
     induction n as [|n' ind].
@@ -13,16 +14,16 @@ Theorem add_zero_right :
   Qed.
 
 Theorem minus_n_n :
-  forall n, minus n n = zero.
+  forall n, minus n n = 0.
   Proof.
   intros n. induction n as [| n' ind].
   - simpl. reflexivity.
   - simpl. rewrite ind. reflexivity. 
   Qed.
 
-Theorem mul_zero_right: 
+Theorem mul_0_right: 
   forall n:nat,
-  n * zero = zero.
+  n * 0 = 0.
   Proof.
     intros n.
     induction n as [|n' ind].
@@ -30,9 +31,9 @@ Theorem mul_zero_right:
     - simpl. rewrite ind. reflexivity.
   Qed.
 
-Theorem plus_n_succ_m : 
+Theorem plus_n_S_m : 
   forall n m : nat,
-  succ (n + m) = n + (succ m).
+  S (n + m) = n + (S m).
   Proof.
     intros n m.
     induction n as [|n' ind].
@@ -46,8 +47,8 @@ Theorem add_commutativity :
   Proof.
     intros n m.
     induction n as [|n' ind].
-    - rewrite add_zero_right. reflexivity.
-    - simpl. rewrite ind. rewrite plus_n_succ_m. reflexivity.
+    - rewrite add_0_right. reflexivity.
+    - simpl. rewrite ind. rewrite plus_n_S_m. reflexivity.
   Qed.
 
 
@@ -63,8 +64,8 @@ Theorem add_assoc :
 
 Fixpoint double (n:nat) :=
   match n with
-  | zero => zero
-  | succ n' => succ (succ (double n'))
+  | 0 => 0
+  | S n' => S (S (double n'))
   end.
 
 Lemma double_plus:
@@ -74,7 +75,7 @@ Lemma double_plus:
     intros n.
     induction n as [|n' ind].
     - simpl. reflexivity.
-    - simpl. rewrite ind. rewrite plus_n_succ_m. reflexivity. 
+    - simpl. rewrite ind. rewrite plus_n_S_m. reflexivity. 
   Qed.
 
 Theorem eqb_refl: 
@@ -89,7 +90,7 @@ Theorem eqb_refl:
 
 Theorem even_succ : 
   forall n : nat,
-  even (succ n) = negb (even n).
+  even (S n) = negb (even n).
   Proof.
     intros n.
     induction n as [|n' ind].
@@ -97,14 +98,17 @@ Theorem even_succ :
     - rewrite ind. rewrite negb_is_involutive. simpl. reflexivity.
   Qed.
 
-Theorem mult_zero_plus' : 
+Theorem mult_0_plus' : 
   forall n m : nat,
-  (n + zero + zero) * m = n * m.
+  (n + 0 + 0) * m = n * m.
   Proof.
     intros n m.
-    assert (H: n + zero + zero = n).
-      rewrite add_commutativity. simpl. rewrite add_commutativity. 
+    assert (H: n + 0 + 0 = n).
+      rewrite add_commutativity. 
+      simpl. 
+      rewrite add_commutativity. 
       reflexivity.
     rewrite H.
-    reflexivity. 
+    reflexivity.
   Qed.
+
