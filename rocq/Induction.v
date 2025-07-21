@@ -112,3 +112,57 @@ Theorem mult_0_plus' :
     reflexivity.
   Qed.
 
+Theorem plus_rearrange_firsttry: 
+  forall n m p q : nat,
+  (n + m) + (p + q) = (m + n) + (p + q).
+Proof.
+  intros n m p q.
+  assert (h: n + m = m + n).
+    rewrite add_commutativity.
+    reflexivity.
+  rewrite h.
+  reflexivity.
+Qed.
+
+Theorem add_shuffle3:
+  forall n m p :nat,
+  n + (m + p) = m + (n + p).
+Proof.
+  intros n m p.
+  assert (h: n + m = m + n).
+    rewrite add_commutativity.
+    reflexivity.
+  rewrite add_assoc.
+  rewrite h.
+  rewrite add_assoc.
+  reflexivity.
+Qed.
+
+Theorem mult_n_S_m:
+    forall n m: nat,
+    n * m + n = n * S m.
+Proof. 
+  intros n m.
+  induction n as [|n' ind].
+  - rewrite mult_0_n. reflexivity.
+  - rewrite <- plus_n_S_m. 
+    simpl. 
+    rewrite <- ind.
+    rewrite add_assoc.
+    reflexivity.
+Qed.
+
+Theorem mul_commutativity : 
+  forall m n : nat,
+  m * n = n * m.
+Proof.
+  intros n m.
+  induction n as [|n' ind].
+  - rewrite mul_0_right. 
+    reflexivity.
+  - simpl. 
+    rewrite <- mult_n_S_m. 
+    rewrite ind.
+    rewrite add_commutativity.
+    reflexivity.
+Qed.
