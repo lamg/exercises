@@ -1,6 +1,5 @@
-From LF Require Export Basics.
-
-Import NatPlayground.
+From Rocq Require Export Basics.
+Import Basics.NatPlayground.
 Require Import Coq.Init.Nat.
 
 Theorem add_0_right : 

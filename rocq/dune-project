@@ -1,0 +1,12 @@
+(lang dune 3.19)
+
+(name rocq)
+
+(generate_opam_files true)
+
+(using coq 0.3)
+
+(package
+ (name rocq))
+
+(warnings (deprecated_coq_lang_lt_08 disabled))

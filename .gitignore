@@ -14,6 +14,10 @@ primes.txt
 .vscode
 global.json
 *.agdai
+*/_build/*
+# rocq project build artifacts
+/rocq/_build/
+/rocq/.opencode/
 
 ## Coq files
 *.vo
