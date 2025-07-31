@@ -181,3 +181,14 @@ Proof.
     + reflexivity.
     + assumption. 
 Qed.
+
+Theorem leb_refl:
+  forall n:nat,
+  n <=? n = true.
+Proof.
+  intro n.
+  induction n as [|n' ind].
+  - reflexivity.
+  - simpl. assumption.
+Qed.
+   
