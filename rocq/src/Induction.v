@@ -270,3 +270,15 @@ Proof.
   - rewrite mult_0_n. rewrite mult_0_n. reflexivity.
   - simpl. rewrite mult_plus_distr_r. rewrite ind. reflexivity.
 Qed.
+
+Theorem add_shuffle3':
+  forall n m p,
+  n + (m + p) = m + (n + p).
+Proof.
+  intros n m p.
+  rewrite add_assoc.
+  replace (n + m) with (m + n).
+  - rewrite add_assoc.
+    reflexivity.
+  - rewrite add_commutativity. reflexivity.
+Qed.
