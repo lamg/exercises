@@ -282,3 +282,48 @@ Proof.
     reflexivity.
   - rewrite add_commutativity. reflexivity.
 Qed.
+
+Ltac refl := reflexivity.
+
+Import BinaryNumerals.
+
+Inductive bin : Type :=
+  | Z
+  | B0 (n : bin)
+  | B1 (n : bin).
+
+  Fixpoint incr (m: bin) :=
+    match m with
+    | B0 b => B1 b
+    | B1 b => B0 (incr b)
+    | Z => B1 Z
+  end.
+
+  Import NatPlayground.
+
+  Fixpoint bin_to_nat (m:bin):nat :=
+    match m with
+    | Z => O
+    | B0 b => 2 * bin_to_nat b
+    | B1 b => one + (2 * bin_to_nat b)
+  end.
+
+
+Theorem bin_to_nat_pres_incr:
+  forall b,
+  bin_to_nat (incr b) = S (bin_to_nat b).
+Proof.
+  intro b.
+  induction b as [|b0 ind0 |b1 ind1].
+  - simpl. refl.
+  - simpl. refl. 
+  - simpl. 
+    rewrite add_0_right. 
+    rewrite add_0_right. 
+    rewrite ind1.
+    rewrite <- plus_n_S_m.
+    rewrite add_commutativity.
+    rewrite <- plus_n_S_m.
+    refl.
+Qed.
+
