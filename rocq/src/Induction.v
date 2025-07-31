@@ -1,7 +1,6 @@
 From Rocq Require Export Basics.
-
-Import NatPlayground.
 Require Import Coq.Init.Nat.
+Import NatPlayground.
 
 Theorem add_0_right :
   forall n:nat,
@@ -12,6 +11,7 @@ Theorem add_0_right :
     - reflexivity.
     - simpl. rewrite ind. reflexivity.
   Qed.
+
 
 Theorem minus_n_n :
   forall n, minus n n = 0.
@@ -95,7 +95,10 @@ Theorem even_succ :
     intros n.
     induction n as [|n' ind].
     - simpl. reflexivity.
-    - rewrite ind. rewrite negb_is_involutive. simpl. reflexivity.
+    - rewrite ind.
+      rewrite negb_is_involutive.
+      simpl.
+      reflexivity.
   Qed.
 
 Theorem mult_0_plus' :
@@ -299,7 +302,6 @@ Inductive bin : Type :=
     | Z => B1 Z
   end.
 
-  Import NatPlayground.
 
   Fixpoint bin_to_nat (m:bin):nat :=
     match m with
@@ -307,7 +309,6 @@ Inductive bin : Type :=
     | B0 b => 2 * bin_to_nat b
     | B1 b => one + (2 * bin_to_nat b)
   end.
-
 
 Theorem bin_to_nat_pres_incr:
   forall b,
