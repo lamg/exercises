@@ -3,7 +3,7 @@ From Rocq Require Export Basics.
 Import NatPlayground.
 Require Import Coq.Init.Nat.
 
-Theorem add_0_right : 
+Theorem add_0_right :
   forall n:nat,
   n + 0 = n.
   Proof.
@@ -18,10 +18,10 @@ Theorem minus_n_n :
   Proof.
   intros n. induction n as [| n' ind].
   - simpl. reflexivity.
-  - simpl. rewrite ind. reflexivity. 
+  - simpl. rewrite ind. reflexivity.
   Qed.
 
-Theorem mul_0_right: 
+Theorem mul_0_right:
   forall n:nat,
   n * 0 = 0.
   Proof.
@@ -31,7 +31,7 @@ Theorem mul_0_right:
     - simpl. rewrite ind. reflexivity.
   Qed.
 
-Theorem plus_n_S_m : 
+Theorem plus_n_S_m :
   forall n m : nat,
   S (n + m) = n + (S m).
   Proof.
@@ -41,7 +41,7 @@ Theorem plus_n_S_m :
     - simpl. rewrite ind. reflexivity.
   Qed.
 
-Theorem add_commutativity : 
+Theorem add_commutativity :
   forall n m : nat,
   n + m = m + n.
   Proof.
@@ -52,7 +52,7 @@ Theorem add_commutativity :
   Qed.
 
 
-Theorem add_assoc : 
+Theorem add_assoc :
   forall n m p : nat,
   n + (m + p) = (n + m) + p.
   Proof.
@@ -75,10 +75,10 @@ Lemma double_plus:
     intros n.
     induction n as [|n' ind].
     - simpl. reflexivity.
-    - simpl. rewrite ind. rewrite plus_n_S_m. reflexivity. 
+    - simpl. rewrite ind. rewrite plus_n_S_m. reflexivity.
   Qed.
 
-Theorem eqb_refl: 
+Theorem eqb_refl:
   forall n : nat,
   (n =? n) = true.
   Proof.
@@ -88,7 +88,7 @@ Theorem eqb_refl:
     - simpl. rewrite ind. reflexivity.
   Qed.
 
-Theorem even_succ : 
+Theorem even_succ :
   forall n : nat,
   even (S n) = negb (even n).
   Proof.
@@ -98,21 +98,21 @@ Theorem even_succ :
     - rewrite ind. rewrite negb_is_involutive. simpl. reflexivity.
   Qed.
 
-Theorem mult_0_plus' : 
+Theorem mult_0_plus' :
   forall n m : nat,
   (n + 0 + 0) * m = n * m.
   Proof.
     intros n m.
     assert (H: n + 0 + 0 = n).
-      rewrite add_commutativity. 
-      simpl. 
-      rewrite add_commutativity. 
+      rewrite add_commutativity.
+      simpl.
+      rewrite add_commutativity.
       reflexivity.
     rewrite H.
     reflexivity.
   Qed.
 
-Theorem plus_rearrange_firsttry: 
+Theorem plus_rearrange_firsttry:
   forall n m p q : nat,
   (n + m) + (p + q) = (m + n) + (p + q).
 Proof.
@@ -141,27 +141,27 @@ Qed.
 Theorem mult_n_S_m:
     forall n m: nat,
     n * m + n = n * S m.
-Proof. 
+Proof.
   intros n m.
   induction n as [|n' ind].
   - rewrite mult_0_n. reflexivity.
-  - rewrite <- plus_n_S_m. 
-    simpl. 
+  - rewrite <- plus_n_S_m.
+    simpl.
     rewrite <- ind.
     rewrite add_assoc.
     reflexivity.
 Qed.
 
-Theorem mul_commutativity : 
+Theorem mul_commutativity :
   forall m n : nat,
   m * n = n * m.
 Proof.
   intros n m.
   induction n as [|n' ind].
-  - rewrite mul_0_right. 
+  - rewrite mul_0_right.
     reflexivity.
-  - simpl. 
-    rewrite <- mult_n_S_m. 
+  - simpl.
+    rewrite <- mult_n_S_m.
     rewrite ind.
     rewrite add_commutativity.
     reflexivity.
@@ -179,7 +179,7 @@ Proof.
     simpl.
     rewrite ind.
     + reflexivity.
-    + assumption. 
+    + assumption.
 Qed.
 
 Theorem leb_refl:
@@ -191,7 +191,7 @@ Proof.
   - reflexivity.
   - simpl. assumption.
 Qed.
-  
+
 Theorem zero_neqb_S:
   forall n:nat,
   0 =? S n = false.
@@ -239,7 +239,7 @@ Proof.
   - simpl. destruct b eqn:F.
     + reflexivity.
     + reflexivity.
-  - simpl. reflexivity. 
+  - simpl. reflexivity.
 Qed.
 
 Theorem mult_plus_distr_r:
@@ -316,10 +316,10 @@ Proof.
   intro b.
   induction b as [|b0 ind0 |b1 ind1].
   - simpl. refl.
-  - simpl. refl. 
-  - simpl. 
-    rewrite add_0_right. 
-    rewrite add_0_right. 
+  - simpl. refl.
+  - simpl.
+    rewrite add_0_right.
+    rewrite add_0_right.
     rewrite ind1.
     rewrite <- plus_n_S_m.
     rewrite add_commutativity.

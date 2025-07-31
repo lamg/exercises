@@ -107,7 +107,7 @@ Check (negb true):bool.
 Check negb: bool -> bool.
 
 Inductive rgb: Type :=
-  | red 
+  | red
   | green
   | blue.
 
@@ -145,7 +145,7 @@ Module TuplePlayground.
     | B₁
     | B₀.
 
-  Inductive nybble: Type := 
+  Inductive nybble: Type :=
   | bits (b₀ b₁ b₂ b₃ : bit).
 
   Check (bits B₀ B₁ B₀ B₁: nybble).
@@ -164,29 +164,29 @@ End TuplePlayground.
 Module NatPlayground.
   Definition pred (n: nat): nat :=
     match n with
-    | O => O 
+    | O => O
     | S n => n
     end.
-  
+
   Definition minus2 (n : nat) : nat :=
     match n with
     | O => O
     | S O => O
     | S (S n) => n
-    end.      
-  
-  
+    end.
+
+
   Fixpoint even (n: nat): bool :=
     match n with
     | O => true
     | S(S n) => even n
     | _ => false
     end.
-     
+
   Example four_minus_2_is_2:
     minus2 4 = 2.
-  Proof. simpl. reflexivity. Qed. 
-  
+  Proof. simpl. reflexivity. Qed.
+
   Example four_even:
     even 4 = true.
   Proof. reflexivity. Qed.
@@ -194,13 +194,13 @@ Module NatPlayground.
   Example three_is_not_even:
     even 3 = false.
   Proof. reflexivity. Qed.
-    
+
   Definition odd (n:nat) := negb (even n).
 
   Example three_odd:
     odd 3 = true.
-  Proof. reflexivity. Qed.    
-  
+  Proof. reflexivity. Qed.
+
   Fixpoint plus (n:nat) (m:nat): nat :=
     match n with
     | O => m
@@ -216,18 +216,18 @@ Module NatPlayground.
     | O => O
     | S n => plus m (mult n m)
   end.
-  
+
   Example three_times_3_is_nine:
     mult 3 3 = 9.
   Proof. reflexivity. Qed.
-  
+
   Fixpoint minus (n m : nat) :=
     match n, m with
     | O, _ => O
     | _ , O => n
     | S n, S m => minus n m
     end.
-   
+
   Example three_minus_one_is_2 :
     minus 3 1 = 2.
   Proof. reflexivity. Qed.
@@ -237,11 +237,11 @@ Module NatPlayground.
     | O => one
     | S p => mult base (exp base p)
     end.
-  
-  Example square_of_3_is_nine: 
+
+  Example square_of_3_is_nine:
     exp 3 2 = 9.
   Proof. reflexivity. Qed.
-  
+
   Fixpoint factorial (n: nat) :=
     match n with
     | O => one
@@ -251,37 +251,37 @@ Module NatPlayground.
   Example factorial_3_is_six:
     factorial 3 = plus 3 3.
   Proof. reflexivity. Qed.
-  
+
 
   Example factorial_5_is_120:
     factorial 5 = 120.
   Proof. reflexivity. Qed.
-    
-  
+
+
   Check 1 + 2: nat.
-  
+
   Fixpoint eqb (n m: nat) :=
     match n, m with
     | O, O => true
     | S n', S m' => eqb n' m'
     | _, _ => false
     end.
-  
+
   Example two_differs_from_3:
     eqb 2 3 = false.
   Proof. reflexivity. Qed.
-  
+
   Fixpoint leb (n m :nat) :=
     match n, m with
     | O, _ => true
     | S n', S m' => leb n' m'
     | _, _ => false
     end.
-  
+
   Example two_leb_3:
     leb 2 3 = true.
   Proof. reflexivity. Qed.
-  
+
   Example not_3_leb_2:
     leb 3 2 = false.
   Proof. reflexivity. Qed.
@@ -292,12 +292,12 @@ Module NatPlayground.
     | S n', S m' => gt n' m'
     | _, _ => false
   end.
-  
+
 
   Example notation_test:
     3 <=? 2 = false.
   Proof. reflexivity. Qed.
-  
+
   Example ltb_2_3:
     ltb 2 3 = true.
   Proof. reflexivity. Qed.
@@ -309,17 +309,17 @@ Module NatPlayground.
   Example ltw_four_2:
     ltb 4 2 = false.
   Proof. reflexivity. Qed.
-  
+
   Theorem plus_0_n:
     forall n:nat, 0 + n = n.
-  Proof. intros n. simpl. reflexivity. Qed. 
-  
+  Proof. intros n. simpl. reflexivity. Qed.
+
   Theorem mult_0_n:
     forall n: nat, O * n = O.
   Proof. intros n. reflexivity. Qed.
 
   Theorem plus_id_example:
-    forall n m : nat, 
+    forall n m : nat,
     n = m -> n + n = m + m.
   Proof. intros n m. intros antecedent. rewrite antecedent. reflexivity. Qed.
 
@@ -334,14 +334,14 @@ Module NatPlayground.
       rewrite antecedent1.
       reflexivity.
     Qed.
-  
+
   Check mult_0_n.
-  
-  Theorem mult_n_0: 
-    forall n:nat, 
+
+  Theorem mult_n_0:
+    forall n:nat,
     n * 0 = 0.
-  Proof. Admitted. 
-  
+  Proof. Admitted.
+
   Theorem mult_n_S_m:
     forall n m: nat,
     n * m + n = n * S m.
@@ -356,7 +356,7 @@ Module NatPlayground.
       rewrite mult_n_0.
       reflexivity.
     Qed.
-  
+
   Theorem mult_p_one:
     forall p:nat,
     p * 1 = p.
@@ -379,17 +379,17 @@ Module NatPlayground.
       - reflexivity.
       - reflexivity.
     Qed.
-  
+
   Theorem negb_is_involutive:
     forall b: bool,
     negb (negb b) = b.
-  Proof. 
+  Proof.
     intros b.
     destruct b eqn:E.
     - reflexivity.
     - reflexivity.
   Qed.
-  
+
   Theorem andb_is_commutative:
     forall x y: bool,
     andb x y = andb y x.
@@ -403,7 +403,7 @@ Module NatPlayground.
       + reflexivity.
       + reflexivity.
   Qed.
-  
+
   Theorem andb3_exchange :
     forall x y z, andb (andb x y) z = andb (andb x z) y.
   Proof.
@@ -435,9 +435,9 @@ Module NatPlayground.
       + simpl. intro a. rewrite a. reflexivity.
     - destruct y eqn:F.
       + reflexivity.
-      + simpl. intro a. rewrite a. reflexivity. 
+      + simpl. intro a. rewrite a. reflexivity.
   Qed.
- 
+
 
   Theorem plus_one_neq_0':
     forall n, n + 1 =? 0 = false.
@@ -503,7 +503,7 @@ Module NatPlayground.
     rewrite negb_is_involutive.
     reflexivity.
   Qed.
-  
+
   Theorem andb_eq_orb:
     forall x y,
     (andb x y = orb x y) ->
@@ -587,7 +587,7 @@ Module LateDays.
   Proof.
     reflexivity.
   Qed.
-  
+
   Example test_grade_comparison3 :
     (grade_comparison (Grade F Plus) (Grade F Plus)) = Eq.
   Proof.
@@ -599,7 +599,7 @@ Module LateDays.
   Proof.
     reflexivity.
   Qed.
-  
+
   Definition lower_letter (l : letter) : letter :=
     match l with
     | A => B
@@ -617,13 +617,13 @@ Module LateDays.
     intro l.
     intro a.
     destruct l eqn:E.
-    - reflexivity. 
+    - reflexivity.
     - reflexivity.
     - reflexivity.
     - reflexivity.
     - rewrite <- a. reflexivity.
   Qed.
-  
+
   Definition lower_grade (g : grade) : grade :=
     match g with
     | Grade F Minus => Grade F Minus
@@ -631,29 +631,29 @@ Module LateDays.
     | Grade l Plus => Grade l Natural
     | Grade l Natural => Grade l Minus
   end.
-  
+
   Example lower_grade_A_Plus :
     lower_grade (Grade A Plus) = (Grade A Natural).
   Proof.
     reflexivity.
   Qed.
-  
+
   Example lower_grade_A_Natural :
     lower_grade (Grade A Natural) = (Grade A Minus).
   Proof. reflexivity. Qed.
- 
+
   Example lower_grade_A_Minus :
     lower_grade (Grade A Minus) = (Grade B Plus).
   Proof. reflexivity. Qed.
- 
+
   Example lower_grade_B_Plus :
     lower_grade (Grade B Plus) = (Grade B Natural).
   Proof. reflexivity. Qed.
-  
+
   Example lower_grade_F_Natural :
     lower_grade (Grade F Natural) = (Grade F Minus).
   Proof. reflexivity. Qed.
- 
+
   Example lower_grade_twice :
     lower_grade (lower_grade (Grade B Minus)) = (Grade C Natural).
   Proof. reflexivity. Qed.
@@ -661,11 +661,11 @@ Module LateDays.
   Example lower_grade_thrice :
     lower_grade (lower_grade (lower_grade (Grade B Minus))) = (Grade C Minus).
   Proof. reflexivity. Qed.
-  
-  Theorem lower_grade_F_Minus : 
+
+  Theorem lower_grade_F_Minus :
     lower_grade (Grade F Minus) = (Grade F Minus).
   Proof. reflexivity. Qed.
-  
+
   Theorem lower_grade_lowers :
     forall (g : grade),
     grade_comparison (Grade F Minus) g = Lt ->
@@ -691,15 +691,15 @@ Module LateDays.
     - reflexivity.
     - reflexivity.
   Qed.
-  
+
   Import NatPlayground.
-  
+
   Definition apply_late_policy (late_days : nat) (g : grade) : grade :=
     if late_days <? 9 then g
     else if late_days <? 17 then lower_grade g
     else if late_days <? 21 then lower_grade (lower_grade g)
     else lower_grade (lower_grade (lower_grade g)).
-  
+
   Theorem apply_late_policy_unfold :
     forall (late_days : nat) (g : grade),
     (apply_late_policy late_days g)
@@ -761,26 +761,26 @@ Module BinaryNumerals.
     | B1 b => one + (2 * bin_to_nat b)
   end.
 
-  Example test_bin_incr1 : 
+  Example test_bin_incr1 :
     (incr (B1 Z)) = B0 (B1 Z).
   Proof. reflexivity. Qed.
 
-  Example test_bin_incr2 : 
+  Example test_bin_incr2 :
     (incr (B0 (B1 Z))) = B1 (B1 Z).
   Proof. reflexivity. Qed.
-  
-  Example test_bin_incr3 : 
+
+  Example test_bin_incr3 :
     (incr (B1 (B1 Z))) = B0 (B0 (B1 Z)).
   Proof. reflexivity. Qed.
-  
-  Example test_bin_incr4 : 
+
+  Example test_bin_incr4 :
     bin_to_nat (B0 (B1 Z)) = 2.
   Proof. reflexivity. Qed.
-  
+
   Example test_bin_incr5 :
     bin_to_nat (incr (B1 Z)) = one + bin_to_nat (B1 Z).
   Proof. reflexivity. Qed.
-  
+
   Example test_bin_incr6 :
     bin_to_nat (incr (incr (B1 Z))) = 2 + bin_to_nat (B1 Z).
   Proof. reflexivity. Qed.
