@@ -242,13 +242,6 @@ Proof.
   - simpl. reflexivity. 
 Qed.
 
-Lemma simplify_add:
-  forall a b c,
-  (a + b = a + c) -> b = c.
-Proof.
-  intros a b c.
-Admitted.
-
 Theorem mult_plus_distr_r:
   forall n m p,
   (n + m) * p = (n * p) + (m * p).
@@ -268,3 +261,12 @@ Proof.
     + rewrite H. reflexivity.
 Qed.
 
+Theorem mult_assoc:
+  forall n m p,
+  n * (m * p) = (n * m) * p.
+Proof.
+  intros n m p.
+  induction n as [|n' ind].
+  - rewrite mult_0_n. rewrite mult_0_n. reflexivity.
+  - simpl. rewrite mult_plus_distr_r. rewrite ind. reflexivity.
+Qed.
