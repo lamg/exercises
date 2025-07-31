@@ -191,4 +191,80 @@ Proof.
   - reflexivity.
   - simpl. assumption.
 Qed.
-   
+  
+Theorem zero_neqb_S:
+  forall n:nat,
+  0 =? S n = false.
+Proof.
+  intro n.
+  simpl.
+  reflexivity.
+Qed.
+
+Theorem andb_false_r:
+  forall b,
+  andb b false = false.
+Proof.
+  intro b.
+  destruct b eqn:E.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem S_neqb_0:
+  forall n:nat,
+  S n =? 0 = false.
+Proof.
+  intro n.
+  simpl.
+  reflexivity.
+Qed.
+
+Theorem mult_1_l:
+  forall n,
+  1 * n = n.
+Proof.
+  intro n.
+  simpl.
+  rewrite add_0_right.
+  reflexivity.
+Qed.
+
+Theorem all3_spec:
+  forall a b:bool,
+  orb (andb a b) (orb (negb a) (negb b)) = true.
+Proof.
+  intros a b.
+  destruct a eqn:E.
+  - simpl. destruct b eqn:F.
+    + reflexivity.
+    + reflexivity.
+  - simpl. reflexivity. 
+Qed.
+
+Lemma simplify_add:
+  forall a b c,
+  (a + b = a + c) -> b = c.
+Proof.
+  intros a b c.
+Admitted.
+
+Theorem mult_plus_distr_r:
+  forall n m p,
+  (n + m) * p = (n * p) + (m * p).
+Proof.
+  intros n m p.
+  induction p as [|p' ind ].
+
+  - rewrite mul_0_right. rewrite mul_0_right. rewrite mul_0_right. reflexivity.
+  - rewrite <- mult_n_S_m.
+    rewrite <- mult_n_S_m.
+    rewrite <- mult_n_S_m.
+    rewrite ind.
+    rewrite <- add_assoc.
+    rewrite <- add_assoc.
+    assert (H: m*p' + (n + m) = (n + (m*p' + m))).
+    + rewrite add_shuffle3. reflexivity.
+    + rewrite H. reflexivity.
+Qed.
+
