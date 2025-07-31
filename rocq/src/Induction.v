@@ -1,5 +1,6 @@
 From Rocq Require Export Basics.
-Import Basics.NatPlayground.
+
+Import NatPlayground.
 Require Import Coq.Init.Nat.
 
 Theorem add_0_right : 
@@ -164,4 +165,19 @@ Proof.
     rewrite ind.
     rewrite add_commutativity.
     reflexivity.
+Qed.
+
+(* monotonicity of + and ≤ *)
+Theorem plus_leb_compat_l:
+  forall n m p: nat,
+  n <=? m = true -> (p + n) <=? (p + m) = true.
+Proof.
+  intros n m p.
+  induction p as [|p' ind].
+  - intro a. assumption.
+  - intro a.
+    simpl.
+    rewrite ind.
+    + reflexivity.
+    + assumption. 
 Qed.

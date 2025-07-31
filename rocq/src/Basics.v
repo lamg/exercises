@@ -16,7 +16,7 @@ Definition next_working_day (d:day) : day :=
   | thursday => friday
   | friday => monday
   | saturday => monday
-| sunday => monday
+  | sunday => monday
   end.
 
 Example test_next_working_day:
