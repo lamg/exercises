@@ -328,3 +328,21 @@ Proof.
     refl.
 Qed.
 
+Fixpoint nat_to_bin (n:nat) : bin :=
+  match n with
+  | O => B0 Z
+  | S n' => incr (nat_to_bin n')
+  end.
+
+Theorem nat_bin_nat:
+  forall n,
+  bin_to_nat(nat_to_bin n) = n.
+Proof.
+  intro n.
+  induction n as [|n' ind].
+  - simpl. refl.
+  - simpl.
+    rewrite bin_to_nat_pres_incr.
+    rewrite ind.
+    refl.
+Qed.
