@@ -306,8 +306,8 @@ Inductive bin : Type :=
   Fixpoint bin_to_nat (m:bin):nat :=
     match m with
     | Z => O
-    | B0 b => 2 * bin_to_nat b
-    | B1 b => one + (2 * bin_to_nat b)
+    | B0 b => double (bin_to_nat b)
+    | B1 b => S (double (bin_to_nat b))
   end.
 
 Theorem bin_to_nat_pres_incr:
@@ -319,18 +319,14 @@ Proof.
   - simpl. refl.
   - simpl. refl.
   - simpl.
-    rewrite add_0_right.
-    rewrite add_0_right.
     rewrite ind1.
-    rewrite <- plus_n_S_m.
-    rewrite add_commutativity.
-    rewrite <- plus_n_S_m.
+    simpl.
     refl.
 Qed.
 
 Fixpoint nat_to_bin (n:nat) : bin :=
   match n with
-  | O => B0 Z
+  | O => Z
   | S n' => incr (nat_to_bin n')
   end.
 
@@ -346,3 +342,98 @@ Proof.
     rewrite ind.
     refl.
 Qed.
+
+Theorem bin_nat_bin_fails:
+  forall b,
+  nat_to_bin (bin_to_nat b) = b.
+Proof.
+  intro b.
+  destruct b eqn:E.
+  - simpl. refl. (* goal unsatisfiable: B0 Z = Z*)
+  - simpl.
+Abort.
+
+Lemma double_incr:
+  forall n,
+  double (S n) = S (S (double n)).
+Proof.
+  intro n.
+  simpl.
+  refl.
+Qed.
+
+Definition double_bin(b:bin) :=
+  match b with
+  | Z => Z
+  | _ => B0 b
+  end.
+
+Example double_bin_zero:
+  double_bin Z = Z.
+Proof. refl. Qed.
+
+Lemma double_incr_bin:
+  forall b,
+  double_bin (incr b) = incr (incr (double_bin b)).
+Proof.
+  intro b.
+  destruct b eqn:E.
+  - simpl. refl.
+  - simpl. refl.
+  - simpl. refl.
+  Qed.
+
+Fixpoint normalize (b:bin) : bin :=
+  match b with
+  | Z => Z
+  | B0 b' => double_bin (normalize b')
+  | B1 b' => incr (double_bin (normalize b'))
+end.
+
+Example normalize_Z:
+  normalize Z = Z.
+Proof. refl. Qed.
+
+Example normalize_B1_Z:
+  normalize (B1 Z) = B1 Z.
+Proof. refl. Qed.
+
+Example normalize_B0_Z:
+  normalize (B0 Z) = Z.
+Proof. refl. Qed.
+
+Example normalize_100:
+  normalize (B0 (B0 (B1 (B0 Z)))) = (B0 (B0 (B1 Z))).
+Proof. refl. Qed.
+
+Lemma double_nat_bin:
+  forall n,
+  nat_to_bin (double n) = double_bin (nat_to_bin n).
+Proof.
+  intro n.
+  induction n as [|n' ind].
+  - simpl. refl.
+  - rewrite double_incr.
+    simpl.
+    rewrite double_incr_bin.
+    rewrite ind.
+    refl.
+Qed.
+
+Theorem bin_nat_bin:
+  forall b,
+  nat_to_bin (bin_to_nat b) = normalize b.
+Proof.
+  intro b.
+  induction b as [|b0 ind0|b1 ind1].
+  - simpl. refl.
+  - simpl.
+    rewrite double_nat_bin.
+    rewrite ind0.
+    refl.
+  - simpl.
+    rewrite double_nat_bin.
+    rewrite ind1.
+    refl.
+Qed.
+
