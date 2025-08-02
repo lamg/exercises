@@ -1,5 +1,5 @@
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; sym)
+open Eq using (_≡_; refl; cong; sym; trans)
 open Eq.≡-Reasoning using (begin_; step-≡-∣; step-≡-⟩; _∎)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _^_)
 
@@ -19,5 +19,20 @@ _ = refl
 +-suc (suc m) n rewrite +-suc m n = refl
 
 +-symmetry : ∀ (m n : ℕ) → m + n ≡ n + m
-+-symmetry zero n rewrite +-unit-right n =  refl
-+-symmetry (suc m) n rewrite +-suc n m = cong suc (+-symmetry m n)
++-symmetry m zero  =
+  begin
+  m + zero
+  ≡⟨ +-unit-right m ⟩
+  zero + m
+  ∎
+  
++-symmetry m (suc n)  =
+  begin
+  m + suc n
+  ≡⟨ +-suc m n ⟩
+  suc(m + n)
+  ≡⟨ cong suc (+-symmetry m n) ⟩
+  suc (n + m)
+  ≡⟨ refl ⟩
+  suc n + m
+  ∎
