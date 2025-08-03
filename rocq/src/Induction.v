@@ -436,4 +436,3 @@ Proof.
     rewrite ind1.
     refl.
 Qed.
-
