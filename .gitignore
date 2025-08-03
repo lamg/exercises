@@ -16,10 +16,12 @@ global.json
 *.agdai
 */_build/*
 # rocq project build artifacts
-/rocq/_build/
-/rocq/.opencode/
-
+rocq/_build/
+rocq/.opencode/
 ## Coq files
+rocq/Makefile.conf
+rocq/Makefile
+rocq/.Makefile.d
 *.vo
 *.vok
 *.vos
