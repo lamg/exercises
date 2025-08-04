@@ -110,13 +110,13 @@ Module NatList.
 
   Definition hd (default: nat) (xs: natlist) :=
     match xs with
-      | nil => default
+      | [] => default
       | x :: _ => x
     end.
 
   Definition tl (xs: natlist) :=
     match xs with
-      | nil => nil
+      | [] => []
       | _ :: ys => ys
     end.
 
@@ -310,5 +310,104 @@ Module NatList.
  Theorem nil_app :
    forall l : natlist, [] ++ l = l.
  Proof. refl. Qed.
+
+ Theorem tl_length_pred :
+   forall l:natlist,
+   pred (length l) = length (tl l).
+ Proof.
+  intros l.
+  destruct l as [| n l'].
+  - (* l = nil *)
+    reflexivity.
+  - (* l = cons n l' *)
+    reflexivity.
+ Qed.
+
+ Theorem app_assoc:
+   forall l0 l1 l2: natlist,
+     (l0 ++ l1) ++ l2 = l0 ++ (l1 ++ l2).
+   Proof.
+     intros l0 l1 l2.
+     induction l0 as [|n l0 ind].
+     - refl.
+     - simpl. rewrite ind. refl.
+  Qed.
+
+ Theorem repeat_double_firsttry :
+   forall c n: nat,
+     repeat n c ++ repeat n c = repeat n (c + c).
+ Proof.
+   intro c.
+   induction c as [|c' indC].
+   - intro n. simpl. refl.
+   - intro n. simpl.
+ Abort.
+
+ Theorem repeat_plus:
+   forall c0 c1 n: nat,
+     repeat n c0 ++ repeat n c1 = repeat n (c0 + c1).
+   Proof.
+     intros c0 c1 n.
+     induction c0 as [|c0' ind].
+     - simpl. refl.
+     - simpl. rewrite ind. refl.
+  Qed.
+
+  Fixpoint rev (l: natlist) :=
+    match l with
+      | [] => []
+      | h :: t => rev t ++ [h]
+    end.
+
+  Example test_rev1: rev [1;2;3] = [3;2;1].
+  Proof. reflexivity. Qed.
+  Example test_rev2: rev nil = nil.
+  Proof. reflexivity. Qed.
+
+  Theorem rev_length_firsttry:
+    forall l, length (rev l) = length l.
+  Proof.
+    intro l.
+    induction l as [|n l' ind].
+    - simpl. refl.
+    - simpl.
+  Abort.
+
+  Theorem app_rev_length_S_firsttry:
+    forall l n,
+      length (rev l ++ [n]) = S (length (rev l)).
+  Proof.
+    intro l.
+    induction l as [| m l' ind].
+    - intro n. simpl. refl.
+    - intro n. simpl.
+  Abort.
+
+  Theorem app_length_S:
+    forall l n, length (l ++ [n]) = S (length l).
+  Proof.
+    intro l.
+    induction l as [| m l' ind].
+    - refl.
+    - intro n. simpl. rewrite ind. refl.
+  Qed.
+
+  Theorem rev_length:
+    forall l, length (rev l) = length l.
+  Proof.
+    intro l.
+    induction l as [|n l' ind].
+    - simpl. refl.
+    - simpl. rewrite <- ind. rewrite app_length_S. refl.
+  Qed.
+
+  Theorem app_length:
+    forall l0 l1, length (l0 ++ l1) = length l0 + length l1.
+  Proof.
+    intros l0 l1.
+    induction l0 as [|n l' ind].
+    - simpl. refl.
+    - simpl. rewrite ind. refl.
+  Qed.
 
 End NatList.
