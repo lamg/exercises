@@ -533,5 +533,71 @@ Module NatList.
     refl.
   Qed.
 
+  Theorem rev_injective:
+    forall l0 l1, rev l0 = rev l1 -> l0 = l1.
+  Proof.
+    intros l0 l1.
+    intro p.
+    rewrite <- rev_involutive.
+    rewrite <- p.
+    rewrite rev_involutive.
+    refl.
+  Qed.
 
 End NatList.
+
+
+Module NatOption.
+  Import NatList.
+
+  Inductive natoption: Type :=
+    | Some (n: nat)
+    | None.
+
+  Fixpoint nth_error (xs: natlist) (n:nat) :=
+    match xs with
+      | [] => None
+      | x :: xs =>
+          match n with
+          | 0 => Some x
+          | S n' => nth_error xs n'
+          end
+    end.
+
+  Example test_nth_error1 : nth_error [4;5;6;7] 0 = Some 4.
+  Proof. reflexivity. Qed.
+  Example test_nth_error2 : nth_error [4;5;6;7] 3 = Some 7.
+  Proof. reflexivity. Qed.
+  Example test_nth_error3 : nth_error [4;5;6;7] 9 = None.
+  Proof. reflexivity. Qed.
+
+  Definition option_elim (d : nat) (o : natoption) : nat :=
+    match o with
+    | Some n' => n'
+    | None => d
+  end.
+
+  Definition hd_error (l: natlist) :=
+    match l with
+      | [] => None
+      | x :: _ => Some x
+    end.
+
+  Example test_hd_error1 : hd_error [] = None.
+  Proof. reflexivity. Qed.
+  Example test_hd_error2 : hd_error [1] = Some 1.
+  Proof. reflexivity. Qed.
+  Example test_hd_error3 : hd_error [5;6] = Some 5.
+  Proof. reflexivity. Qed.
+
+
+  Theorem option_elim_hd :
+    forall (l:natlist) (default:nat),
+    hd default l = option_elim default (hd_error l).
+  Proof.
+    intros l n.
+    destruct l eqn:E.
+    - simpl. refl.
+    - simpl. refl.
+  Qed.
+End NatOption.
