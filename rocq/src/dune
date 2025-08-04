@@ -1,4 +1,4 @@
 (coq.theory
  (name Rocq)
- (modules Basics Induction)
+ (modules Basics Induction Lists)
  (package rocq))
