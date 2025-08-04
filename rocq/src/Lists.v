@@ -131,7 +131,7 @@ Module NatList.
 
   Fixpoint nonzeros (l:natlist) : natlist :=
     match l with
-      | nil => nil
+      | [] => []
       | 0 :: xs => nonzeros xs
       | x :: xs => x :: nonzeros xs
     end.
@@ -159,13 +159,13 @@ Module NatList.
   Proof. refl. Qed.
 
   Example test_countoddmembers3:
-    countoddmembers nil = 0.
+    countoddmembers [] = 0.
   Proof. refl. Qed.
 
   Fixpoint alternate (l1 l2 : natlist) :=
     match l1, l2 with
-      | nil, _ => l2
-      | _, nil => l1
+      | [], _ => l2
+      | _, [] => l1
       | x :: xs, y :: ys => x :: y :: (alternate xs ys)
       end.
 
@@ -190,7 +190,7 @@ Module NatList.
 
   Fixpoint count (v : nat) (s : bag) : nat :=
     match s with
-      | nil => 0
+      | [] => 0
       | x :: xs =>
           if eqb v x then S (count v xs) else count v xs
     end.
@@ -216,7 +216,7 @@ Module NatList.
 
   Fixpoint member (v : nat) (s : bag) : bool :=
     match s with
-      | nil => false
+      | [] => false
       | x :: xs =>
           if eqb v x then true else member v xs
     end.
@@ -229,7 +229,7 @@ Module NatList.
 
   Fixpoint remove_one (v : nat) (s : bag) : bag :=
     match s with
-      | nil => nil
+      | [] => []
       | x :: xs =>
           if eqb x v then xs else x :: remove_one v xs
   end.
@@ -252,7 +252,7 @@ Module NatList.
 
   Fixpoint remove_all (v:nat) (s:bag) : bag :=
     match s with
-      | nil => nil
+      | [] => []
       | x :: xs =>
           if eqb x v then remove_all v xs else x :: remove_all v xs
     end.
@@ -275,7 +275,7 @@ Module NatList.
 
   Fixpoint included (s1 : bag) (s2 : bag) : bool :=
     match s1 with
-      | nil => true
+      | [] => true
       | x :: xs =>
           member x s2 && included xs (remove_one x s2)
   end.
@@ -307,5 +307,8 @@ Module NatList.
     refl.
   Qed.
 
+ Theorem nil_app :
+   forall l : natlist, [] ++ l = l.
+ Proof. refl. Qed.
 
 End NatList.
