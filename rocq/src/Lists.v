@@ -410,4 +410,128 @@ Module NatList.
     - simpl. rewrite ind. refl.
   Qed.
 
+  Theorem app_nil_r:
+    forall l: natlist, l ++ [] = l.
+  Proof.
+    intro l.
+    induction l as [|n l' ind].
+    - refl.
+    - simpl. rewrite ind. refl.
+  Qed.
+
+  Theorem rev_app_distr:
+    forall l0 l1, rev (l0 ++ l1) = rev l1 ++ rev l0.
+  Proof.
+    intros l0 l1.
+    induction l0 as [|n l' ind].
+    - simpl. rewrite app_nil_r. refl.
+    - simpl. rewrite ind. rewrite app_assoc. refl.
+  Qed.
+
+  Theorem rev_involutive:
+    forall l, rev (rev l) = l.
+  Proof.
+    intro l.
+    induction l as [|n l' ind].
+    - refl.
+    - simpl. rewrite rev_app_distr. rewrite ind. simpl. refl.
+  Qed.
+
+  Theorem app_assoc4:
+    forall l0 l1 l2 l3, l0 ++ (l1 ++ (l2 ++ l3)) = ((l0 ++ l1) ++ l2) ++ l3.
+  Proof.
+    intros l0 l1 l2 l3.
+    rewrite app_assoc.
+    rewrite app_assoc.
+    refl.
+  Qed.
+
+  Lemma nonzeros_app:
+    forall l0 l1, nonzeros (l0 ++ l1) = nonzeros l0 ++ nonzeros l1.
+  Proof.
+    intros l0 l1.
+    induction l0 as [|n l0' ind].
+    - refl.
+    - simpl.
+      destruct n eqn:E.
+      + rewrite ind. refl.
+      + simpl. rewrite ind. refl.
+    Qed.
+
+  Fixpoint eqblist (l0 l1: natlist) :=
+    match l0, l1 with
+      | [], [] => true
+      | x :: xs, y :: ys =>
+          eqb x y && eqblist xs ys
+      | _, _ => false
+    end.
+
+  Example test_eqblist1 : (eqblist nil nil = true). Proof. refl. Qed.
+  Example test_eqblist2 :eqblist [1;2;3] [1;2;3] = true. Proof. refl. Qed.
+  Example test_eqblist3 : eqblist [1;2;3] [1;2;4] = false. Proof. refl. Qed.
+
+  Theorem eqblist_refl :
+    forall l:natlist, true = eqblist l l.
+  Proof.
+    intro l.
+    induction l as [|n l' ind].
+    - refl.
+    - simpl. rewrite nat_identity. simpl. rewrite ind. refl.
+  Qed.
+
+  Theorem count_member_nonzero:
+    forall s, leb 1 (count 1 (1 :: s)) = true.
+  Proof.
+    intro s.
+    simpl.
+    refl.
+  Qed.
+
+  Theorem leb_n_Sn:
+    forall n, leb n (S n) = true.
+  Proof.
+    intro n.
+    induction n as [|n' ind].
+    - refl.
+    - simpl. rewrite ind. refl.
+  Qed.
+
+  Theorem remove_does_not_increase_count:
+    forall s, leb (count 0 (remove_one 0 s)) (count 0 s) = true.
+  Proof.
+    intro s.
+    induction s as [|n s' ind].
+    - refl.
+    - simpl.
+      destruct n eqn:E.
+      + simpl. rewrite leb_n_Sn. refl.
+      + simpl. rewrite ind. refl.
+  Qed.
+
+  Theorem bag_count_sum:
+    forall n s0 s1, count n (s0 ++ s1) = count n s0 + count n s1.
+  Proof.
+    intros n s0 s1.
+    induction s0 as [|m s0' ind].
+    - simpl. refl.
+    - simpl.
+      destruct (eqb n m) eqn:E.
+      + simpl. rewrite ind. refl.
+      + rewrite ind. refl.
+  Qed.
+
+  Theorem involution_injective:
+    forall (f: nat -> nat),
+      (forall n, f (f n) = n) -> (forall p q, f p = f q -> p = q).
+  Proof.
+    intro f.
+    intros involutive n.
+    intros p q.
+    rewrite <- involutive.
+    rewrite <- q.
+    rewrite involutive.
+    refl.
+  Qed.
+
+
 End NatList.
