@@ -525,10 +525,10 @@ Module NatList.
       (forall n, f (f n) = n) -> (forall p q, f p = f q -> p = q).
   Proof.
     intro f.
-    intros involutive n.
-    intros p q.
+    intros involutive.
+    intros p q equal_image.
     rewrite <- involutive.
-    rewrite <- q.
+    rewrite <- equal_image.
     rewrite involutive.
     refl.
   Qed.
