@@ -1,4 +1,6 @@
 -Q src Rocq
 src/Basics.v
 src/Induction.v
+src/Lists.v
+src/Poly.v
 test/Rocq_test.v
