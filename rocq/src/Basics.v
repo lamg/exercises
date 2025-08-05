@@ -1,4 +1,5 @@
 Require Import Coq.Init.Nat.
+
 Inductive day : Type :=
   | monday
   | tuesday
@@ -292,7 +293,6 @@ Module NatPlayground.
     | S n', S m' => gt n' m'
     | _, _ => false
   end.
-
 
   Example notation_test:
     3 <=? 2 = false.
