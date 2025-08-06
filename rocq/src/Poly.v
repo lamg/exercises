@@ -508,18 +508,29 @@ Module Church.
 
   Example mult_2 : mult zero (plus three three) = zero.
   Proof. reflexivity. Qed.
-
   Example mult_3 : mult two three = plus three three.
   Proof. reflexivity. Qed.
 
+  Definition conv (t:Type) (x: t) := fun (_:Type) (_: t -> t) (_:t) => t.
+
   Definition exp (n m : cnat) : cnat :=
-    fun (t: Type) (succ: t -> t) (zero: t) =>
-      m t (fun _ => n t (n t succ) zero) (succ zero).
+    fun (t: Type) (succ: t -> t) (z: t) =>
+     m t (fun x => mul n (conv x) t succ) (succ z).
+
+  Definition four := scc three.
+
+  Compute (exp two two nat S O).
+
+  Compute (exp three three nat S O).
+
+  Compute (exp four three nat S O).
+
+  Compute (exp four zero nat S O).
 
   Example exp_2 : exp three zero = one.
   Proof. reflexivity. Qed.
 
-  Example exp_1 : exp two two = plus two two.
+  Example exp_1 : exp two two = four.
   Proof. reflexivity. Qed.
 
   Example exp_3 : exp three two = plus (mult two (mult two two)) one.
