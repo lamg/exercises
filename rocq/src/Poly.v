@@ -457,7 +457,73 @@ Theorem nth_error_index_out_of_range:
 Proof.
   intros t xs n.
   intro cond.
-Admitted.
+Abort.
 
 Module Church.
+  Definition cnat := forall t: Type, (t -> t) -> t -> t.
+  Definition zero: cnat := fun (t: Type) (_: t -> t) (zero: t) => zero.
+  Definition one: cnat := fun (t: Type) (succ: t -> t) (zero: t) => succ zero.
+  Definition two: cnat := fun (t: Type) (succ: t -> t) (zero: t) => succ (succ zero).
+  Definition three: cnat := @doit3times.
+
+  Example zero_church_peano:
+    zero nat S O = 0.
+  Proof. reflexivity. Qed.
+
+  Example one_church_peano:
+    one nat S O = 1.
+  Proof. reflexivity. Qed.
+
+  Example two_church_peano:
+    two nat S O = 2.
+  Proof. reflexivity. Qed.
+
+  Definition scc (n: cnat): cnat :=
+    fun (t: Type) (succ: t -> t) (zero: t) => succ (n t succ zero).
+
+  Example scc_1 : scc zero = one.
+  Proof. reflexivity. Qed.
+  Example scc_2 : scc one = two.
+  Proof. reflexivity. Qed.
+  Example scc_3 : scc two = three.
+  Proof. reflexivity. Qed.
+
+  Definition plus (n m: cnat): cnat :=
+    fun (t: Type) (succ: t -> t) (zero: t) => m t succ (n t succ zero).
+
+  Example plus_1 : plus zero one = one.
+  Proof. reflexivity. Qed.
+  Example plus_2 : plus two three = plus three two.
+  Proof. reflexivity. Qed.
+  Example plus_3 :
+    plus (plus two two) three = plus one (plus three three).
+  Proof. reflexivity. Qed.
+
+  Definition mult (n m : cnat): cnat :=
+    fun (t: Type) (succ: t -> t) (zero: t) =>
+      m t (n t succ) zero.
+
+  Example mult_1 : mult one one = one.
+  Proof. reflexivity. Qed.
+
+  Example mult_2 : mult zero (plus three three) = zero.
+  Proof. reflexivity. Qed.
+
+  Example mult_3 : mult two three = plus three three.
+  Proof. reflexivity. Qed.
+
+  Definition exp (n m : cnat) : cnat :=
+    fun (t: Type) (succ: t -> t) (zero: t) =>
+      m t (fun _ => n t (n t succ) zero) (succ zero).
+
+  Example exp_2 : exp three zero = one.
+  Proof. reflexivity. Qed.
+
+  Example exp_1 : exp two two = plus two two.
+  Proof. reflexivity. Qed.
+
+  Example exp_3 : exp three two = plus (mult two (mult two two)) one.
+  Proof. reflexivity. Qed.
+
+
 End Church.
