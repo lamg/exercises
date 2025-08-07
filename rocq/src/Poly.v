@@ -20,7 +20,6 @@ Example test_repeat2 :
   repeat bool false 1 = cons bool false (nil bool).
 Proof. reflexivity. Qed.
 
-
 Module MumbleGrumble.
   Inductive mumble : Type :=
     | a
@@ -67,6 +66,7 @@ Fixpoint app {t : Type} (l1 l2 : list t) : list t :=
   | nil => l2
   | cons h t => cons h (app t l2)
   end.
+
 Fixpoint rev {t:Type} (l:list t) : list t :=
   match l with
   | nil => nil
@@ -146,6 +146,26 @@ Proof.
   induction l0 as [|x l0' ind].
   - simpl. rewrite app_nil_r. reflexivity.
   - simpl. rewrite ind. rewrite app_assoc. reflexivity.
+Qed.
+
+Theorem rev_involutive:
+  forall (t:Type) (l: list t), rev (rev l) = l.
+Proof.
+  intros t l.
+  induction l as [|n l' ind].
+  - reflexivity.
+  - simpl. rewrite rev_app_distr. rewrite ind. simpl. reflexivity.
+Qed.
+
+Theorem rev_injective:
+  forall (t: Type) (l0 l1: list t), rev l0 = rev l1 -> l0 = l1.
+Proof.
+  intros t l0 l1.
+  intro p.
+  rewrite <- rev_involutive.
+  rewrite <- p.
+  rewrite rev_involutive.
+  reflexivity.
 Qed.
 
 Inductive prod (t u: Type): Type :=
