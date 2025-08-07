@@ -22,7 +22,6 @@ Proof. reflexivity. Qed.
 
 
 Module MumbleGrumble.
-
   Inductive mumble : Type :=
     | a
     | b (x : mumble) (y : nat)
@@ -174,7 +173,10 @@ Fixpoint combine {t u : Type} (l0 : list t) (l1 : list u) :=
 end.
 
 (* Check @combine. *)
-(* Compute (combine [1;2] [false; true; false]). *)
+
+Example test_combine:
+  combine [1;2] [false;true;false] = [(1,false);(2,true)].
+Proof. reflexivity. Qed.
 
 Fixpoint split {t u : Type} (l : list (t * u)) : list t * list u :=
   match l with
@@ -379,7 +381,6 @@ Proof. reflexivity. Qed.
 Definition constfun {t: Type} (x: t) : nat -> t := fun (k:nat) => x.
 Definition ftrue := constfun true.
 
-
 Example constfun_example1 : ftrue 0 = true.
 Proof. reflexivity. Qed.
 
@@ -513,19 +514,31 @@ Module Church.
 
   Definition conv (t:Type) (x: t) := fun (_:Type) (_: t -> t) (_:t) => t.
 
-  Definition exp (n m : cnat) : cnat :=
-    fun (t: Type) (succ: t -> t) (z: t) =>
-     m t (fun x => mul n (conv x) t succ) (succ z).
+  Definition exp (n m: cnat) : cnat :=
+    fun (t: Type) (succ: t -> t) (zero: t) =>
+      m (t -> t) (n t) succ zero.
 
   Definition four := scc three.
 
-  Compute (exp two two nat S O).
+  Example two_squared:
+    exp two two nat S O = 4.
+  Proof. reflexivity. Qed.
 
-  Compute (exp three three nat S O).
+  Example three_cubed:
+    exp three three nat S O = 27.
+  Proof. reflexivity. Qed.
 
-  Compute (exp four three nat S O).
+  Example four_cubed:
+    exp four three nat S O = 64.
+  Proof. reflexivity. Qed.
 
-  Compute (exp four zero nat S O).
+  Example four_zero:
+    exp four zero nat S O = 1.
+  Proof. reflexivity. Qed.
+
+  Example three_four:
+    exp three four nat S O = 81.
+  Proof. reflexivity. Qed.
 
   Example exp_2 : exp three zero = one.
   Proof. reflexivity. Qed.
@@ -535,6 +548,5 @@ Module Church.
 
   Example exp_3 : exp three two = plus (mult two (mult two two)) one.
   Proof. reflexivity. Qed.
-
 
 End Church.
