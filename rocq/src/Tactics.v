@@ -310,3 +310,62 @@ Proof.
       injection eq as goal.
       apply goal.
 Qed.
+
+Theorem double_injective_take2_FAILED:
+  forall n m, double n = double m -> n = m.
+Proof.
+  intros n m.
+  induction m as [|m' ind].
+  - simpl.
+    intros eq.
+    destruct n as [|n'] eqn:E.
+    + reflexivity.
+    + discriminate eq.
+  - intros eq.
+    destruct n as [|n'] eqn:E.
+    + discriminate eq.
+    + f_equal.
+Abort.
+
+Theorem double_injective_take2:
+  forall n m, double n = double m -> m = n.
+Proof.
+  intros n m.
+  generalize dependent n.
+  induction m as [|m' ind].
+  - simpl.
+    intros n eq.
+    destruct n as [|n'] eqn:E.
+    + reflexivity.
+    + discriminate eq.
+  - simpl.
+    intros n eq.
+    destruct n as [|n'] eqn:E.
+    + discriminate eq.
+    + f_equal.
+      apply ind.
+      injection eq as goal.
+      apply goal.
+Qed.
+
+Import OptionPlayground.
+
+Theorem nth_error_after_last:
+  forall (n: nat) (t : Type) (xs: list t),
+    length xs = n -> nth_error xs n = None.
+Proof.
+  intros n t xs eq.
+  generalize dependent xs.
+  induction n as [|n' ind].
+  - intros xs eq.
+    destruct xs eqn:E.
+    + reflexivity.
+    + discriminate eq.
+  - intros xs eq.
+    destruct xs eqn:E.
+    + reflexivity.
+    + simpl.
+      injection eq as goal.
+      apply ind.
+      apply goal.
+Qed.
