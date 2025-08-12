@@ -155,7 +155,7 @@ Proof.
     reflexivity.
 Qed.
 
-Theorem mul_commutativity :
+Theorem mult_commutativity :
   forall m n : nat,
   m * n = n * m.
 Proof.

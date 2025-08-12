@@ -369,3 +369,129 @@ Proof.
       apply ind.
       apply goal.
 Qed.
+
+Definition square n := n * n.
+
+Import Induction.
+
+Lemma square_mult:
+  forall n m,
+    square (n * m) = square n * square m.
+Proof.
+  intros n m.
+  unfold square.
+  rewrite mult_assoc.
+  assert (H: n * m * n = n * n * m).
+    + rewrite mult_commutativity.
+      rewrite mult_assoc.
+      reflexivity.
+    + rewrite H.
+      rewrite mult_assoc.
+      reflexivity.
+Qed.
+
+Definition foo (x: nat) := 5.
+
+Fact silly_fact_1:
+  forall m, foo m + 1 = foo (m + 1) + 1.
+Proof.
+  intros m.
+  simpl.
+  reflexivity.
+Qed.
+
+Definition bar x :=
+  match x with
+  | 0 => 5
+  | S _ => 5
+  end.
+
+Fact silly_fact_2_failed:
+  forall m, bar m + 1  = bar (m + 1) + 1.
+Proof.
+  intros m.
+  simpl.
+Abort.
+
+
+Fact silly_fact_2:
+  forall m, bar m + 1  = bar (m + 1) + 1.
+Proof.
+  intros m.
+  destruct m eqn:E.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+
+Fact silly_fact_2':
+  forall m, bar m + 1  = bar (m + 1) + 1.
+Proof.
+  intros m.
+  unfold bar.
+  destruct m eqn:E.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Definition sillyfun (n: nat): bool :=
+  if n =? 3 then false
+  else if n =? 5 then false
+  else false.
+
+Theorem sillyfun_false:
+  forall (n: nat), sillyfun n = false.
+Proof.
+  intros n.
+  unfold sillyfun.
+  destruct (n =? 3) eqn:E.
+  - reflexivity.
+  - destruct (n =? 5) eqn:F.
+    + reflexivity.
+    + reflexivity.
+Qed.
+
+Theorem prod_eq_fst:
+  forall (t u : Type) (w x:t) (y z:u),
+    (w, y) = (x, z) -> w = x.
+Proof.
+  intros t u w x y z eq.
+  injection eq.
+  intros a b.
+  apply b.
+Qed.
+
+Definition combine_uncurried {t u: Type} := @prod_uncurry (list t) (list u) (list (t * u)) combine.
+
+Theorem combine_split_uncurried:
+  forall t u (xs: list (t * u)),
+    combine_uncurried (split xs) = xs.
+Proof.
+  intros t u xs.
+  induction xs as [|x xs' ind].
+  - simpl. reflexivity.
+  - destruct x.
+    simpl.
+    destruct (split xs').
+    rewrite <- ind.
+    unfold combine_uncurried.
+    unfold prod_uncurry.
+    unfold fst.
+    unfold snd.
+    simpl.
+    reflexivity.
+Qed.
+
+Theorem combine_split:
+  forall t u (xs: list (t * u)) ys zs,
+    split xs = (ys, zs) -> combine ys zs = xs.
+Proof.
+   intros t u xs ys zs eq.
+   rewrite <- combine_split_uncurried.
+   unfold combine_uncurried.
+   unfold prod_uncurry.
+   rewrite eq.
+   unfold fst.
+   unfold snd.
+   reflexivity.
+Qed.
