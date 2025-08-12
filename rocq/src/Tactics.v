@@ -469,7 +469,7 @@ Theorem combine_split_uncurried:
 Proof.
   intros t u xs.
   induction xs as [|x xs' ind].
-  - simpl. reflexivity.
+  - reflexivity.
   - destruct x.
     simpl.
     destruct (split xs').
@@ -478,7 +478,6 @@ Proof.
     unfold prod_uncurry.
     unfold fst.
     unfold snd.
-    simpl.
     reflexivity.
 Qed.
 
@@ -494,4 +493,51 @@ Proof.
    unfold fst.
    unfold snd.
    reflexivity.
+Qed.
+
+Definition sillyfun1 (n: nat) : bool :=
+  if n =? 3 then true
+  else if n =? 5 then true
+  else false.
+
+Theorem sillyfun1_odd_FAILED:
+  forall (n:nat), sillyfun1 n = true -> odd n = true.
+Proof.
+  intros n eq.
+  unfold sillyfun1 in eq.
+  destruct (n =? 3).
+Abort.
+
+Theorem sillyfun1_odd:
+  forall (n:nat), sillyfun1 n = true -> odd n = true.
+Proof.
+  intros n eq.
+  unfold sillyfun1 in eq.
+  destruct (n =? 3) eqn:E.
+  - apply eqb_true in E.
+    rewrite E.
+    reflexivity.
+  - destruct (n =? 5) eqn:F.
+    + apply eqb_true in F.
+      rewrite F.
+      reflexivity.
+    + discriminate eq.
+Qed.
+
+Theorem bool_fn_applied_thrice:
+  forall (f: bool -> bool) (b: bool),
+    f (f (f b)) = f b.
+Proof.
+  intros f b.
+  destruct b eqn:E.
+  - destruct (f true) eqn:F.
+    + rewrite F. apply F.
+    + destruct (f false) eqn:G.
+      * apply F.
+      * apply G.
+  - destruct (f false) eqn:F.
+    + destruct (f true) eqn:G.
+      * apply G.
+      * apply F.
+    + rewrite F. apply F.
 Qed.
