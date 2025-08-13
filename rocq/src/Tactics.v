@@ -562,3 +562,59 @@ Proof.
     + simpl.
       apply ind.
 Qed.
+
+Theorem eqb_trans:
+  forall (n m p: nat),
+    n =? m = true ->
+    m =? p = true ->
+    n =? p = true.
+Proof.
+  intros n m p eq0 eq1.
+  (*eq0: n =? m = true*)
+  (*eq0: m =? p = true*)
+  (*goal: n =? p = true *)
+  (* eqb_true: n =? m = true -> n = m*)
+  apply eqb_true in eq0.
+  (* eq0: n = m *)
+  apply eqb_true in eq1.
+  (*eq1: m = p*)
+  rewrite eq0.
+  (*goal: m =? p = true *)
+  rewrite eq1.
+  (*goal: p =? p = true *)
+  apply eqb_refl.
+Qed.
+
+Lemma hd_equal:
+  forall (t: Type) (xs ys: list t) (x y: t),
+    x :: xs = y :: ys -> x = y.
+Proof.
+  intros t xs ys x y eq.
+  injection eq as eq0 eq1.
+  apply eq0.
+Qed.
+
+Lemma tail_equal:
+  forall (t: Type) (xs ys: list t) (x y: t),
+    x :: xs = y :: ys -> xs = ys.
+Proof.
+  intros t xs ys x y eq.
+  injection eq as eq0 eq1.
+  apply eq1.
+Qed.
+
+Theorem filter_exercise:
+  forall (t: Type) (test: t -> bool) (x: t) (xs xs': list t),
+    filter test xs = x :: xs' -> test x = true.
+Proof.
+  intros t test x xs xs'.
+  induction xs as [|y ys ind].
+  - intro eq. discriminate eq.
+  - simpl.
+    destruct (test y) eqn:E.
+    + intro eq.
+      apply hd_equal in eq.
+      rewrite eq in E.
+      apply E.
+    + apply ind.
+Qed.
