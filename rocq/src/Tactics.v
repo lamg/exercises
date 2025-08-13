@@ -541,3 +541,24 @@ Proof.
       * apply F.
     + rewrite F. apply F.
 Qed.
+
+Import Induction.
+
+Theorem eqb_sym:
+  forall (n m : nat), (n =? m) = (m =? n).
+Proof.
+  intros n m.
+  generalize dependent m.
+  induction n as [|n' ind].
+  - destruct m eqn:F.
+    + reflexivity.
+    + rewrite zero_neqb_S.
+      rewrite S_neqb_0.
+      reflexivity.
+  - destruct m eqn:F.
+    + rewrite zero_neqb_S.
+      rewrite S_neqb_0.
+      reflexivity.
+    + simpl.
+      apply ind.
+Qed.
