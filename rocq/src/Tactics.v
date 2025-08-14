@@ -618,3 +618,72 @@ Proof.
       apply E.
     + apply ind.
 Qed.
+
+
+Fixpoint forallb {t: Type} (f: t -> bool) (xs: list t) :=
+  match xs with
+  | [] => true
+  | y :: ys => f y && forallb f ys
+end.
+
+Fixpoint existsb {t: Type} (f: t -> bool) (xs: list t) :=
+  match xs with
+  | [] => false
+  | y :: ys => f y || existsb f ys
+end.
+
+Example forallb_tests:
+ forallb odd [1;3;5;7;9] &&
+ forallb negb [false;false] &&
+ (negb(forallb even [0;2;4;5])) &&
+ forallb (eqb 5) [] = true.
+Proof. reflexivity. Qed.
+
+Example existsb_tests:
+  (negb (existsb (eqb 5) [0;2;3;6])) &&
+  existsb (andb true) [true;true;false] &&
+  existsb odd [1;0;0;0;0;3] &&
+  (negb (existsb even [])) = true.
+Proof. reflexivity. Qed.
+
+Definition existsb' {t: Type} (f: t -> bool) (xs: list t) :=
+  negb (forallb (fun x => negb (f x)) xs).
+
+Theorem demorgan:
+  forall x y,
+    negb (x && y) = negb x || negb y.
+Proof.
+  intros x y.
+  destruct x eqn:E.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem existsb_existsb' :
+  forall (t : Type) (test : t -> bool) (xs : list t),
+  existsb test xs = existsb' test xs.
+Proof.
+  intros t test xs.
+  induction xs as [|y ys ind].
+  - reflexivity.
+  - (* ind : existsb test ys = existsb' test ys *)
+    (* existsb test (y :: ys) = existsb' test (y :: ys) *)
+    simpl.
+    (* test y || existsb test ys = existsb' test (y :: ys) *)
+    unfold existsb'.
+    (* test y || existsb test ys = negb (forallb (fun x : t => negb (test x)) (y :: ys)) *)
+    simpl.
+    (* test y || existsb test ys =
+       negb (andb (negb (test y)) (forallb (fun x : t => negb (test x)) ys)) *)
+    rewrite demorgan.
+    (* test y || existsb test ys =
+       negb  (negb (test y)) || negb (forallb (fun x : t => negb (test x)) ys) *)
+    rewrite negb_is_involutive.
+    (* test y || existsb test ys =
+       test y || negb (forallb (fun x : t => negb (test x)) ys) *)
+    unfold existsb' in ind.
+    (* ind : existsb test ys = negb (forallb (fun x : t => negb (test x)) ys) *)
+    rewrite <- ind.
+    (* test y || existsb test ys = test y || existsb test ys *)
+    reflexivity.
+Qed.
