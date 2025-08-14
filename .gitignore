@@ -20,7 +20,6 @@ rocq/_build/
 rocq/.opencode/
 ## Coq files
 rocq/Makefile.conf
-rocq/Makefile
 rocq/.Makefile.d
 *.vo
 *.vok
