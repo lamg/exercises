@@ -4,4 +4,5 @@ src/Induction.v
 src/Lists.v
 src/Poly.v
 src/Tactics.v
+src/Logic.v
 test/Rocq_test.v
