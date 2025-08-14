@@ -42,12 +42,10 @@ Example plus_is_0:
   forall n m: nat, n + m = 0 -> n = 0 /\ m = 0.
 Proof.
   intros n m eq.
-  induction n as [|n' ind].
+  destruct n eqn:E.
   - simpl in eq.
     split.
     + reflexivity.
     + apply eq.
-  - split.
-    + discriminate eq.
-    + discriminate eq.
+  - discriminate eq.
 Qed.
