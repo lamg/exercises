@@ -155,3 +155,148 @@ Proof.
   - right. apply hp.
   - left. apply hq.
 Qed.
+
+Definition not (p: Prop) := p -> False.
+
+Notation "~ x" := (not x): type_scope.
+
+Theorem ex_falso_quodlibet:
+  forall p, False -> p.
+Proof.
+  intros p contra.
+  destruct contra.
+Qed.
+
+Theorem not_implies_our_not:
+  forall p, ~p -> (forall q:Prop, p -> q).
+Proof.
+  intros p notp q cond.
+  (* notp: ~p
+     cond: p
+     q *)
+  apply ex_falso_quodlibet.
+  (* False *)
+  unfold not in notp.
+  (* notp: p -> False *)
+  apply notp.
+  (* p *)
+  apply cond.
+Qed.
+
+Theorem zero_not_one:
+  0 <> 1.
+Proof.
+  unfold not.
+  intros contra.
+  discriminate contra.
+Qed.
+
+Theorem not_false:
+  ~ False.
+Proof.
+  unfold not.
+  intros cond.
+  apply cond.
+Qed.
+
+Theorem contradiction_implies_anything:
+  forall p q: Prop, p /\ ~p -> q.
+Proof.
+  intros p q.
+  apply not_implies_our_not.
+  unfold not.
+  intros cond.
+  destruct cond as [c0 c1].
+  apply c1.
+  apply c0.
+Qed.
+
+Theorem double_neg:
+  forall p, p -> ~~p.
+Proof.
+  intros p cond.
+  unfold not.
+  intros q.
+  apply q.
+  apply cond.
+Qed.
+
+Theorem de_morgan_not_or:
+  forall p q, ~(p \/ q) -> ~p /\ ~q.
+Proof.
+  unfold not.
+  intros p q cond.
+  (*cond: p \/ q -> False *)
+  (*(p -> False) /\ (q -> False)*)
+  split.
+  - (* p -> False *)
+    intro H.
+    (* H: p *)
+    (* False *)
+    apply cond.
+    (* p \/ q *)
+    left.
+    (* p *)
+    apply H.
+  - intro H.
+    apply cond.
+    right.
+    apply H.
+Qed.
+
+Lemma not_S_pred_n:
+  ~(forall n, S (pred n) = n).
+Proof.
+  unfold not.
+  intros H.
+  assert (E: S (pred 0) = 0).
+  - apply H.
+  - discriminate E.
+Qed.
+
+Theorem not_true_is_false:
+  forall b, b <> true -> b = false.
+Proof.
+  intros b cond.
+  destruct b eqn:E.
+  - apply ex_falso_quodlibet.
+    apply cond.
+    reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem not_true_is_false':
+  forall b, b <> true -> b = false.
+Proof.
+  intros [] H.
+  - exfalso.
+    apply H.
+    reflexivity.
+  - reflexivity.
+Qed.
+
+Lemma true_is_true:
+  True.
+Proof. apply I. Qed.
+
+Definition disc_fn (n: nat) :=
+  match n with
+  | 0 => True
+  | S _ => False
+end.
+
+Theorem disc_example:
+  forall n, ~(0 = S n).
+Proof.
+  intros n contra.
+  assert (H: disc_fn 0).
+  - simpl. apply I.
+  - rewrite contra in H.
+    simpl in H.
+    apply H.
+Qed.
+
+Theorem nil_is_not_cons:
+  forall t (x: t) (xs: list t),
+    ~(nil = x :: xs).
+Proof.
