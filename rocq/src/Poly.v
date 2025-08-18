@@ -173,8 +173,6 @@ Inductive prod (t u: Type): Type :=
 Arguments pair {t} {u}.
 Notation "( x , y )" := (pair x y).
 
-Notation "t * u" := (prod t u) : type_scope.
-
 Definition fst {t u: Type} (p: t * u) :=
   match p with
   | (x, _) => x
