@@ -523,3 +523,19 @@ Proof.
       f_equal.
       apply E.
 Qed.
+
+Theorem plus_exists_leb:
+  forall n m, (exists x, m = n + x) -> n <=? m = true.
+Proof.
+  intros n.
+  induction n as [|n' ind].
+  - intros m h.
+    reflexivity.
+  - intros m h.
+    destruct h as [x E].
+    rewrite E.
+    simpl.
+    apply ind.
+    exists x.
+    reflexivity.
+Qed.
