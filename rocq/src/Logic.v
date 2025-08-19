@@ -503,13 +503,23 @@ Proof.
       apply E.
 Qed.
 
-Lemma n_x_m_leb:
-  forall n m x, n + x = m -> n <=? m = true.
-Proof.
-  Admitted.
-
 Theorem leb_plus_exists:
   forall n m: nat, n <=? m = true -> exists x, m = n + x.
 Proof.
   intros n m h.
-  apply
+  generalize dependent m.
+  induction n as [|n' ind].
+  - intros m.
+    exists m.
+    reflexivity.
+  - intros m h.
+    destruct m eqn:F.
+    + discriminate h.
+    + simpl.
+      simpl in h.
+      apply ind in h.
+      destruct h as [y E].
+      exists y.
+      f_equal.
+      apply E.
+Qed.
