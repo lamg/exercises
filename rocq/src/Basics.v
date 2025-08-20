@@ -1,4 +1,4 @@
-Require Import Coq.Init.Nat.
+Require Import Stdlib.Init.Nat.
 
 Inductive day : Type :=
   | monday
@@ -103,10 +103,6 @@ Proof. reflexivity. Qed.
 Example test_andb34: (andb3 true true false) = false.
 Proof. reflexivity. Qed.
 
-Check (negb true):bool.
-
-Check negb: bool -> bool.
-
 Inductive rgb: Type :=
   | red
   | green
@@ -138,9 +134,6 @@ End Playground.
 
 Definition foo : bool := true.
 
-Check Playground.foo: rgb.
-Check foo:bool.
-
 Module TuplePlayground.
   Inductive bit: Type :=
     | B₁
@@ -148,8 +141,6 @@ Module TuplePlayground.
 
   Inductive nybble: Type :=
   | bits (b₀ b₁ b₂ b₃ : bit).
-
-  Check (bits B₀ B₁ B₀ B₁: nybble).
 
   Definition all_O (nb: nybble) :=
     match nb with
@@ -259,8 +250,6 @@ Module NatPlayground.
   Proof. reflexivity. Qed.
 
 
-  Check 1 + 2: nat.
-
   Fixpoint eqb (n m: nat) :=
     match n, m with
     | O, O => true
@@ -334,8 +323,6 @@ Module NatPlayground.
       rewrite antecedent1.
       reflexivity.
     Qed.
-
-  Check mult_0_n.
 
   Theorem mult_n_0:
     forall n:nat,

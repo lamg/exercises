@@ -30,11 +30,11 @@ Module MumbleGrumble.
     | d (m : mumble)
     | e (x : T).
 
-  Check (d mumble (b a 5)).
-  Check (d bool (b a 5)).
-  Check (e bool true).
-  Check (e mumble (b c 0)).
-  Check c.
+  (* Check (d mumble (b a 5)). *)
+  (* Check (d bool (b a 5)). *)
+  (* Check (e bool true). *)
+  (* Check (e mumble (b c 0)). *)
+  (* C heck c. *)
 
 End MumbleGrumble.
 
@@ -93,8 +93,6 @@ Proof. reflexivity. Qed.
 Fail Definition mynil := nil.
 
 Definition mynil : list nat := nil.
-
-Check @nil : forall t : Type, list t.
 
 Definition mynil' := @nil nat.
 
@@ -242,8 +240,6 @@ Definition hd_error {t: Type} (l: list t): option t :=
     | x :: _ => Some x
 end.
 
-Check @hd_error : forall t : Type, list t -> option t.
-
 Example test_hd_error1 : hd_error [1;2] = Some 1.
 Proof. reflexivity. Qed.
 Example test_hd_error2 : hd_error [[1];[2]] = Some [1].
@@ -251,8 +247,6 @@ Proof. reflexivity. Qed.
 
 Definition doit3times {t : Type} (f : t -> t) (n : t) : t :=
   f (f (f n)).
-
-Check @doit3times: forall t: Type, (t -> t) -> t -> t.
 
 Import NatPlayground.
 
@@ -406,7 +400,6 @@ Example constfun_example2 : (constfun 5) 99 = 5.
 Proof. reflexivity. Qed.
 
 Definition plus3 := plus 3.
-Check plus3 : nat -> nat.
 Example test_plus3 : plus3 4 = 7.
 Proof. reflexivity. Qed.
 Example test_plus3' : doit3times plus3 0 = 9.
@@ -449,9 +442,6 @@ Definition prod_uncurry {t u v : Type}
 
 Example test_map1': map (plus 3) [2;0;2] = [5;3;5].
 Proof. reflexivity. Qed.
-
-(* Check @prod_curry. *)
-(* Check @prod_uncurry. *)
 
 Theorem uncurry_curry:
   forall (t u v: Type) (f: t -> u -> v) x y,

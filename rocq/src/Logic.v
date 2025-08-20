@@ -1037,9 +1037,9 @@ Qed.
 
 Definition excluded_middle := forall p: Prop, p \/ ~p.
 
-Theorem not_exists_dist:
-  excluded_middle ->
-  forall (t: Type) (p: t -> Prop), ~(exists x, ~ p x) -> (forall x, p x).
-Proof.
-  intros em t p h.
-  intro x.
+(* Theorem not_exists_dist: *)
+(*   excluded_middle -> *)
+(*   forall (t: Type) (p: t -> Prop), ~(exists x, ~ p x) -> (forall x, p x). *)
+(* Proof. *)
+(*   intros em t p h. *)
+(*   intro x. *)

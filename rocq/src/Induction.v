@@ -1,5 +1,5 @@
 From Rocq Require Export Basics.
-Require Import Coq.Init.Nat.
+Require Import Stdlib.Init.Nat.
 Import NatPlayground.
 
 Theorem add_0_right :

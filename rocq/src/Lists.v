@@ -7,8 +7,6 @@ Module NatList.
   Inductive natprod: Type :=
     | pair (n0 n1 : nat).
 
-  Check (pair 3 5) : natprod.
-
   Definition fst (p : natprod) :=
     match p with
       | pair x _ => x
