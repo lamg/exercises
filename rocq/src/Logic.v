@@ -808,13 +808,13 @@ Proof.
     apply even_double.
 Qed.
 
-(* Theorem eqb_eq: *)
-(*   forall m n: nat, m =? n = true  <->  m = n. *)
-(* Proof. *)
-(*   intros m n. *)
-(*   split. *)
-(*   - apply Tactics.eqb_true. *)
-(*   - intros h. *)
-(*     rewrite h. *)
-(*     apply Induction.eqb_refl. *)
-(* Qed. *)
+Theorem eqb_eq:
+  forall m n: nat, m =? n = true  <->  m = n.
+Proof.
+  intros m n.
+  split.
+  - apply Tactics.eqb_true.
+  - intros h.
+    rewrite h.
+    apply Induction.eqb_refl.
+Qed.
