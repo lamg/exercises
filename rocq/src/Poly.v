@@ -1,6 +1,6 @@
 From Rocq Require Export Basics.
 From Rocq Require Export Lists.
-Require Export Coq.Init.Nat.
+Require Export Stdlib.Init.Nat.
 
 Inductive list (T: Type) : Type :=
   | nil
@@ -173,12 +173,12 @@ Inductive prod (t u: Type): Type :=
 Arguments pair {t} {u}.
 Notation "( x , y )" := (pair x y).
 
-Definition fst {t u: Type} (p: t * u) :=
+Definition fst {t u: Type} (p: prod t u) :=
   match p with
   | (x, _) => x
 end.
 
-Definition snd {t u: Type} (p: t * u) :=
+Definition snd {t u: Type} (p: prod t u) :=
   match p with
   | (_, y) => y
 end.
@@ -196,7 +196,7 @@ Example test_combine:
   combine [1;2] [false;true;false] = [(1,false);(2,true)].
 Proof. reflexivity. Qed.
 
-Fixpoint split {t u : Type} (l : list (t * u)) : list t * list u :=
+Fixpoint split {t u : Type} (l : list (prod t u)) : prod (list t) (list u) :=
   match l with
   | [] => ([], [])
   | (x, y) :: l' =>
@@ -311,7 +311,7 @@ Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
 Proof. reflexivity. Qed.
 
-Definition partition {t: Type} (f: t -> bool) (xs: list t): list t * list t :=
+Definition partition {t: Type} (f: t -> bool) (xs: list t): prod (list t) (list t) :=
   (filter (fun x => f x) xs, filter (fun x => negb (f x)) xs).
 
 Example test_partition1: partition odd [1;2;3;4;5] = ([1;3;5], [2;4]).
@@ -442,10 +442,10 @@ Proof.
 Qed.
 
 Definition prod_curry {t u v : Type}
-  (f : t * u -> v) (x : t) (y : u) : v := f (x, y).
+  (f : prod t u -> v) (x : t) (y : u) : v := f (x, y).
 
 Definition prod_uncurry {t u v : Type}
-  (f : t -> u -> v) (p : t * u) : v := (f (fst p)) (snd p).
+  (f : t -> u -> v) (p : prod t u) : v := (f (fst p)) (snd p).
 
 Example test_map1': map (plus 3) [2;0;2] = [5;3;5].
 Proof. reflexivity. Qed.
@@ -462,7 +462,7 @@ Proof.
 Qed.
 
 Theorem curry_uncurry:
-  forall (t u v: Type) (f: t * u -> v) (p: t * u),
+  forall (t u v: Type) (f: prod t u -> v) (p: prod t u),
     prod_uncurry (prod_curry f) p = f p.
 Proof.
   intros t u v f p.

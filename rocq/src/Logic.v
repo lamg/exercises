@@ -1,5 +1,6 @@
 Require Export Rocq.Basics.
 Require Export Rocq.Poly.
+Require Export Rocq.Tactics.
 (* Check (forall n m : nat, n + m = m + n) : Prop. *)
 
 (* Check (2 = 2) : Prop. *)
@@ -761,7 +762,6 @@ Proof.
   induction k as [|k' ind].
   - reflexivity.
   - simpl.
-    rewrite <- Induction.plus_n_S_m.
     apply ind.
 Qed.
 
@@ -786,24 +786,35 @@ Proof.
       simpl.
       rewrite E.
       exists (S k).
-      unfold double.
-      rewrite Induction.plus_n_S_m.
+      simpl.
       reflexivity.
 Qed.
-
-Lemma if_equal:
-  forall (n m p: nat), n = (if true then m else p) -> n = m.
-Proof.
-  Admitted.
 
 Lemma even_bool_prop:
   forall n, even n = true <-> Even n.
 Proof.
   intros n.
   split.
-  - unfold Even.
-    intro h.
-    rewrite <- (even_double n) in h.
-    induction n as [|n' ind].
-    + exists 0. reflexivity.
-    +
+  - intros h.
+    destruct (even_double_conv n) as [k E].
+    rewrite h in E.
+    rewrite E.
+    unfold Even.
+    exists k.
+    reflexivity.
+  - intros h.
+    destruct h as [k E].
+    rewrite E.
+    apply even_double.
+Qed.
+
+(* Theorem eqb_eq: *)
+(*   forall m n: nat, m =? n = true  <->  m = n. *)
+(* Proof. *)
+(*   intros m n. *)
+(*   split. *)
+(*   - apply Tactics.eqb_true. *)
+(*   - intros h. *)
+(*     rewrite h. *)
+(*     apply Induction.eqb_refl. *)
+(* Qed. *)

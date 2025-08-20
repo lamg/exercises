@@ -461,10 +461,10 @@ Proof.
   apply b.
 Qed.
 
-Definition combine_uncurried {t u: Type} := @prod_uncurry (list t) (list u) (list (t * u)) combine.
+Definition combine_uncurried {t u: Type} := @prod_uncurry (list t) (list u) (list (prod t u)) combine.
 
 Theorem combine_split_uncurried:
-  forall t u (xs: list (t * u)),
+  forall t u (xs: list (prod t u)),
     combine_uncurried (split xs) = xs.
 Proof.
   intros t u xs.
@@ -482,7 +482,7 @@ Proof.
 Qed.
 
 Theorem combine_split:
-  forall t u (xs: list (t * u)) ys zs,
+  forall t u (xs: list (prod t u)) ys zs,
     split xs = (ys, zs) -> combine ys zs = xs.
 Proof.
    intros t u xs ys zs eq.
