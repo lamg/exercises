@@ -977,7 +977,7 @@ Definition tr_rev {X} (l : list X) : list X :=
   rev_append l [].
 
 Lemma rev_append_app:
-  forall (x:t) (xs ys: list t), rev_append xs ys = rev_append xs [] ++ ys.
+  forall (t:Type) (xs ys: list t), rev_append xs ys = rev_append xs [] ++ ys.
 Proof.
   intros x xs.
   induction xs as [|x' xs' ind].
@@ -1002,5 +1002,44 @@ Proof.
     rewrite <- ind.
     unfold tr_rev.
     simpl.
-    Print rev_append_app.
     rewrite (rev_append_app t xs' [x']).
+    reflexivity.
+Qed.
+
+Theorem restricted_excluded_middle:
+  forall p b, (p <-> b = true) -> p \/ ~p.
+Proof.
+  intros p [] h.
+  - left. rewrite h. reflexivity.
+  - right. rewrite h. intros contra. discriminate contra.
+Qed.
+
+Theorem restricted_excluded_middle_eq:
+  forall (n m : nat), n = m  \/  n <> m.
+Proof.
+  intros n m.
+  apply (restricted_excluded_middle (n = m) (n =? m)).
+  symmetry.
+  apply eqb_eq.
+Qed.
+
+Theorem excluded_middle_irrefutable:
+  forall (p: Prop), ~~ (p \/ ~p).
+Proof.
+  intros p h.
+  apply de_morgan_not_or in h.
+  destruct h.
+  unfold not in H0.
+  apply H0.
+  unfold not in H.
+  apply H.
+Qed.
+
+Definition excluded_middle := forall p: Prop, p \/ ~p.
+
+Theorem not_exists_dist:
+  excluded_middle ->
+  forall (t: Type) (p: t -> Prop), ~(exists x, ~ p x) -> (forall x, p x).
+Proof.
+  intros em t p h.
+  intro x.
