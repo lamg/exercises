@@ -809,7 +809,7 @@ Proof.
 Qed.
 
 Theorem eqb_eq:
-  forall m n: nat, m =? n = true  <->  m = n.
+  forall m n, m =? n = true  <->  m = n.
 Proof.
   intros m n.
   split.
@@ -818,3 +818,189 @@ Proof.
     rewrite h.
     apply Induction.eqb_refl.
 Qed.
+
+Theorem andb_true_iff:
+  forall x y, x && y = true  <->  x = true /\ y = true.
+Proof.
+  intros x y.
+  split.
+  - intros h.
+    split.
+    + apply (andb_true_elim2 y).
+      rewrite andb_is_commutative.
+      apply h.
+    + apply (andb_true_elim2 x).
+      apply h.
+  - intros [h0 h1].
+    rewrite h0.
+    rewrite h1.
+    reflexivity.
+Qed.
+
+Theorem orb_true_iff:
+  forall x y, x || y = true  <->  x = true \/ y = true.
+Proof.
+  intros x y.
+  split.
+  - intros h.
+    destruct x eqn:E.
+    + left. reflexivity.
+    + simpl in h.
+      right. apply h.
+  - intros [h0 | h1].
+    + rewrite h0.
+      reflexivity.
+    + rewrite h1.
+      destruct x.
+      * reflexivity.
+      * reflexivity.
+Qed.
+
+Theorem eqb_neq:
+  forall x y: nat,
+    x =? y = false  <->  x <> y.
+Proof.
+  intros x y.
+  split.
+  - intros h.
+    unfold not.
+    rewrite <- eqb_eq.
+    intros h'.
+    rewrite h in h'.
+    discriminate h'.
+  - unfold not.
+    intros h.
+    apply not_true_is_false.
+    unfold not.
+    rewrite eqb_eq.
+    apply h.
+Qed.
+
+Fixpoint eqb_list {t: Type} (eqb: t -> t -> bool) (xs ys: list t) :=
+  match xs, ys with
+  | [], [] => true
+  | x :: xs, y :: ys => eqb x y && eqb_list eqb xs ys
+  | _, _ => false
+ end.
+
+Theorem eqb_list_true_iff:
+  forall t (eqb: t -> t -> bool),
+    (forall x y, eqb x y = true <-> x = y) ->
+    forall xs ys, eqb_list eqb xs ys = true  <->  xs = ys.
+Proof.
+  intros t eqb h.
+  split.
+  - intros h'.
+    generalize dependent ys.
+    induction xs as [|x' xs' ind].
+    + destruct ys eqn:F.
+      * reflexivity.
+      * intros h''. simpl in h''. discriminate h''.
+    + destruct ys eqn:F.
+      * intros h''. simpl in h''. discriminate h''.
+      * intros h''.
+        simpl in h''.
+        rewrite andb_true_iff in h''.
+        destruct h''.
+        rewrite h in H.
+        rewrite H.
+        f_equal.
+        apply ind.
+        apply H0.
+  - intros h'.
+    generalize dependent ys.
+    induction xs as [|x' xs' ind].
+    + destruct ys.
+      * intros h''. reflexivity.
+      * intros h''. discriminate h''.
+    + destruct ys.
+      * intros h''. discriminate h''.
+      * intros h''.
+        rewrite <- h''.
+        simpl.
+        rewrite andb_true_iff.
+        split.
+        -- rewrite h. reflexivity.
+        -- apply ind. reflexivity.
+Qed.
+
+Theorem forallb_true_iff:
+  forall (t: Type) test (xs: list t),
+    forallb test xs = true  <->  All (fun x => test x = true) xs.
+Proof.
+  intros t test xs.
+  split.
+  - intros h.
+    induction xs as [|x' xs ind].
+    + simpl.
+      apply I.
+    + simpl.
+      simpl in h.
+      rewrite andb_true_iff in h.
+      destruct h.
+      split.
+      * apply H.
+      * apply ind.
+        apply H0.
+ - intros h.
+   induction xs as [|x' xs ind].
+   + simpl. reflexivity.
+   + simpl.
+     simpl in h.
+     destruct h.
+     rewrite andb_true_iff.
+     split.
+     * apply H.
+     * apply ind.
+       apply H0.
+Qed.
+
+Axiom functional_extensionality:
+  forall {t u: Type} {f g: t -> u},
+    (forall x, f x = g x) -> f = g.
+
+Example function_equality_ex2:
+  (fun x => plus x 1) = (fun x => plus 1 x).
+Proof.
+  apply functional_extensionality.
+  intros x.
+  apply add_commutativity.
+Qed.
+
+Fixpoint rev_append {X} (l1 l2 : list X) : list X :=
+  match l1 with
+  | [] => l2
+  | x :: l1' => rev_append l1' (x :: l2)
+  end.
+
+Definition tr_rev {X} (l : list X) : list X :=
+  rev_append l [].
+
+Lemma rev_append_app:
+  forall (x:t) (xs ys: list t), rev_append xs ys = rev_append xs [] ++ ys.
+Proof.
+  intros x xs.
+  induction xs as [|x' xs' ind].
+  - simpl. reflexivity.
+  - simpl.
+    intros ys.
+    rewrite ind.
+    rewrite (ind [x']).
+    rewrite <- app_assoc.
+    reflexivity.
+Qed.
+
+Theorem tr_rev_correct:
+  forall t, @tr_rev t = @rev t.
+Proof.
+  intros t.
+  apply functional_extensionality.
+  intros xs.
+  induction xs as [|x' xs' ind].
+  - reflexivity.
+  - simpl.
+    rewrite <- ind.
+    unfold tr_rev.
+    simpl.
+    Print rev_append_app.
+    rewrite (rev_append_app t xs' [x']).
