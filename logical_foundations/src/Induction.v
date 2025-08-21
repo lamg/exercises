@@ -1,4 +1,4 @@
-From Rocq Require Export Basics.
+From LogicalFoundations Require Export Basics.
 Require Import Stdlib.Init.Nat.
 Import NatPlayground.
 

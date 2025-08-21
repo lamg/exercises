@@ -1,5 +1,5 @@
 (coq.theory
- (name Rocq)
+ (name LogicalFoundations)
  (modules Basics Induction Lists Poly Tactics)
  (theories Stdlib)
  (package rocq))

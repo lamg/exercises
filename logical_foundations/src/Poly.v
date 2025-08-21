@@ -1,5 +1,5 @@
-From Rocq Require Export Basics.
-From Rocq Require Export Lists.
+From LogicalFoundations Require Export Basics.
+From LogicalFoundations Require Export Lists.
 Require Export Stdlib.Init.Nat.
 
 Inductive list (T: Type) : Type :=

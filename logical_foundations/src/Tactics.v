@@ -1,7 +1,7 @@
-From Rocq Require Export Poly.
-From Rocq Require Export Basics.
+From LogicalFoundations Require Export Poly.
+From LogicalFoundations Require Export Basics.
 Import NatPlayground.
-From Rocq Require Export Induction.
+From LogicalFoundations Require Export Induction.
 
 Theorem silly0:
   forall (n m : nat), n = m -> n = m.

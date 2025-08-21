@@ -1,6 +1,6 @@
-Require Export Rocq.Basics.
-Require Export Rocq.Poly.
-Require Export Rocq.Tactics.
+Require Export LogicalFoundations.Basics.
+Require Export LogicalFoundations.Poly.
+Require Export LogicalFoundations.Tactics.
 (* Check (forall n m : nat, n + m = m + n) : Prop. *)
 
 (* Check (2 = 2) : Prop. *)

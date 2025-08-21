@@ -1,5 +1,5 @@
 (coq.theory
  (name Rocq_test)
  (modules Rocq_test)
- (theories Rocq)
+ (theories LogicalFoundations)
  (package rocq))

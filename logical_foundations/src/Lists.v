@@ -1,5 +1,5 @@
-From Rocq Require Import Induction.
-From Rocq Require Import Basics.
+From LogicalFoundations Require Import Induction.
+From LogicalFoundations Require Import Basics.
 
 Module NatList.
   Import NatPlayground.

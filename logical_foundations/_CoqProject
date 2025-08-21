@@ -1,4 +1,4 @@
--Q src Rocq
+-Q src LogicalFoundations
 src/Basics.v
 src/Induction.v
 src/Lists.v
