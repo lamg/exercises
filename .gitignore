@@ -19,8 +19,8 @@ global.json
 rocq/_build/
 rocq/.opencode/
 ## Coq files
-rocq/Makefile.conf
-rocq/.Makefile.d
+logical_foundations/Makefile.conf
+logical_foundations/.Makefile.d
 *.vo
 *.vok
 *.vos
