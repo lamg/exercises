@@ -1037,9 +1037,86 @@ Qed.
 
 Definition excluded_middle := forall p: Prop, p \/ ~p.
 
-(* Theorem not_exists_dist: *)
-(*   excluded_middle -> *)
-(*   forall (t: Type) (p: t -> Prop), ~(exists x, ~ p x) -> (forall x, p x). *)
+Theorem not_exists_dist:
+  excluded_middle ->
+  forall (t: Type) (p: t -> Prop), ~(exists x, ~ p x) -> (forall x, p x).
+Proof.
+  intros em t p e x.
+  destruct (em (p x)) as [h0 | h1].
+  - apply h0.
+  - exfalso.
+    apply e.
+    exists x.
+    apply h1.
+Qed.
+
+Definition peirce := forall p q: Prop, ((p -> q) -> p) -> p.
+
+Definition double_negation_elimination := forall p: Prop, ~~p -> p.
+
+Definition de_morgan_not_and_not := forall p q: Prop, ~(~p /\ ~q) -> p \/ q.
+
+Definition implies_to_or := forall p q: Prop, (p -> q) -> (~p \/ q).
+
+Definition consequentia_mirabilis := forall p: Prop, (~p -> p) -> p.
+
+Lemma not_p_or_q:
+  forall p q, ~p \/ q -> (p -> q).
+Proof.
+  intros p q h.
+  destruct h as [h0 | h1].
+  - intros hp.
+    exfalso.
+    apply h0.
+    apply hp.
+  - intros hp.
+    apply h1.
+Qed.
+
+Theorem peirce_implies:
+  peirce -> double_negation_elimination.
+Proof.
+  intros peirce p.
+  unfold not.
+  intros h.
+  apply (peirce p False).
+  intros hp.
+  apply h in hp.
+  exfalso.
+  apply hp.
+Qed.
+
+Theorem double_negation_elimination_implies:
+  double_negation_elimination -> de_morgan_not_and_not.
+Proof.
+  intros dn p q.
+  intros h.
+  unfold not in h.
+  apply dn.
+  unfold not.
+  intros hpq.
+  apply de_morgan_not_or in hpq.
+  apply h.
+  apply hpq.
+Qed.
+
+Theorem de_morgan_not_and_not_implies:
+  de_morgan_not_and_not -> implies_to_or.
+Proof.
+  intros dm p q hpq.
+  apply (dm (~p) q).
+  intros npq.
+  destruct npq.
+  apply H.
+  intro hp.
+  apply hpq in hp.
+  apply H0.
+  apply hp.
+Qed.
+
+(* Theorem implies_to_or_implies: *)
+(*   implies_to_or -> consequentia_mirabilis. *)
 (* Proof. *)
-(*   intros em t p h. *)
-(*   intro x. *)
+(*   intros ito p np. *)
+(*   apply ito in np. *)
+(*   destruct np as [h0|h1]. *)
