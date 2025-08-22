@@ -167,7 +167,7 @@ theorem negb_is_involutive (b: Bool):
   | true => rfl
 
 theorem andb_is_commutative(x y : Bool):
-  andb x y == andb y x
+  (x && y) = (y && x)
 := by
   cases x with
   | false =>
@@ -178,3 +178,130 @@ theorem andb_is_commutative(x y : Bool):
     cases y with
     | false => rfl
     | true => rfl
+
+theorem andb3_exchange(x y z: Bool):
+  ((x && y) && z) = (x && (y && z))
+:= by
+  cases x <;> cases y <;> cases z <;> rfl
+
+theorem andb_true_elim2(x y : Bool):
+  (x && y) = true -> (y = true)
+:= by
+  cases x <;> cases y <;> simp
+
+theorem plus_one_neq_0'(n: Nat):
+  (n + 1 == 0) = false
+:= by
+  cases n <;> simp
+
+theorem identity_fn_applied_twice (f: Bool -> Bool) (h: ∀ x, f x = x):
+  ∀ b, f (f b) = b
+:= by
+  intro b
+  rewrite [h, h]
+  rfl
+
+theorem negation_fn_applied_twice
+  (f: Bool -> Bool)
+  (h: ∀ x, f x = negb x)
+  (b: Bool):
+  f (f b) = b
+:= by
+  rewrite [h,h]
+  rewrite [negb_is_involutive]
+  rfl
+
+theorem andb_eq_orb (x y: Bool):
+ (x && y) = (x || y) ->  x = y
+:= by
+  cases x <;> simp
+
+inductive letter where | A | B | C | D | F
+
+inductive modifier where | Plus | Natural | Minus
+
+inductive grade where | Grade (l: letter) (m: modifier)
+
+inductive comparison where | Eq | Lt | Gt
+
+open letter
+open modifier
+open grade
+open comparison
+
+def letter_comparison (l0 l1: letter) :=
+  match l0, l1 with
+  | A, A => comparison.Eq
+  | A, _ => Gt
+  | B, A => Lt
+  | B, B => Eq
+  | B, _ => Gt
+  | C, A
+  | C, B => Lt
+  | C, C => Eq
+  | C, _ => Gt
+  | D, A
+  | D, B
+  | D, C => Lt
+  | D, D => Eq
+  | D, _ => Gt
+  | F, A
+  | F, B
+  | F, C
+  | F, D => Lt
+  | F, F => Eq
+
+theorem letter_comparison_eq (l: letter):
+  letter_comparison l l = comparison.Eq
+:= by
+  cases l <;> rfl
+
+def modifier_comparison (m₀ m₁: modifier) :=
+  match m₀, m₁ with
+  | Plus, Plus => comparison.Eq
+  | Plus, _ => Gt
+  | Natural, Plus => Lt
+  | Natural, Natural => Eq
+  | Natural, _ => Gt
+  | Minus, Plus
+  | Minus, Natural => Lt
+  | Minus, Minus => Eq
+
+def grade_comparison (g₀ g₁: grade) :=
+  match g₀, g₁ with
+  | grade.Grade l₀ m₀, grade.Grade l₁ m₁ =>
+    match letter_comparison l₀ l₁ with
+    | comparison.Eq => modifier_comparison m₀ m₁
+    | r => r
+
+example: grade_comparison (Grade A Minus) (Grade B Plus) = Gt := by rfl
+
+example: grade_comparison (Grade A Minus) (Grade A Plus) = Lt := by rfl
+
+example: grade_comparison (Grade F Plus) (Grade F Plus) = comparison.Eq := by rfl
+
+example: grade_comparison (Grade B Minus) (Grade C Plus) = Gt := by rfl
+
+def lower_letter (l: letter) :=
+  match l with
+  | A => B
+  | B => C
+  | C => D
+  | D => F
+  | F => F
+
+theorem lower_letter_lowers (l: letter):
+  letter_comparison F l = Lt ->
+  letter_comparison (lower_letter l) l = Lt
+:= by
+  intro h
+  cases l with
+  | F => rewrite [<-h]; rfl
+  | _ => rfl
+
+def lower_grade (g: grade) :=
+  match g with
+  | Grade F Minus => Grade F Minus
+  | Grade l Minus => Grade (lower_letter l) Plus
+  | Grade l Plus => Grade l Natural
+  | Grade l Natural => Grade l Minus
