@@ -1114,9 +1114,27 @@ Proof.
   apply hp.
 Qed.
 
-(* Theorem implies_to_or_implies: *)
-(*   implies_to_or -> consequentia_mirabilis. *)
-(* Proof. *)
-(*   intros ito p np. *)
-(*   apply ito in np. *)
-(*   destruct np as [h0|h1]. *)
+Theorem implies_to_or_implies:
+  implies_to_or -> consequentia_mirabilis.
+Proof.
+  intros ito p np.
+  assert(H: ~p \/ p).
+  - apply ito.
+    intro hp.
+    apply hp.
+  - destruct H.
+    + apply np in H. apply H.
+    + apply H.
+Qed.
+
+Theorem consequentia_mirabilis_implies:
+  consequentia_mirabilis -> excluded_middle.
+Proof.
+  intros cm p.
+  apply cm.
+  intro h.
+  apply de_morgan_not_or in h.
+  right.
+  destruct h.
+  apply H.
+Qed.
