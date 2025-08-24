@@ -1,0 +1,10 @@
+name = "logical_foundations"
+version = "0.1.0"
+defaultTargets = ["logical_foundations"]
+
+[[lean_lib]]
+name = "LogicalFoundations"
+
+[[lean_exe]]
+name = "logical_foundations"
+root = "Main"

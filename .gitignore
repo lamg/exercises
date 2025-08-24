@@ -27,6 +27,9 @@ logical_foundations/.Makefile.d
 *.glob
 *.aux
 
+# Lean build artifacts
+.lake/
+
 # User-specific files
 *.rsuser
 *.suo
