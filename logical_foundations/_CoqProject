@@ -5,4 +5,5 @@ src/Lists.v
 src/Poly.v
 src/Tactics.v
 src/Logic.v
+src/IndProp.v
 test/Rocq_test.v
