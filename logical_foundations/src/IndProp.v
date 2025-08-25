@@ -96,3 +96,34 @@ Inductive Perm3 {t: Type}: list t -> list t -> Prop :=
   | perm3_swap12 (x y z: t): Perm3 [x; y; z] [y; x; z]
   | perm3_swap23 (x y z: t): Perm3 [x; y; z] [x; z; y]
   | perm3_trans (xs ys zs: list t): Perm3 xs ys -> Perm3 ys zs -> Perm3 xs zs.
+
+Example self_perm_123:
+ Perm3 [1;2;3] [1;2;3].
+(*
+1 2 3
+2 1 3
+2 3 1
+3 2 1
+
+3 2 1
+3 1 2
+1 3 2
+1 2 3
+ *)
+Proof.
+  apply perm3_trans with [3;2;1].
+  - apply perm3_trans with [2; 1; 3].
+    + apply perm3_swap12.
+    + apply perm3_trans with [2; 3; 1].
+      * apply perm3_swap23.
+      * apply perm3_swap12.
+  - apply perm3_trans with [3; 1; 2].
+    + apply perm3_swap23.
+    + apply perm3_trans with [1;3;2].
+      * apply perm3_swap12.
+      * apply perm3_swap23.
+Qed.
+
+Inductive ev: nat -> Prop :=
+  | ev_0: ev 0
+  | ev_SS (n: nat) (H: ev n): ev (S (S n)).
