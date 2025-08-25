@@ -305,3 +305,70 @@ def lower_grade (g: grade) :=
   | Grade l Minus => Grade (lower_letter l) Plus
   | Grade l Plus => Grade l Natural
   | Grade l Natural => Grade l Minus
+
+theorem lower_grade_lowers (g: grade):
+  grade_comparison (Grade F Minus) g = Lt ->
+  grade_comparison (lower_grade g) g = Lt
+:= by
+  intros h
+  cases g with
+  | Grade l m =>
+    cases l <;> cases m <;>
+      first
+      | rewrite [←h]; rfl  -- succeeds only when l = F, m = Minus
+      | rfl                  -- succeeds in all the other cases
+
+def apply_late_policy (late_days: Nat) (g: grade) :=
+  if Nat.blt late_days 9 then g
+  else if Nat.blt late_days 17 then lower_grade g
+  else if Nat.blt late_days 21 then lower_grade (lower_grade g)
+  else lower_grade (lower_grade (lower_grade g))
+
+theorem no_penalty_for_mostly_on_time (late_days:Nat) (g: grade):
+  Nat.blt late_days 9 = true -> apply_late_policy late_days g = g
+:= by
+  intro h
+  unfold apply_late_policy
+  rewrite [h]
+  simp
+
+theorem grade_lowered_once (late_days: Nat) (g: grade):
+    Nat.blt late_days 9 = false ->
+    Nat.blt late_days 17 ->
+    apply_late_policy late_days g = lower_grade g
+:= by
+  intros not_9 lt_17
+  unfold apply_late_policy
+  rewrite [not_9, lt_17]
+  simp
+
+inductive bin where
+  | Z
+  | B₀ (n: bin)
+  | B₁ (n: bin)
+
+open bin
+
+def incr (m: bin) :=
+  match m with
+  | B₀ b => B₁ b
+  | B₁ b => B₀ (incr b)
+  | Z => B₁ Z
+
+def bin_to_nat (m: bin) :=
+  match m with
+  | Z => 0
+  | B₀ b => 2 * bin_to_nat b
+  | B₁ b => 1 + (2 * bin_to_nat b)
+
+example: incr (B₁ Z) = B₀ (B₁ Z) := by rfl
+
+example: incr (B₀ (B₁ Z)) = B₁ (B₁ Z) := by rfl
+
+example: incr (B₁ (B₁ Z)) = B₀ (B₀ (B₁ Z)) := by rfl
+
+example: bin_to_nat (B₀ (B₁ Z)) = 2 := by rfl
+
+example: bin_to_nat (incr (B₁ Z)) = 1 + bin_to_nat (B₁ Z) := by rfl
+
+example: bin_to_nat (incr (incr (B₁ Z))) = 2 + bin_to_nat (B₁ Z) := by rfl
