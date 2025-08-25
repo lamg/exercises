@@ -2,4 +2,4 @@
  (name Rocq_test)
  (modules Rocq_test)
  (theories LogicalFoundations)
- (package rocq))
+ (package logical_foundations))

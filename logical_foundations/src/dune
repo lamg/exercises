@@ -2,4 +2,4 @@
  (name LogicalFoundations)
  (modules Basics Induction Lists Poly Tactics IndProp)
  (theories Stdlib)
- (package rocq))
+ (package logical_foundations))
