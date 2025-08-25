@@ -1,6 +1,6 @@
 Require Export Logic.
 Require Export Basics.
-Require Export Poly.
+Require Export LogicalFoundations.Poly.
 Require Export Init.Nat.
 
 Fixpoint div2 (n: nat) :=
