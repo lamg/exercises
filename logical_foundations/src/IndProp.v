@@ -1,5 +1,6 @@
-Require Export Logic.
-Require Export Basics.
+Require Export LogicalFoundations.Basics.
+Require Export LogicalFoundations.Logic.
+Require Export LogicalFoundations.Induction.
 Require Export LogicalFoundations.Poly.
 Require Export Init.Nat.
 
@@ -127,3 +128,211 @@ Qed.
 Inductive ev: nat -> Prop :=
   | ev_0: ev 0
   | ev_SS (n: nat) (H: ev n): ev (S (S n)).
+
+Theorem ev_4:
+  ev 4.
+Proof.
+  apply ev_SS.
+  apply ev_SS.
+  apply ev_0.
+Qed.
+
+Theorem ev_4':
+  ev 4.
+Proof.
+  apply (ev_SS 2 (ev_SS 0 ev_0)).
+Qed.
+
+Theorem ev_double:
+  forall n, ev (Induction.double n).
+Proof.
+  induction n as [|n' ind].
+  - unfold double.
+    simpl.
+    apply ev_0.
+  - unfold double.
+    simpl.
+    apply ev_SS.
+    apply ind.
+Qed.
+
+Lemma Perm3_refl:
+  forall (t: Type) (x y z: t), Perm3 [x;y;z] [x;y;z].
+Proof.
+  intros t x y z.
+  apply perm3_trans with [z;y;x].
+  - apply perm3_trans with [y;x;z].
+    + apply perm3_swap12.
+    + apply perm3_trans with [y; z; x].
+      * apply perm3_swap23.
+      * apply perm3_swap12.
+  - apply perm3_trans with [z; x; y].
+    + apply perm3_swap23.
+    + apply perm3_trans with [x; z; y].
+      * apply perm3_swap12.
+      * apply perm3_swap23.
+Qed.
+
+Theorem ev_inversion:
+  forall (n: nat), ev n -> (n = 0) \/ (exists n', n = S (S n') /\ ev n').
+Proof.
+  intros n E.
+  destruct E as [|n' E'].
+  - left. reflexivity.
+  - right.
+    exists n'.
+    split.
+    + reflexivity.
+    + apply E'.
+Qed.
+
+Theorem le_inversion:
+  forall (n m: nat), le n m -> (n = m) \/ (exists m', m = S m' /\ le n m').
+Proof.
+  intros n m E.
+  destruct E as [|n' m' E'].
+  - left. reflexivity.
+  - right.
+    exists m'.
+    split.
+    + reflexivity.
+    + apply E'.
+Qed.
+
+Theorem evSS_ev:
+  forall n, ev (S (S n)) -> ev n.
+Proof.
+  intros n E.
+  apply ev_inversion in E.
+  destruct E as [h0|h1].
+  - discriminate h0.
+  - destruct h1 as [n' [Hn E']].
+    injection Hn as Hn.
+    rewrite Hn.
+    apply E'.
+Qed.
+
+Theorem evSS_ev':
+  forall n, ev (S (S n)) -> ev n.
+Proof.
+  intros n E.
+  inversion E as [|n' E' Hn].
+  apply E'.
+Qed.
+
+Theorem one_not_even:
+  ~ ev 1.
+Proof.
+  intros H.
+  apply ev_inversion in H.
+  destruct H as [|[m [Hm _]]].
+  - discriminate H.
+  - discriminate Hm.
+Qed.
+
+Theorem one_not_even':
+  ~ ev 1.
+Proof.
+  intros H.
+  inversion H.
+Qed.
+
+Theorem SSSSev__even:
+  forall n, ev (S (S (S (S n)))) -> ev n.
+Proof.
+  intros n H.
+  inversion H as [|n' E' Hn].
+  apply evSS_ev.
+  apply E'.
+Qed.
+
+
+Theorem ev5_nonsense:
+  ev 5 -> (plus 2 2 = 9).
+Proof.
+  intros H.
+  inversion H as [|n' E' Hn].
+  apply evSS_ev in E'.
+  inversion E' as [|n'' E'' Hnn].
+Qed.
+
+Theorem inversion_ex1:
+  forall (n m p: nat), [n;m] = [p;p] -> [n] = [m].
+Proof.
+  intros n m p H.
+  inversion H.
+  reflexivity.
+Qed.
+
+Theorem inversion_ex2:
+  forall (n:nat), S n = O -> plus 2 2 = 5.
+Proof.
+  intros n H.
+  inversion H.
+Qed.
+
+Lemma ev_Even_firsttry:
+  forall n, ev n -> Even n.
+Proof.
+  intros n H.
+  unfold Even.
+  inversion H as [E | n' H' E].
+  - exists 0. reflexivity.
+  - assert (h0: (exists k, n' = Induction.double k) -> (exists n0, S (S n') = Induction.double n0)).
+    + intros [k E'].
+      exists (S k).
+      simpl.
+      simpl.
+      rewrite E'.
+      reflexivity.
+    + apply h0.
+      generalize dependent E.
+      Abort.
+
+Lemma ev_Even:
+  forall n, ev n -> Even n.
+Proof.
+  unfold Even.
+  intros n E.
+  induction E as [|n' E' ind].
+  - exists 0. reflexivity.
+  - destruct ind as [n H].
+    exists (S n).
+    simpl.
+    rewrite H.
+    reflexivity.
+Qed.
+
+Theorem ev_Even_iff:
+  forall n, ev n <-> Even n.
+Proof.
+  intros n.
+  split.
+  - apply ev_Even.
+  - unfold Even.
+    intros [k E].
+    rewrite E.
+    apply ev_double.
+Qed.
+
+Theorem ev_sum:
+  forall n m, ev n -> ev m -> ev (n + m).
+Proof.
+  intros n m H0 H1.
+  induction H0 as [|n' E ind].
+  - apply H1.
+  - simpl.
+    apply ev_SS.
+    apply ind.
+Qed.
+
+Theorem ev_ev__ev:
+  forall n m, ev (n + m) -> ev n -> ev m.
+Proof.
+  intros n m H0 H1.
+  induction H1 as [|n' E ind].
+  - apply H0.
+  - inversion H0 as [|n'' E' H].
+    apply ind.
+    apply E'.
+Qed.
