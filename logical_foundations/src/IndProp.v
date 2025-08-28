@@ -336,3 +336,94 @@ Proof.
     apply ind.
     apply E'.
 Qed.
+
+Theorem ev_plus_plus:
+  forall n m p, ev (n + m) -> ev (n + p) -> ev (m + p).
+Proof.
+  intros n m p H0 H1.
+  assert (H: ev (n+m + (n+p))).
+  - apply ev_sum.
+    apply H0.
+    apply H1.
+  - rewrite <- add_assoc in H.
+    rewrite (add_commutativity n p) in H.
+    rewrite (add_assoc m p n) in H.
+    rewrite (add_commutativity (m + p) n) in H.
+    rewrite add_assoc in H.
+    apply (ev_ev__ev (n + n) (m + p)) in H.
+    + apply H.
+    + rewrite <- double_plus.
+      apply ev_double.
+Qed.
+
+Inductive ev': nat -> Prop :=
+  | ev'_0: ev' 0
+  | ev'_2: ev' 2
+  | ev'_sum n m (Hn: ev' n) (Hm: ev' m): ev' (n + m).
+
+Theorem ev'_ev:
+  forall n, ev' n <-> ev n.
+Proof.
+  intros n.
+  split.
+  - intro H.
+    induction H as [ | | n' m H0 H1 H2 ind].
+    + apply ev_0.
+    + apply ev_SS. apply ev_0.
+    + apply ev_sum.
+      * apply H1.
+      * apply ind.
+  - intro H.
+    induction H as [|n' E ind].
+    + apply ev'_0.
+    + apply (ev'_sum 2 n' ev'_2 ind).
+Qed.
+
+Lemma Perm3_symm:
+  forall (t: Type) (xs ys: list t),
+    Perm3 xs ys -> Perm3 ys xs.
+Proof.
+  intros t xs ys E.
+  induction E as [x y z | x y z | xs ys zs E__xy H__xy E__yz H__yz].
+  - apply perm3_swap12.
+  - apply perm3_swap23.
+  - apply (perm3_trans _ ys _).
+    + apply H__yz.
+    + apply H__xy.
+Qed.
+
+Lemma or_symmetry:
+  forall x y, x \/ y <-> y \/ x.
+Proof.
+  intros x y.
+  split.
+  - intros H. apply or_commutativity. apply H.
+  - intros H. apply or_commutativity. apply H.
+Qed.
+
+Print "\/".
+
+Lemma Perm3_In:
+  forall (t: Type) (x: t) (xs ys: list t),
+    Perm3 xs ys -> In x xs -> In x ys.
+Proof.
+  intros t x xs ys Hperm Hin.
+  induction Hperm as [ | | xs ys zs Perm__xs  Ind__xs Perm__ys Ind__ys ].
+  - simpl. simpl in Hin.
+    rewrite or_assoc.
+    rewrite (or_symmetry (x = y) (x = x0)).
+    rewrite <- or_assoc.
+    apply Hin.
+  - simpl. simpl in Hin.
+    rewrite or_assoc.
+    rewrite (or_assoc (x = x0 \/ x = z)).
+    rewrite <- (or_assoc (x = x0) (x = z) (x = y)).
+    rewrite (or_symmetry (x = z) (x = y)).
+    rewrite or_assoc.
+    rewrite <- (or_assoc (x = x0 \/ x = y) (x = z) False).
+    rewrite <- or_assoc.
+    apply Hin.
+  - apply Ind__ys.
+    apply Ind__xs.
+    apply Hin.
+Qed.
