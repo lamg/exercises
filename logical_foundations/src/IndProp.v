@@ -427,3 +427,158 @@ Proof.
     apply Ind__xs.
     apply Hin.
 Qed.
+
+Lemma Perm3_NotIn:
+  forall (t : Type) (x: t) (xs ys : list t),
+    Perm3 xs ys -> ~In x xs -> ~In x ys.
+Proof.
+  intros t x xs ys Hperm Hin_xs Hin_ys.
+  apply Hin_xs.
+  apply (Perm3_In t x ys xs).
+  - apply Perm3_symm.
+    apply Hperm.
+  - apply Hin_ys.
+Qed.
+
+Example Perm3_example2:
+  ~ Perm3 [1;2;3] [1;2;4].
+Proof.
+  intro H.
+  apply (Perm3_NotIn t 4 [1;2;3] [1;2;4]).
+  - apply H.
+  - unfold not.
+    simpl.
+    intro in4.
+    destruct in4.
+    + discriminate H0.
+    + destruct H0.
+      * discriminate H0.
+      * destruct H0.
+        -- discriminate H0.
+        -- apply H0.
+  - simpl.
+    right.
+    right.
+    left.
+    reflexivity.
+Qed.
+
+Notation "n <= m" := (le n m).
+
+Theorem test_le1:
+  3 <= 3.
+Proof.
+  apply le_n.
+Qed.
+
+Theorem test_le2:
+  3 <= 6.
+Proof.
+  apply le_S.
+  apply le_S.
+  apply le_S.
+  apply le_n.
+Qed.
+
+Theorem test_le3:
+  (2 <= 1) -> 2 + 2 = 5.
+Proof.
+  intros H.
+  inversion H.
+  inversion H2.
+Qed.
+
+Definition ge (m n : nat) : Prop := le n m.
+Notation "m >= n" := (ge m n).
+
+Lemma le_monotonicity:
+  forall n m, n <= m -> S n <= S m.
+Proof.
+  intros n m H.
+  induction H as [|n' E ind].
+  - apply le_n.
+  - apply le_S.
+    apply IHind.
+Qed.
+
+Lemma le_trans:
+  forall m n p, m <= n -> n <= p -> m <= p.
+Proof.
+  intros m n p H0 H1.
+  induction H1.
+  - apply H0.
+  - apply IHle in H0.
+    apply le_S in H0.
+    apply H0.
+Qed.
+
+Theorem O_le_n:
+  forall n, 0 <= n.
+Proof.
+  intros n.
+  induction n.
+  - apply le_n.
+  - apply le_S in IHn.
+    apply IHn.
+Qed.
+
+Theorem n_le_m__Sn_le_Sm:
+  forall n m, n <= m -> S n <= S m.
+Proof.
+  apply le_monotonicity.
+Qed.
+
+Theorem le_plus_l:
+  forall x y, x <= x + y.
+Proof.
+  intros x y.
+  induction x.
+  - simpl. apply O_le_n.
+  - apply (le_monotonicity x (x + y)).
+    apply IHx.
+Qed.
+
+Theorem plus_le:
+  forall x y z,
+    x + y <= z  ->  x <= z /\ y <= z.
+Proof.
+  intros x y z H.
+  split.
+  - apply (le_trans x (x + y) z).
+    + apply le_plus_l.
+    + apply H.
+  - apply (le_trans y (x + y) z).
+    + rewrite add_commutativity.
+      apply le_plus_l.
+    + apply H.
+Qed.
+
+Lemma plus_1_is_S:
+  forall n m, S n + m = n + m + 1.
+Proof.
+  intros n m.
+  simpl.
+  rewrite <- (plus_n_S_m (n + m) 0).
+  rewrite add_0_right.
+  reflexivity.
+Qed.
+
+Lemma S_is_plus_1:
+  forall n, S n = n + 1.
+Proof.
+  intro n.
+  rewrite <- (plus_n_S_m n 0).
+  rewrite add_0_right.
+  reflexivity.
+Qed.
+
+Theorem plus_le_cases:
+  forall n m p q,
+    n + m <= p + q  ->  n <= p \/ m <= q.
+Proof.
+  intros n m p q H.
+  induction n.
+  - left.
+    apply O_le_n.
+  - left.
+    rewrite S_is_plus_1.
