@@ -1,8 +1,7 @@
-From LogicalFoundations Require Import Induction.
-From LogicalFoundations Require Import Basics.
+Require Export LogicalFoundations.Induction.
+Require Import LogicalFoundations.Basics.
 
 Module NatList.
-  Import NatPlayground.
 
   Inductive natprod: Type :=
     | pair (n0 n1 : nat).
@@ -603,7 +602,6 @@ End NatOption.
 
 
 Module PartialMap.
-  Import NatPlayground.
   Import NatList.
   Import NatOption.
 
