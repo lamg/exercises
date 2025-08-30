@@ -153,358 +153,351 @@ Module TuplePlayground.
   Proof. reflexivity. Qed.
 End TuplePlayground.
 
-Module NatPlayground.
-  Definition pred (n: nat): nat :=
-    match n with
-    | O => O
-    | S n => n
-    end.
-
-  Definition minus2 (n : nat) : nat :=
-    match n with
-    | O => O
-    | S O => O
-    | S (S n) => n
-    end.
-
-
-  Fixpoint even (n: nat): bool :=
-    match n with
-    | O => true
-    | S(S n) => even n
-    | _ => false
-    end.
-
-  Example four_minus_2_is_2:
-    minus2 4 = 2.
-  Proof. simpl. reflexivity. Qed.
-
-  Example four_even:
-    even 4 = true.
-  Proof. reflexivity. Qed.
-
-  Example three_is_not_even:
-    even 3 = false.
-  Proof. reflexivity. Qed.
-
-  Definition odd (n:nat) := negb (even n).
-
-  Example three_odd:
-    odd 3 = true.
-  Proof. reflexivity. Qed.
-
-  Fixpoint plus (n:nat) (m:nat): nat :=
-    match n with
-    | O => m
-    | S n => S (plus n m)
+Definition pred (n: nat): nat :=
+  match n with
+  | O => O
+  | S n => n
   end.
 
-  Example two_plus_2_is_four:
-    plus 2 2 = 4.
-  Proof. reflexivity. Qed.
-
-  Fixpoint mult (n m :nat ): nat :=
-    match n with
-    | O => O
-    | S n => plus m (mult n m)
+Definition minus2 (n : nat) : nat :=
+  match n with
+  | O => O
+  | S O => O
+  | S (S n) => n
   end.
 
-  Example three_times_3_is_nine:
-    mult 3 3 = 9.
-  Proof. reflexivity. Qed.
 
-  Fixpoint minus (n m : nat) :=
-    match n, m with
-    | O, _ => O
-    | _ , O => n
-    | S n, S m => minus n m
-    end.
-
-  Example three_minus_one_is_2 :
-    minus 3 1 = 2.
-  Proof. reflexivity. Qed.
-
-  Fixpoint exp (base power: nat) :=
-    match power with
-    | O => one
-    | S p => mult base (exp base p)
-    end.
-
-  Example square_of_3_is_nine:
-    exp 3 2 = 9.
-  Proof. reflexivity. Qed.
-
-  Fixpoint factorial (n: nat) :=
-    match n with
-    | O => one
-    | S n' => mult n (factorial n')
+Fixpoint even (n: nat): bool :=
+  match n with
+  | O => true
+  | S(S n) => even n
+  | _ => false
   end.
 
-  Example factorial_3_is_six:
-    factorial 3 = plus 3 3.
-  Proof. reflexivity. Qed.
+Example four_minus_2_is_2:
+  minus2 4 = 2.
+Proof. simpl. reflexivity. Qed.
 
+Example four_even:
+  even 4 = true.
+Proof. reflexivity. Qed.
 
-  Example factorial_5_is_120:
-    factorial 5 = 120.
-  Proof. reflexivity. Qed.
+Example three_is_not_even:
+  even 3 = false.
+Proof. reflexivity. Qed.
 
+Definition odd (n:nat) := negb (even n).
 
-  Fixpoint eqb (n m: nat) :=
-    match n, m with
-    | O, O => true
-    | S n', S m' => eqb n' m'
-    | _, _ => false
-    end.
+Example three_odd:
+  odd 3 = true.
+Proof. reflexivity. Qed.
 
-  Example two_differs_from_3:
-    eqb 2 3 = false.
-  Proof. reflexivity. Qed.
+Fixpoint plus (n:nat) (m:nat): nat :=
+  match n with
+  | O => m
+  | S n => S (plus n m)
+end.
 
-  Fixpoint leb (n m :nat) :=
-    match n, m with
-    | O, _ => true
-    | S n', S m' => leb n' m'
-    | _, _ => false
-    end.
+Example two_plus_2_is_four:
+  plus 2 2 = 4.
+Proof. reflexivity. Qed.
 
-  Example two_leb_3:
-    leb 2 3 = true.
-  Proof. reflexivity. Qed.
+Fixpoint mult (n m :nat ): nat :=
+  match n with
+  | O => O
+  | S n => plus m (mult n m)
+end.
 
-  Example not_3_leb_2:
-    leb 3 2 = false.
-  Proof. reflexivity. Qed.
+Example three_times_3_is_nine:
+  mult 3 3 = 9.
+Proof. reflexivity. Qed.
 
-  Fixpoint gt(n m :nat) :=
-    match n,m with
-    | S n', O => true
-    | S n', S m' => gt n' m'
-    | _, _ => false
+Fixpoint minus (n m : nat) :=
+  match n, m with
+  | O, _ => O
+  | _ , O => n
+  | S n, S m => minus n m
   end.
 
-  Example notation_test:
-    3 <=? 2 = false.
-  Proof. reflexivity. Qed.
+Example three_minus_one_is_2 :
+  minus 3 1 = 2.
+Proof. reflexivity. Qed.
 
-  Example ltb_2_3:
-    ltb 2 3 = true.
-  Proof. reflexivity. Qed.
+Fixpoint exp (base power: nat) :=
+  match power with
+  | O => one
+  | S p => mult base (exp base p)
+  end.
 
-  Example ltw_2_2:
-    ltb 2 2 = false.
-  Proof. reflexivity. Qed.
+Example square_of_3_is_nine:
+  exp 3 2 = 9.
+Proof. reflexivity. Qed.
 
-  Example ltw_four_2:
-    ltb 4 2 = false.
-  Proof. reflexivity. Qed.
+Fixpoint factorial (n: nat) :=
+  match n with
+  | O => one
+  | S n' => mult n (factorial n')
+end.
 
-  Theorem plus_0_n:
-    forall n:nat, 0 + n = n.
-  Proof. intros n. simpl. reflexivity. Qed.
+Example factorial_3_is_six:
+  factorial 3 = plus 3 3.
+Proof. reflexivity. Qed.
 
-  Theorem mult_0_n:
-    forall n: nat, O * n = O.
-  Proof. intros n. reflexivity. Qed.
 
-  Theorem plus_id_example:
-    forall n m : nat,
-    n = m -> n + n = m + m.
-  Proof. intros n m. intros antecedent. rewrite antecedent. reflexivity. Qed.
+Example factorial_5_is_120:
+  factorial 5 = 120.
+Proof. reflexivity. Qed.
 
-  Theorem plus_id_exercise:
-    forall n m p: nat,
-      n = m -> m = p -> n + m = m + p.
-    Proof.
-      intros n m p.
-      intros antecedent0.
-      intros antecedent1.
-      rewrite antecedent0.
-      rewrite antecedent1.
-      reflexivity.
-    Qed.
+Fixpoint eqb (n m: nat) :=
+  match n, m with
+  | O, O => true
+  | S n', S m' => eqb n' m'
+  | _, _ => false
+  end.
 
-  Theorem mult_n_0:
-    forall n:nat,
-    n * 0 = 0.
-  Proof. Admitted.
+Example two_differs_from_3:
+  eqb 2 3 = false.
+Proof. reflexivity. Qed.
 
-  Theorem mult_n_S_m:
-    forall n m: nat,
-    n * m + n = n * S m.
-  Proof. Admitted.
+Fixpoint leb (n m :nat) :=
+  match n, m with
+  | O, _ => true
+  | S n', S m' => leb n' m'
+  | _, _ => false
+  end.
 
-  Theorem mult_n_0_m_0:
-    forall p q: nat,
-    (p * 0) + (q * 0) = 0.
-    Proof.
-      intros p q.
-      rewrite mult_n_0.
-      rewrite mult_n_0.
-      reflexivity.
-    Qed.
+Example two_leb_3:
+  leb 2 3 = true.
+Proof. reflexivity. Qed.
 
-  Theorem mult_p_one:
-    forall p:nat,
-    p * 1 = p.
+Example not_3_leb_2:
+  leb 3 2 = false.
+Proof. reflexivity. Qed.
+
+Fixpoint gt(n m :nat) :=
+  match n,m with
+  | S n', O => true
+  | S n', S m' => gt n' m'
+  | _, _ => false
+end.
+
+Example notation_test:
+  3 <=? 2 = false.
+Proof. reflexivity. Qed.
+
+Example ltb_2_3:
+  ltb 2 3 = true.
+Proof. reflexivity. Qed.
+
+Example ltw_2_2:
+  ltb 2 2 = false.
+Proof. reflexivity. Qed.
+
+Example ltw_four_2:
+  ltb 4 2 = false.
+Proof. reflexivity. Qed.
+
+Theorem plus_0_n:
+  forall n:nat, 0 + n = n.
+Proof. intros n. simpl. reflexivity. Qed.
+
+Theorem mult_0_n:
+  forall n: nat, O * n = O.
+Proof. intros n. reflexivity. Qed.
+
+Theorem plus_id_example:
+  forall n m : nat,
+  n = m -> n + n = m + m.
+Proof. intros n m. intros antecedent. rewrite antecedent. reflexivity. Qed.
+
+Theorem plus_id_exercise:
+  forall n m p: nat,
+    n = m -> m = p -> n + m = m + p.
   Proof.
-    intros p.
-    rewrite <- mult_n_S_m.
+    intros n m p.
+    intros antecedent0.
+    intros antecedent1.
+    rewrite antecedent0.
+    rewrite antecedent1.
+    reflexivity.
+  Qed.
+
+Theorem mult_n_0:
+  forall n:nat,
+  n * 0 = 0.
+Proof. Admitted.
+
+Theorem mult_n_S_m:
+  forall n m: nat,
+  n * m + n = n * S m.
+Proof. Admitted.
+
+Theorem mult_n_0_m_0:
+  forall p q: nat,
+  (p * 0) + (q * 0) = 0.
+  Proof.
+    intros p q.
     rewrite mult_n_0.
-    simpl.
+    rewrite mult_n_0.
     reflexivity.
   Qed.
 
-  (* proof by case analysis *)
+Theorem mult_p_one:
+  forall p:nat, p * 1 = p.
+Proof.
+  intros p.
+  rewrite <- mult_n_S_m.
+  rewrite mult_n_0.
+  simpl.
+  reflexivity.
+Qed.
 
-  Theorem plus_one_neq_0:
-    forall n: nat,
-    (n + 1) =? 0 = false.
-    Proof.
-      intros n.
-      destruct n as [| n' ] eqn:E.
-      - reflexivity.
-      - reflexivity.
-    Qed.
+(* proof by case analysis *)
 
-  Theorem negb_is_involutive:
-    forall b: bool,
-    negb (negb b) = b.
-  Proof.
-    intros b.
-    destruct b eqn:E.
-    - reflexivity.
-    - reflexivity.
+Theorem plus_one_neq_0:
+  forall n: nat, (n + 1) =? 0 = false.
+Proof.
+  intros n.
+  destruct n as [| n' ] eqn:E.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem negb_is_involutive:
+  forall b: bool, negb (negb b) = b.
+Proof.
+  intros b.
+  destruct b eqn:E.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem andb_is_commutative:
+  forall x y: bool, andb x y = andb y x.
+Proof.
+  intros x y.
+  destruct x eqn:E.
+  - destruct y eqn:F.
+    + reflexivity.
+    + reflexivity.
+  - destruct y eqn:F.
+    + reflexivity.
+    + reflexivity.
+Qed.
+
+Theorem andb3_exchange :
+  forall x y z, andb (andb x y) z = andb (andb x z) y.
+Proof.
+  intros x y z.
+  destruct x eqn:E.
+  - destruct y eqn:F.
+    + destruct z eqn:G.
+      * reflexivity.
+      * reflexivity.
+    + destruct z eqn:G.
+      * reflexivity.
+      * reflexivity.
+  - destruct y eqn: F.
+    + destruct z eqn:G.
+      * reflexivity.
+      * reflexivity.
+    + destruct z eqn:G.
+      * reflexivity.
+      * reflexivity.
   Qed.
 
-  Theorem andb_is_commutative:
-    forall x y: bool,
-    andb x y = andb y x.
-  Proof.
-    intros x y.
-    destruct x eqn:E.
-    - destruct y eqn:F.
-      + reflexivity.
-      + reflexivity.
-    - destruct y eqn:F.
-      + reflexivity.
-      + reflexivity.
-  Qed.
-
-  Theorem andb3_exchange :
-    forall x y z, andb (andb x y) z = andb (andb x z) y.
-  Proof.
-    intros x y z.
-    destruct x eqn:E.
-    - destruct y eqn:F.
-      + destruct z eqn:G.
-        * reflexivity.
-        * reflexivity.
-      + destruct z eqn:G.
-        * reflexivity.
-        * reflexivity.
-    - destruct y eqn: F.
-      + destruct z eqn:G.
-        * reflexivity.
-        * reflexivity.
-      + destruct z eqn:G.
-        * reflexivity.
-        * reflexivity.
-    Qed.
-
-  Theorem andb_true_elim2:
-    forall x y, andb x y = true -> y = true.
-  Proof.
-    intros x y.
-    destruct x eqn:E.
-    - destruct y eqn:F.
-      + reflexivity.
-      + simpl. intro a. rewrite a. reflexivity.
-    - destruct y eqn:F.
-      + reflexivity.
-      + simpl. intro a. rewrite a. reflexivity.
-  Qed.
+Theorem andb_true_elim2:
+  forall x y, andb x y = true -> y = true.
+Proof.
+  intros x y.
+  destruct x eqn:E.
+  - destruct y eqn:F.
+    + reflexivity.
+    + simpl. intro a. rewrite a. reflexivity.
+  - destruct y eqn:F.
+    + reflexivity.
+    + simpl. intro a. rewrite a. reflexivity.
+Qed.
 
 
-  Theorem plus_one_neq_0':
-    forall n, n + 1 =? 0 = false.
-  Proof.
-    intros [|n].
-    - reflexivity.
-    - reflexivity.
-  Qed.
+Theorem plus_one_neq_0':
+  forall n, n + 1 =? 0 = false.
+Proof.
+  intros [|n].
+  - reflexivity.
+  - reflexivity.
+Qed.
 
-  Theorem andb_is_commutative'' :
-    forall x y, andb x y =  andb y x.
-  Proof.
-    intros [] [].
-    - reflexivity.
-    - reflexivity.
-    - reflexivity.
-    - reflexivity.
-  Qed.
+Theorem andb_is_commutative'' :
+  forall x y, andb x y =  andb y x.
+Proof.
+  intros [] [].
+  - reflexivity.
+  - reflexivity.
+  - reflexivity.
+  - reflexivity.
+Qed.
 
-  Theorem zero_nbeq_plus_one:
-    forall n,
-    0 =? (n + 1) = false.
-  Proof.
-    intros [|n'].
-    - reflexivity.
-    - reflexivity.
-  Qed.
+Theorem zero_nbeq_plus_one:
+  forall n,
+  0 =? (n + 1) = false.
+Proof.
+  intros [|n'].
+  - reflexivity.
+  - reflexivity.
+Qed.
 
-  (* gcd terminates but Rocq doesn't know how *)
-  (* Fixpoint gcd (m n : nat) := *)
-  (*   if m =? n then *)
-  (*     m *)
-  (*   else *)
-  (*     if gt m n then gcd (m - n) n *)
-  (*     else gcd m (n - m). *)
-  (*   . *)
-  (* end. *)
+(* gcd terminates but Rocq doesn't know how *)
+(* Fixpoint gcd (m n : nat) := *)
+(*   if m =? n then *)
+(*     m *)
+(*   else *)
+(*     if gt m n then gcd (m - n) n *)
+(*     else gcd m (n - m). *)
+(*   . *)
+(* end. *)
 
 
-  Theorem identity_fn_applied_twice:
-    forall f: bool -> bool,
-    (forall x, f x = x) ->
-    forall b, f (f b) = b.
-  Proof.
-    intro f.
-    intro a.
-    intro b.
-    rewrite a.
-    rewrite a.
-    reflexivity.
-  Qed.
+Theorem identity_fn_applied_twice:
+  forall f: bool -> bool,
+  (forall x, f x = x) ->
+  forall b, f (f b) = b.
+Proof.
+  intro f.
+  intro a.
+  intro b.
+  rewrite a.
+  rewrite a.
+  reflexivity.
+Qed.
 
-  Theorem negation_fn_applied_twice:
-    forall f: bool -> bool,
-    (forall x, f x = negb x) ->
-    forall b, f (f b) = b.
-  Proof.
-    intro f.
-    intro a.
-    intro b.
-    rewrite a.
-    rewrite a.
-    rewrite negb_is_involutive.
-    reflexivity.
-  Qed.
+Theorem negation_fn_applied_twice:
+  forall f: bool -> bool,
+  (forall x, f x = negb x) ->
+  forall b, f (f b) = b.
+Proof.
+  intro f.
+  intro a.
+  intro b.
+  rewrite a.
+  rewrite a.
+  rewrite negb_is_involutive.
+  reflexivity.
+Qed.
 
-  Theorem andb_eq_orb:
-    forall x y,
-    (andb x y = orb x y) ->
-    x = y.
-  Proof.
-    intros x y.
-    destruct x eqn:E.
-    - simpl.
-      + intro a. rewrite a. reflexivity.
-    - simpl.
-      + intro a. rewrite a. reflexivity.
-  Qed.
+Theorem andb_eq_orb:
+  forall x y,
+  (andb x y = orb x y) ->
+  x = y.
+Proof.
+  intros x y.
+  destruct x eqn:E.
+  - simpl.
+    + intro a. rewrite a. reflexivity.
+  - simpl.
+    + intro a. rewrite a. reflexivity.
+Qed.
 
-End NatPlayground.
 
 Module LateDays.
   Inductive letter: Type := A | B | C | D | F.
@@ -679,7 +672,6 @@ Module LateDays.
     - reflexivity.
   Qed.
 
-  Import NatPlayground.
 
   Definition apply_late_policy (late_days : nat) (g : grade) : grade :=
     if late_days <? 9 then g
@@ -738,8 +730,6 @@ Module BinaryNumerals.
     | B1 b => B0 (incr b)
     | Z => B1 Z
   end.
-
-  Import NatPlayground.
 
   Fixpoint bin_to_nat (m:bin):nat :=
     match m with
