@@ -488,6 +488,9 @@ Proof.
   inversion H2.
 Qed.
 
+Definition lt (n m: nat) := le (S n) m.
+Notation "n < m" := (lt n m).
+
 Definition ge (m n : nat) : Prop := le n m.
 Notation "m >= n" := (ge m n).
 
@@ -553,32 +556,227 @@ Proof.
     + apply H.
 Qed.
 
-Lemma plus_1_is_S:
-  forall n m, S n + m = n + m + 1.
+Lemma s_n_le_n:
+  forall n m, S n <= m -> n <= m.
 Proof.
-  intros n m.
-  simpl.
-  rewrite <- (plus_n_S_m (n + m) 0).
-  rewrite add_0_right.
-  reflexivity.
+  intros n m H.
+  induction n.
+  - apply O_le_n.
+  - inversion H.
+    + apply le_S. apply le_n.
+    + rewrite H2.
+      apply (le_trans _ (S (S n)) _).
+      * apply le_S. apply le_n.
+      * apply H.
 Qed.
 
-Lemma S_is_plus_1:
-  forall n, S n = n + 1.
+Lemma cases_le_plus:
+  forall n m p, n <= m \/ n <= p -> n <= m + p.
 Proof.
-  intro n.
-  rewrite <- (plus_n_S_m n 0).
-  rewrite add_0_right.
-  reflexivity.
+  intros n m p H.
+  destruct H.
+  - apply (le_trans _ m _).
+    + apply H.
+    + apply le_plus_l.
+  - apply (le_trans _ p _).
+    + apply H.
+    + rewrite add_commutativity.
+      apply le_plus_l.
 Qed.
 
+Lemma s_n_pred_m:
+  forall n m, S n <= m -> n <= pred m.
+Proof.
+  intros n m H.
+  induction n.
+  - apply O_le_n.
+  - inversion H.
+    + simpl. apply le_n.
+    + simpl.
+      apply s_n_le_n in H0.
+      apply H0.
+Qed.
+
+ 
 Theorem plus_le_cases:
   forall n m p q,
     n + m <= p + q  ->  n <= p \/ m <= q.
 Proof.
   intros n m p q H.
   induction n.
-  - left.
-    apply O_le_n.
-  - left.
-    rewrite S_is_plus_1.
+  - left. apply O_le_n.
+  - destruct q.
+    + rewrite add_0_right in H.
+      apply plus_le in H.
+      destruct H.
+      left.
+      apply H.
+    + apply plus_le in H as G.
+      destruct G.
+      simpl in H.
+      apply s_n_le_n in H.
+      apply IHn in H.
+      destruct H.
+      * left.
+      Admitted.
+
+Theorem plus_le_compat_l:
+  forall n m p, n <= m -> p + n <= p + m.
+Proof.
+  intros n m p H.
+  induction p.
+  - simpl. apply H.
+  - simpl.
+    apply le_monotonicity.
+    apply IHp.
+Qed.
+
+Theorem plus_le_compat_r:
+  forall n m p, n <= m -> n + p <= m + p.
+Proof.
+  intros n m p H.
+  induction p.
+  - rewrite add_0_right.
+    rewrite add_0_right.
+    apply H.
+  - rewrite <- plus_n_S_m.
+    rewrite <- plus_n_S_m.
+    apply le_monotonicity.
+    apply IHp.
+Qed.
+
+Theorem le_plus_trans:
+  forall n m p, n <= m -> n <= m + p.
+Proof.
+  intros n m p H.
+  induction p.
+  - rewrite add_0_right. apply H.
+  - apply le_S in IHp.
+    simpl in IHp.
+    rewrite plus_n_S_m in IHp.
+    apply IHp.
+Qed.
+
+
+Theorem lt_ge_cases:
+  forall n m, n < m \/ n >= m.
+Proof.
+  intros n m.
+  induction n.
+  - destruct m.
+    + right. apply le_n.
+    + left.
+      unfold lt.
+      apply le_monotonicity.
+      apply O_le_n.
+  - destruct m.
+    + right.
+      unfold ge.
+      apply O_le_n.
+    + destruct IHn.
+      unfold lt in H.
+      unfold lt.
+      inversion H.
+      * right. unfold ge. apply le_n.
+      * left.
+        apply le_monotonicity.
+        apply H2.
+      * right.
+        unfold ge.
+        unfold ge in H.
+        apply le_S in H.
+        apply H.
+Qed.
+
+Theorem n_lt_m__n_le_m:
+  forall n m, n < m -> n <= m.
+Proof.
+  intros n m H.
+  unfold lt in H.
+  apply s_n_le_n in H.
+  apply H.
+Qed.
+
+Lemma O_lt_s_n:
+  forall n, 0 < S n.
+Proof.
+  intros n.
+  destruct n.
+  - unfold lt. apply le_n.
+  - unfold lt. apply le_monotonicity. apply O_le_n.
+Qed.
+
+Lemma n_lt_s_n:
+  forall n, n < S n.
+Proof.
+  intros n.
+  unfold lt.
+  apply le_n.
+Qed.
+
+Theorem plus_lt:
+  forall n m p, n + m < p -> n < p /\ m < p.
+Proof.
+  intros n m p H.
+  generalize dependent m.
+  generalize dependent p.
+  induction n.
+  - intros p m H'.
+    inversion H'.
+    + simpl.
+      split.
+      * apply O_lt_s_n.
+      * apply n_lt_s_n.
+    + split.
+      * apply O_lt_s_n.
+      * simpl in H'.
+        rewrite H1.
+        apply H'.
+  - intros p m H.
+    inversion H.
+    + simpl.
+      split.
+      * apply le_monotonicity. apply le_monotonicity. apply le_plus_l.
+      * unfold lt.
+        apply le_monotonicity.
+        rewrite add_commutativity.
+        rewrite plus_n_S_m.
+        apply le_plus_l.
+    + rewrite plus_n_S_m in H0.
+      apply plus_le in H0.
+      destruct H0.
+      unfold lt.
+      split.
+      * apply le_monotonicity.
+        apply H0.
+      * apply le_monotonicity.
+        apply s_n_le_n.
+        apply H3.
+Qed.
+
+Theorem leb_complete:
+  forall n m, n <=? m = true -> n <= m.
+Proof.
+  intros n m H.
+  induction n.
+  - apply O_le_n.
+  - apply leb_plus_exists in H.
+    destruct H.
+    rewrite H.
+    apply le_plus_l.
+Qed.
+
+Theorem leb_correct:
+  forall n m, n <= m -> n <=? m = true.
+Proof.
+  intros n m H.
+  generalize dependent m.
+  induction n.
+  - simpl. reflexivity.
+  - intros m H.
+    inversion H.
+    + apply leb_refl.
+    + apply IHn.
+      apply s_n_le_n in H0.
+      apply H0.
+Qed.
