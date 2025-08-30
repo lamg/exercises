@@ -1,7 +1,6 @@
-From LogicalFoundations Require Export Poly.
-From LogicalFoundations Require Export Basics.
-Import NatPlayground.
-From LogicalFoundations Require Export Induction.
+Require Export LogicalFoundations.Poly.
+Require Export LogicalFoundations.Basics.
+Require Export LogicalFoundations.Induction.
 
 Theorem silly0:
   forall (n m : nat), n = m -> n = m.

@@ -1,5 +1,5 @@
-From LogicalFoundations Require Export Basics.
-From LogicalFoundations Require Export Lists.
+Require Export LogicalFoundations.Basics.
+Require Export LogicalFoundations.Lists.
 Require Export Stdlib.Init.Nat.
 
 Inductive list (T: Type) : Type :=
@@ -248,7 +248,6 @@ Proof. reflexivity. Qed.
 Definition doit3times {t : Type} (f : t -> t) (n : t) : t :=
   f (f (f n)).
 
-Import NatPlayground.
 
 Example test_doit3times: doit3times minus2 9 = 3.
 Proof. reflexivity. Qed.
