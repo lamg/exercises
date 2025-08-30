@@ -597,28 +597,54 @@ Proof.
       apply H0.
 Qed.
 
+Theorem le_monotonicity_rev:
+  forall n m, S n <= S m -> n <= m.
+Proof.
+  intros n m H.
+  inversion H.
+  - apply le_n.
+  - apply s_n_le_n.
+    apply H2.
+Qed.
  
 Theorem plus_le_cases:
   forall n m p q,
     n + m <= p + q  ->  n <= p \/ m <= q.
 Proof.
   intros n m p q H.
+  generalize dependent m.
+  generalize dependent p.
+  generalize dependent q.
   induction n.
-  - left. apply O_le_n.
-  - destruct q.
-    + rewrite add_0_right in H.
-      apply plus_le in H.
-      destruct H.
-      left.
-      apply H.
-    + apply plus_le in H as G.
-      destruct G.
-      simpl in H.
-      apply s_n_le_n in H.
+  - intros q p m H.
+    simpl in H.
+    destruct p.
+    + left. apply le_n.
+    + left. apply O_le_n.
+  - intros q p m H.
+    destruct p.
+    + right.
+      inversion H.
+      * apply plus_le in H.
+        simpl in H.
+        destruct H.
+        apply H2.
+      * apply plus_le in H.
+        simpl in H.
+        destruct H.
+        apply H3.
+    + simpl in H.
+      rewrite plus_n_S_m in H.
+      rewrite plus_n_S_m in H.
       apply IHn in H.
       destruct H.
       * left.
-      Admitted.
+        apply le_monotonicity.
+        apply H.
+      * right.
+        apply le_monotonicity_rev.
+        apply H.
+Qed.
 
 Theorem plus_le_compat_l:
   forall n m p, n <= m -> p + n <= p + m.
@@ -780,3 +806,125 @@ Proof.
       apply s_n_le_n in H0.
       apply H0.
 Qed.
+
+Theorem leb_iff:
+  forall n m, n <=? m = true <-> n <= m.
+Proof.
+  intros n m.
+  split.
+  - apply leb_complete.
+  - apply leb_correct.
+Qed.
+
+Theorem leb_true_trans:
+  forall n m p, n <=? m = true -> m <=? p = true -> n <=? p = true.
+Proof.
+  intros n m p.
+  rewrite leb_iff.
+  rewrite leb_iff.
+  rewrite leb_iff.
+  apply le_trans.
+Qed.
+
+Inductive R: nat -> nat -> nat -> Prop :=
+  | c0 : R 0 0 0
+  | c1 m n p (H: R m n p): R (S m) n (S p)
+  | c2 m n p (H: R m n p): R m (S n) (S p)
+  | c3 m n p (H: R (S m) (S n) (S (S p))): R m n p
+  | c4 m n p (H: R m n p): R n m p.
+
+Example r112:
+  R 1 1 2.
+Proof.
+  apply c2.
+  apply c1.
+  apply c0.
+Qed.
+
+Example R226:
+  R 2 2 6.
+Proof.
+  apply c2.
+  apply c1.
+  apply c2.
+  apply c1.
+  (* no applicable constructor at this point*)
+  (* the other two don't make progress *)
+Abort.
+
+(* no because the same can be achieved by a combination of c2 and c3 *)
+
+(* no because c3 just doesn't make progress towards R 0 0 0, which is the only probable proposition
+ that doesn't depend on others *)
+
+Definition fR: nat -> nat -> nat := plus.
+
+Lemma R_0_n_n:
+  forall n, R 0 n n.
+Proof.
+  intros n.
+  induction n.
+  - apply c0.
+  - apply c2.
+    apply IHn.
+Qed.
+
+Theorem R_equiv_fR:
+  forall m n p, R m n p <-> fR m n = p.
+Proof.
+  intros m n p.
+  split.
+  - intros H.
+    induction H.
+    + reflexivity.
+    + simpl. f_equal.  apply IHR.
+    + unfold fR. rewrite <- plus_n_S_m. f_equal. apply IHR.
+    + unfold fR in IHR. simpl in IHR. rewrite <- plus_n_S_m in IHR.
+      injection IHR as h0.
+      apply h0.
+    + rewrite add_commutativity. apply IHR.
+  - intros H.
+    unfold fR in H.
+    generalize dependent n.
+    generalize dependent p.
+    induction m.
+    + intros p n H.
+      simpl in H.
+      rewrite H.
+      apply R_0_n_n.
+    + intros p n H.
+      rewrite <- H.
+      simpl.
+      apply c1.
+      apply IHm.
+      reflexivity.
+Qed.
+
+Definition tl (xs: list nat) :=
+  match xs with
+    | [] => []
+    | _ :: ys => ys
+  end.
+
+
+Inductive subseq: list nat -> list nat -> Prop :=
+  | sub_empty (xs: list nat): subseq [] xs
+  | sub_hd (x: nat) (xs: list nat) (ys: list nat): subseq xs ys -> subseq (x :: xs) (x :: ys)
+  | sub_tl (xs: list nat) (ys: list nat): subseq xs (tl ys) -> subseq xs ys.
+
+Theorem subseq_refl:
+  forall xs, subseq xs xs.
+Proof.
+  intros xs.
+  induction xs.
+  - apply sub_empty.
+  - apply sub_hd. apply IHxs.
+Qed.
+
+Theorem subseq_app:
+  forall xs ys zs, subseq xs ys -> subseq xs (ys ++ zs).
+Proof.
+  intros xs ys zs H.
+  induction zs.
+  - rewrite app_nil_r. apply H.
+  - Abort.
