@@ -1,6 +1,5 @@
-From LogicalFoundations Require Export Basics.
+Require Export LogicalFoundations.Basics.
 Require Import Stdlib.Init.Nat.
-Import NatPlayground.
 
 Theorem add_0_right :
   forall n:nat,
@@ -88,9 +87,9 @@ Theorem eqb_refl:
     - simpl. rewrite ind. reflexivity.
   Qed.
 
-Theorem even_succ :
+Theorem even_S:
   forall n : nat,
-  even (S n) = negb (even n).
+  Basics.even (S n) = negb (Basics.even n).
   Proof.
     intros n.
     induction n as [|n' ind].
