@@ -1,6 +1,8 @@
 Require Export LogicalFoundations.Basics.
 Require Export LogicalFoundations.Poly.
 Require Export LogicalFoundations.Tactics.
+Require Export LogicalFoundations.Induction.
+
 (* Check (forall n m : nat, n + m = m + n) : Prop. *)
 
 (* Check (2 = 2) : Prop. *)
@@ -117,7 +119,7 @@ Proof.
   - rewrite hn.
     reflexivity.
   - rewrite hm.
-    apply NatPlayground.mult_n_0.
+    apply mult_n_0.
 Qed.
 
 Lemma or_intro_l:
@@ -765,8 +767,6 @@ Proof.
     apply ind.
 Qed.
 
-Import NatPlayground.
-
 Lemma even_double_conv:
   forall n, exists k, n = if even n then double k else S (double k).
 Proof.
@@ -775,13 +775,13 @@ Proof.
   - exists 0. reflexivity.
   - destruct ind as [k E].
     destruct (even n') eqn:F.
-    + rewrite Induction.even_succ.
+    + rewrite even_S.
       exists k.
       rewrite F.
       simpl.
       rewrite E.
       reflexivity.
-    + rewrite Induction.even_succ.
+    + rewrite even_S.
       rewrite F.
       simpl.
       rewrite E.
