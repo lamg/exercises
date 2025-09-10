@@ -928,51 +928,6 @@ Proof.
     apply IHsubseq.
 Qed.
 
-(* Theorem subseq_trans: *)
-(*   forall xs ys zs, subseq xs ys -> subseq ys zs -> subseq xs zs. *)
-(* Proof. *)
-(*   intros xs ys zs. *)
-(*   generalize dependent ys. *)
-(*   generalize dependent xs. *)
-(*   induction zs. *)
-(*   - intros xs ys H0 H1. *)
-(*     destruct xs. *)
-(*     + apply sub_empty. *)
-(*     + destruct ys. *)
-(*       * inversion H1. inversion H0. *)
-(*       * inversion H1. *)
-(*   - intros xs ys H0 H1. *)
-(*     apply sub_tl. *)
-(*     apply (IHzs xs ys). *)
-(*     + apply H0. *)
-(*     + *)
-
-(* Theorem subseq_trans: *)
-(*   forall xs ys zs, subseq xs ys -> subseq ys zs -> subseq xs zs. *)
-(* Proof. *)
-(*   intros xs ys zs H. *)
-(*   generalize dependent zs. *)
-(*   generalize dependent ys. *)
-(*   induction xs. *)
-(*   - intros ys H0 zs H1. apply sub_empty. *)
-(*   - intros ys H0 zs H1.  *)
-
-
-
-(* Theorem subseq_trans: *)
-(*   forall xs ys zs, subseq xs ys -> subseq ys zs -> subseq xs zs. *)
-(* Proof. *)
-(*   intros xs ys zs. *)
-(*   generalize dependent zs. *)
-(*   generalize dependent xs. *)
-(*   induction ys. *)
-(*   - intros xs zs H0 H1. *)
-(*     inversion H0. *)
-(*     apply sub_empty. *)
-(*   - intros xs zs H0 H1. *)
-(*     apply IHys. *)
-(*     +  *)
-
 Theorem subseq_trans:
   forall xs ys zs, subseq xs ys -> subseq ys zs -> subseq xs zs.
 Proof.
@@ -983,7 +938,7 @@ Proof.
   - intros zs H'.
     inversion H'.
     + apply sub_hd. apply IHsubseq. apply H3.
-    + Abort.
+    + apply sub_tl. Admitted.
 
 Inductive R': nat -> list nat -> Prop :=
   | d0 : R' 0 []
@@ -1208,9 +1163,66 @@ Proof.
       apply H.
 Qed.
 
-Fixpoint re_not_empty {t: Type} (re: reg_exp t): bool. Admitted.
+Fixpoint re_not_empty {t: Type} (re: reg_exp t): bool :=
+  match re with
+  | EmptySet => false
+  | Union r0 r1 => re_not_empty r0 || re_not_empty r1
+  | App r0 r1 => re_not_empty r0 && re_not_empty r1
+  | _ => true
+end.
 
-Lemma re_not_empty_correcrt:
+Lemma re_not_empty_correct:
   forall t (re: reg_exp t), (exists s, s =~ re) <-> re_not_empty re = true.
 Proof.
-  Admitted.
+  intros t re.
+  split.
+  - intros [s E].
+    induction E.
+    + reflexivity.
+    + reflexivity.
+    + simpl.
+      rewrite IHE1.
+      rewrite IHE2.
+      reflexivity.
+    + simpl.
+      rewrite IHE.
+      reflexivity.
+    + simpl.
+      rewrite IHE.
+      destruct (re_not_empty re0).
+      * reflexivity.
+      * reflexivity.
+    + reflexivity.
+    + rewrite IHE2. reflexivity.
+  - intros H.
+    induction re.
+    + discriminate H.
+    + exists []. apply MEmpty.
+    + exists [c]. apply MChar.
+    + simpl in H.
+      rewrite andb_true_iff in H.
+      destruct H.
+      apply IHre1 in H.
+      apply IHre2 in H0.
+      destruct H.
+      destruct H0.
+      exists (x ++ x0).
+      apply MApp.
+      * apply H.
+      * apply H0.
+    + simpl in H.
+      rewrite orb_true_iff in H.
+      destruct H.
+      * apply IHre1 in H.
+        destruct H.
+        exists x.
+        apply MUnionL.
+        apply H.
+      * apply IHre2 in H.
+        destruct H.
+        exists x.
+        apply MUnionR.
+        apply H.
+    + exists [].
+      apply MStar0.
+Qed.
