@@ -1324,18 +1324,6 @@ Proof.
       * apply H'.
 Qed.
 
-Lemma concat_singleton:
-  forall (t: Type) (xs: list t) (xss: list (list t)),
-    xs = fold app xss [] -> In xs xss \/ xs = [].
-Proof.
-  intros t xs xss H.
-  generalize dependent xs.
-  induction xss.
-  - right. simpl in H. apply H.
-  - left.
-    admit.
-Admitted.
-
 Lemma MStar'':
   forall (t: Type) (xs : list t) (re: reg_exp t),
     xs =~ Star re ->
@@ -1358,22 +1346,18 @@ Proof.
       simpl in H'.
       exfalso.
       apply H'.
-  - exists [s0;s1].
+  - apply IHexp_match2 in E as E'.
+    destruct E' as [xss [xss_concat xss_match]].
+    exists (s0 :: xss).
     split.
-    + simpl. rewrite app_nil_r. reflexivity.
-    + intros ys H'.
-      destruct H' as [h0 | [h1 | h2]].
-      * rewrite h0.
-        injection E as E'.
-        rewrite <- E'.
+    + simpl. rewrite xss_concat. reflexivity.
+    + intros ys [Hy | Hin].
+      * rewrite Hy.
+        injection E as E.
+        rewrite <- E.
         apply H.
-      * rewrite h1.
-        apply IHexp_match2 in E.
-        destruct E.
-        destruct H1.
-        apply H2.
-        admit.
-      * inversion h2.
+      * apply xss_match.
+        apply Hin.
 Qed.
 
 Fixpoint pumping_constant {t} (re: reg_exp t): nat :=
@@ -1387,6 +1371,15 @@ Fixpoint pumping_constant {t} (re: reg_exp t): nat :=
       pumping_constant re0 + pumping_constant re1
   | Star r => pumping_constant r
 end.
+
+(*
+The intuitive idea I find behind the pumping lemma is that regular expressions are made to match
+a basic regular expression like Char repeated 0, 1 or more times. If an already matching string is repeated
+then clearly the result will be still matched by the original regular expression. The surrounding strings are
+mentioned because regular expressions, as defined by reg_exp, are made to match substrings in a any position of
+a string. Then the pumping constant has to be added to the picture because for some initial cases the general idea
+ is not true.
+*)
 
 Lemma pumping_constant_ge_1:
   forall t (re: reg_exp t), pumping_constant re >= 1.
@@ -1428,6 +1421,24 @@ Proof.
   - simpl. rewrite IHn. rewrite app_assoc. reflexivity.
 Qed.
 
+Lemma napp_app_star:
+  forall t s0 s1 (re: reg_exp t) m,
+    s0 =~ re -> s1 =~ Star re -> napp m (s0 ++ s1) =~ Star re.
+Proof.
+  Admitted.
+
+Lemma length_at_least_1:
+  forall t (xs: list t),
+    1 <= length xs -> xs <> [].
+Proof.
+  intros t xs H.
+  unfold not.
+  intros H'.
+  rewrite H' in H.
+  simpl in H.
+  inversion H.
+Qed.
+
 Lemma weak_pumping:
   forall t (re: reg_exp t) xs,
     xs =~ re ->
@@ -1441,22 +1452,107 @@ Proof.
   induction Hre.
   - simpl. intros contra. inversion contra.
   - simpl. intros contra. inversion contra. inversion H1.
-  - simpl. intros H.
-    rewrite app_length in H.
+  - simpl.
+    rewrite app_length.
+    intros H.
     apply plus_le_cases in H.
     destruct H.
     + apply IHHre1 in H.
-      destruct H.
-      destruct H.
-      destruct H.
-      destruct H.
-      destruct H.
-      destruct H0.
-      exists x.
-      exists x0.
-      exists x1.
+      destruct H as [ws [ys [zs [s0_app [ys_non_empty ys_repetition]]]]].
+      exists ws.
+      exists ys.
+      exists (zs ++ s1).
       split.
-      * Admitted.
+      * rewrite s0_app.
+        rewrite <- (app_assoc t ws (ys ++ zs) s1).
+        rewrite <- (app_assoc t ys zs s1).
+        reflexivity.
+      * split.
+        -- apply ys_non_empty.
+        -- intros m.
+           rewrite (app_assoc t ws (napp m ys) (zs ++ s1)).
+           rewrite (app_assoc t (ws ++ (napp m ys)) zs s1).
+           rewrite <- (app_assoc t ws (napp m ys) zs).
+           apply (MApp (ws ++ napp m ys ++ zs) re0 s1 re1).
+           ++ apply ys_repetition.
+           ++ apply Hre2.
+   + apply IHHre2 in H.
+     destruct H as [ws [ys [zs [s1_app [ys_non_empty ys_repetition]]]]].
+     exists (s0 ++ ws).
+     exists ys.
+     exists zs.
+     split.
+     * rewrite <- (app_assoc t s0  ws (ys ++ zs)).
+       rewrite s1_app.
+       reflexivity.
+     * split.
+       -- apply ys_non_empty.
+       -- intros m.
+          rewrite <- (app_assoc t s0 ws (napp m ys ++ zs)).
+          apply (MApp s0 re0 (ws ++ napp m ys ++ zs) re1).
+          ++ apply Hre1.
+          ++ apply ys_repetition.
+  - simpl.
+    intros H.
+    apply plus_le in H.
+    destruct H.
+    apply IHHre in H.
+    destruct H as [ws [ys [zs [s0_app [ys_non_empty ys_repetition]]]]].
+    exists ws.
+    exists ys.
+    exists zs.
+    split.
+    + apply s0_app.
+    + split.
+      * apply ys_non_empty.
+      * intros m.
+        apply MUnionL.
+        apply ys_repetition.
+  - simpl.
+    intros H.
+    apply plus_le in H.
+    destruct H.
+    apply IHHre in H0.
+    destruct H0 as [ws [ys [zs [s0_app [ys_non_empty ys_repetition]]]]].
+    exists ws.
+    exists ys.
+    exists zs.
+    split.
+    + apply s0_app.
+    + split.
+      * apply ys_non_empty.
+      * intros m.
+        apply MUnionR.
+        apply ys_repetition.
+  - simpl.
+    intros H.
+    assert (H1: 1 <= pumping_constant re).
+    + apply pumping_constant_ge_1.
+    + assert (Hf: pumping_constant re <= 0 -> False).
+      * intros _.
+        apply (le_trans 1 (pumping_constant re) 0 H1) in H.
+        inversion H.
+      * exfalso.
+        apply Hf.
+        apply H.
+  - intros H.
+    simpl in IHHre2.
+    exists [].
+    exists (s0 ++ s1).
+    exists [].
+    split.
+    + simpl. rewrite app_nil_r. reflexivity.
+    + split.
+      * apply (le_trans 1 _ (length (s0 ++ s1))) in H.
+        apply length_at_least_1.
+        apply H.
+        apply pumping_constant_ge_1.
+      * intros m.
+        simpl.
+        rewrite app_nil_r.
+        apply (napp_app_star t s0 s1 re m Hre1 Hre2).
+Qed.
+
 
 Theorem filter_non_empty_In:
   forall n xs, filter (fun x => n =? x) xs <> [] -> In n xs.
