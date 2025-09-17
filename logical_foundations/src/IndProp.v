@@ -1425,7 +1425,17 @@ Lemma napp_app_star:
   forall t s0 s1 (re: reg_exp t) m,
     s0 =~ re -> s1 =~ Star re -> napp m (s0 ++ s1) =~ Star re.
 Proof.
-  Admitted.
+  intros t s0 s1 re m H0 H1.
+  induction m.
+  - simpl. apply MStar0.
+  - simpl.
+    rewrite <- app_assoc.
+    apply MStarApp.
+    + apply H0.
+    + apply star_app.
+      * apply H1.
+      * apply IHm.
+Qed.
 
 Lemma length_at_least_1:
   forall t (xs: list t),
@@ -1552,6 +1562,139 @@ Proof.
         rewrite app_nil_r.
         apply (napp_app_star t s0 s1 re m Hre1 Hre2).
 Qed.
+
+Lemma pumping:
+  forall t (re: reg_exp t) s,
+    s =~ re ->
+    pumping_constant re <= length s ->
+    exists xs ys zs,
+      s = xs ++ ys ++ zs /\
+      ys <> [] /\
+      length xs + length ys <= pumping_constant re /\
+      forall m, xs ++ napp m ys ++ zs =~ re.
+Proof.
+  intros t re s H.
+  induction H.
+  - simpl. intros contra. inversion contra.
+  - simpl. intros contra. inversion contra. inversion H1.
+  - simpl.
+    rewrite app_length.
+    intros H'.
+    apply plus_le_cases in H'.
+    destruct H'.
+    + apply IHexp_match1 in H1.
+      destruct H1 as [xs [ys [zs [s0_app [ys_non_empty [xs_ys_length napp_re0]]]]]].
+      exists xs.
+      exists ys.
+      exists (zs ++ s1).
+      rewrite s0_app.
+      split.
+      * rewrite <- (app_assoc _ xs  _ _).
+        rewrite <- (app_assoc _ ys zs s1).
+        reflexivity.
+      * split.
+        -- apply ys_non_empty.
+        -- split.
+           ++ apply (le_plus_trans _ _ (pumping_constant re1)).
+              apply xs_ys_length.
+           ++ intros m.
+              rewrite app_assoc.
+              rewrite (app_assoc _ (xs ++ napp m ys) _ _).
+              rewrite <- (app_assoc _ xs (napp m ys) zs).
+              apply (MApp _ _ _ _).
+              ** apply napp_re0.
+              ** apply H0.
+   + apply IHexp_match2 in H1 as H2.
+     destruct H2 as [xs [ys [zs [s1_app [ys_non_empty [xs_ys_length napp_re1]]]]]].
+     exists (s0 ++ xs).
+     exists ys.
+     exists zs.
+     split.
+     * rewrite s1_app.
+       rewrite <- app_assoc.
+       reflexivity.
+     * split.
+       -- apply ys_non_empty.
+       -- split.
+          ++ rewrite app_length.
+             apply (cases_le_plus _ _ (pumping_constant re1)).
+             rewrite s1_app in H1.
+             rewrite app_length in H1.
+             rewrite app_length in H1.
+             right.
+             admit.
+          ++ intros m.
+             rewrite <- app_assoc.
+             apply MApp.
+             ** apply H.
+             ** apply napp_re1.
+  - simpl.
+    intros H2.
+    apply plus_le in H2.
+    destruct H2.
+    apply IHexp_match in H0.
+    destruct H0 as [xs [ys [zs [s0_app [ys_non_empty [xs_ys_length napp_re0]]]]]].
+    exists xs.
+    exists ys.
+    exists zs.
+    split.
+    + apply s0_app.
+    + split.
+      * apply ys_non_empty.
+      * split.
+        -- apply cases_le_plus.
+           left.
+           apply xs_ys_length.
+        -- intros m.
+           apply MUnionL.
+           apply napp_re0.
+  - simpl.
+    intros H2.
+    apply plus_le in H2.
+    destruct H2.
+    apply IHexp_match in H1.
+    destruct H1 as [xs [ys [zs [s0_app [ys_non_empty [xs_ys_length napp_re1]]]]]].
+    exists xs.
+    exists ys.
+    exists zs.
+    split.
+    + apply s0_app.
+    + split.
+      * apply ys_non_empty.
+      * split.
+        -- apply cases_le_plus.
+           right.
+           apply xs_ys_length.
+        -- intros m.
+           apply MUnionR.
+           apply napp_re1.
+  - simpl.
+    intros H2.
+    inversion H2.
+    exfalso.
+    apply (pumping_constant_0_false t re).
+    apply H1.
+  - simpl.
+    rewrite app_length.
+    intros H1.
+    exists [].
+    exists (s0 ++ s1).
+    exists [].
+    split.
+    + simpl. rewrite app_nil_r. reflexivity.
+    + split.
+      * apply (le_trans 1 _ (length s0 + length s1)) in H1.
+        apply length_at_least_1.
+        rewrite app_length.
+        apply H1.
+        apply pumping_constant_ge_1.
+      * split.
+        -- simpl. rewrite app_length. admit.
+        -- intros m.
+           simpl.
+           rewrite app_nil_r.
+           apply (napp_app_star t s0 s1 re m H H0).
+Admitted.
 
 
 Theorem filter_non_empty_In:
