@@ -99,11 +99,15 @@ def eqb (n m : Nat) :=
   | Nat.succ n', Nat.succ m' => eqb n' m'
   | _, _ => false
 
+infix:60 " =? " => eqb
+
 def leb (n m : Nat) :=
   match n, m with
   | 0, _ => true
   | Nat.succ n', Nat.succ m' => leb n' m'
   | _, _ => false
+
+infix:70 " <=? " => leb
 
 def gt (n m : Nat) :=
   match n, m with
