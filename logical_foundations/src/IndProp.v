@@ -1373,12 +1373,13 @@ Fixpoint pumping_constant {t} (re: reg_exp t): nat :=
 end.
 
 (*
-The intuitive idea I find behind the pumping lemma is that regular expressions are made to match
-a basic regular expression like Char repeated 0, 1 or more times. If an already matching string is repeated
-then clearly the result will be still matched by the original regular expression. The surrounding strings are
-mentioned because regular expressions, as defined by reg_exp, are made to match substrings in a any position of
-a string. Then the pumping constant has to be added to the picture because for some initial cases the general idea
- is not true.
+The intiutive idea behind the pumping lemma (with help of ChatGPT):
+- even if a regular expression dosen't have Star, it describes a regular language, and the automaton that
+recognizes it will have loops, which guarantee the existence of repeatable substrings that can be matched by the regular
+expression. Those are the pumpable substrings.
+- the surrounding strings xs and zs are there because ys (the pumpable substring) can appear in the middle of the string,
+and not necessarily in the begining or end.
+- the pumping constant comes from the number of states of the automaton.
 *)
 
 Lemma pumping_constant_ge_1:
@@ -1563,6 +1564,15 @@ Proof.
         apply (napp_app_star t s0 s1 re m Hre1 Hre2).
 Qed.
 
+Theorem and_le_plus:
+  forall m n p q, m <= p /\ n <= q -> m + n <= p + q.
+Proof.
+  intros m n p q [H0 H1].
+  apply (plus_le_compat_r _ _ n) in H0.
+  apply (plus_le_compat_l _ _ p) in H1.
+  apply (le_trans (m + n) (p + n) (p + q) H0 H1).
+Qed.
+
 Lemma pumping:
   forall t (re: reg_exp t) s,
     s =~ re ->
@@ -1580,8 +1590,8 @@ Proof.
   - simpl.
     rewrite app_length.
     intros H'.
-    apply plus_le_cases in H'.
-    destruct H'.
+    apply plus_le_cases in H' as H3.
+    destruct H3.
     + apply IHexp_match1 in H1.
       destruct H1 as [xs [ys [zs [s0_app [ys_non_empty [xs_ys_length napp_re0]]]]]].
       exists xs.
@@ -1617,12 +1627,15 @@ Proof.
        -- apply ys_non_empty.
        -- split.
           ++ rewrite app_length.
-             apply (cases_le_plus _ _ (pumping_constant re1)).
-             rewrite s1_app in H1.
-             rewrite app_length in H1.
-             rewrite app_length in H1.
-             right.
-             admit.
+             rewrite <- add_assoc.
+             apply le_trans with (n := length s0 + length s1).
+             ** rewrite <- app_length.
+                rewrite <- app_length.
+                rewrite <- app_length.
+                rewrite s1_app.
+                admit.
+             **
+                admit.
           ++ intros m.
              rewrite <- app_assoc.
              apply MApp.
@@ -1689,7 +1702,10 @@ Proof.
         apply H1.
         apply pumping_constant_ge_1.
       * split.
-        -- simpl. rewrite app_length. admit.
+        -- simpl.
+           rewrite app_length.
+
+           admit.
         -- intros m.
            simpl.
            rewrite app_nil_r.
@@ -1885,4 +1901,401 @@ Proof.
   intros t test xs ys ms Hm Ht Hf.
   induction Hm.
   - reflexivity.
-  - Admitted.
+  - simpl.
+    destruct (test x) eqn:E.
+    + simpl in Ht.
+      destruct Ht.
+      assert (H': filter test ms = xs).
+      * apply IHHm.
+        apply H0.
+        apply Hf.
+      * rewrite H'.
+        reflexivity.
+   + simpl in Ht.
+     rewrite E in Ht.
+     destruct Ht.
+     discriminate.
+  - simpl.
+    destruct (test y) eqn:E.
+    + simpl in Hf.
+      destruct Hf.
+      rewrite E in H.
+      discriminate.
+    + simpl in Hf.
+      destruct Hf.
+      apply IHHm.
+      apply Ht.
+      apply H0.
+Qed.
+
+(*
+A different way to characterize the behavior of filter goes like this:
+Among all subsequences of l with the property that test evaluates to true on all their members,
+filter test l is the longest. Formalize this claim and prove it.
+*)
+
+Inductive pal {t: Type}: list t -> Prop :=
+  | pal_empty: pal []
+  | pal_single (x: t): pal [x]
+  | pal_hd (x: t) (xs: list t): pal xs -> pal (x :: xs ++ [x]).
+
+Theorem pal_app_rev:
+  forall (t: Type) (xs: list t),
+    pal (xs ++ (rev xs)).
+Proof.
+  intros t xs.
+  induction xs.
+  - simpl. apply pal_empty.
+  - simpl.
+    rewrite app_assoc.
+    apply (pal_hd x (xs ++ rev xs)).
+    apply IHxs.
+Qed.
+
+Theorem pal_rev:
+  forall (t: Type) (xs: list t),
+    pal xs -> xs = rev xs.
+Proof.
+  intros t xs H.
+  induction H.
+  - reflexivity.
+  - reflexivity.
+  - simpl.
+    rewrite rev_app_distr.
+    simpl.
+    rewrite <- IHpal.
+    reflexivity.
+Qed.
+
+Theorem palindrome_converse:
+  forall (t: Type) (xs: list t),
+    xs = rev xs -> pal xs.
+Proof.
+  intros t xs H.
+  Admitted.
+
+Inductive disjoint {t: Type}: list t -> list t -> Prop :=
+  | disjoint_empty: disjoint [] []
+  | disjoint_hd (x y:t) (xs ys: list t): x <> y -> ~In x ys -> ~ In y xs -> disjoint (x :: xs) (y :: ys).
+
+Inductive NoDup {t: Type}: list t -> Prop :=
+  | nodup_empty: NoDup []
+  | nodup_hd (x: t) (xs: list t): ~ In x xs -> NoDup (x :: xs).
+
+(*
+Finally, state and prove one or more interesting theorems relating disjoint, NoDup and ++ (list append).
+ *)
+
+Lemma in_split:
+  forall (t: Type) (x: t) (xs: list t),
+    In x xs -> exists ys zs, xs = ys ++ x :: zs.
+Proof.
+  intros t x xs H.
+  induction xs.
+  - inversion H.
+  - simpl in H.
+    destruct H.
+    + rewrite H.
+      exists [].
+      exists xs.
+      reflexivity.
+    + apply IHxs in H.
+      destruct H as [ys [zs H]].
+      rewrite H.
+      exists (x0 :: ys).
+      exists zs.
+      reflexivity.
+Qed.
+
+Inductive repeats {t: Type}: list t -> Prop :=
+  | repeats_hd (x: t) (xs: list t): In x xs -> repeats (x :: xs).
+
+Theorem pigeonghole_principle:
+  forall (t: Type) (labels assigned_labels: list t),
+    (forall x, In x assigned_labels -> In x labels) ->
+    length labels < length assigned_labels -> repeats assigned_labels.
+Proof.
+  intros t labels assigned_labels.
+  induction assigned_labels.
+  - intros H H'.
+    simpl in H'.
+    inversion H'.
+  - intros all_in_labels len.
+Admitted.
+
+From Stdlib Require Import Strings.Ascii.
+
+
+Definition string := list ascii.
+
+Lemma provable_equiv_true:
+  forall (p: Prop), p -> (p <-> True).
+Proof.
+  intros p H.
+  split.
+  - intros. constructor.
+  - intros _. apply H.
+Qed.
+
+Lemma not_equiv_false:
+  forall (p: Prop), ~p -> (p <-> False).
+Proof.
+  intros p H.
+  split.
+  - intros. apply H. apply H0.
+  - intros. destruct H0.
+Qed.
+
+Lemma null_matches_none:
+  forall (xs: string), xs =~ EmptySet <-> False.
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+  - intros.
+    destruct H.
+Qed.
+
+Lemma empty_matches_empty_string:
+  forall (xs: string), xs =~ EmptyStr <-> xs = [].
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+    reflexivity.
+  - intros.
+    rewrite H.
+    apply MEmpty.
+Qed.
+
+Lemma empty_nomatch_non_empty:
+  forall (x: ascii) xs, (x :: xs =~ EmptyStr) <-> False.
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+  - intros.
+    destruct H.
+Qed.
+
+Lemma char_nomatch_char:
+  forall (x y: ascii) xs, x <> y -> (x :: xs =~ Char y <-> False).
+Proof.
+  intros.
+  split.
+  -  intros.
+     inversion H0.
+     rewrite H4 in H.
+     apply H.
+     reflexivity.
+  - intros.
+    destruct H0.
+Qed.
+
+Lemma char_eps_suffix:
+  forall (x : ascii) xs,
+    x :: xs =~ Char x  <->  xs = [].
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+    reflexivity.
+  - intros.
+    rewrite H.
+    apply MChar.
+Qed.
+
+Lemma app_exists:
+  forall (xs: string) re0 re1,
+    xs =~ App re0 re1  <->  exists ys zs, xs = ys ++ zs /\ ys =~ re0 /\ zs =~ re1.
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+    exists s0, s1.
+    split.
+    + reflexivity.
+    + split. apply H3. apply H4.
+  - intros [ys [zs [H0 [H1 H2]]]].
+    rewrite H0.
+    apply MApp.
+    apply H1.
+    apply H2.
+Qed.
+
+Lemma app_ne:
+  forall (x: ascii) xs re0 re1,
+    x :: xs =~ (App re0 re1) <-> ([] =~ re0 /\ x :: xs =~ re1) \/ (exists s0 s1, xs = s0 ++ s1  /\  x :: s0 =~ re0  /\  s1 =~ re1).
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+    destruct s0 eqn:E.
+    + left.
+      simpl.
+      split.
+      * apply H3.
+      * apply H4.
+    + right.
+      exists l, s1.
+      injection H0 as H0.
+      split.
+      * rewrite <- H5.
+        reflexivity.
+      * split.
+        rewrite <- H0.
+        apply H3.
+        apply H4.
+  - intros.
+    destruct H.
+    + destruct H.
+      apply (MApp [] re0 (x :: xs) re1).
+      * apply H.
+      * apply H0.
+    + destruct H as [s0 [s1 [h0 [h1 h2]]]].
+      rewrite h0.
+      assert (cons_app: (x :: s0) ++ s1 = x :: s0 ++ s1).
+      * simpl. reflexivity.
+      * rewrite <- cons_app.
+        apply (MApp (x :: s0) re0 s1 re1 h1 h2).
+Qed.
+
+Lemma union_disj:
+  forall (xs: string) re0 re1,
+    xs =~ Union re0 re1  <->  xs =~ re0  \/  xs =~ re1.
+Proof.
+  intros.
+  split.
+  - intros.
+    inversion H.
+    + left. apply H2.
+    + right. apply H2.
+  - intros.
+    destruct H.
+    + apply MUnionL. apply H.
+    + apply MUnionR. apply H.
+Qed.
+
+Lemma star_ne:
+  forall (x: ascii) xs re,
+    x :: xs =~ Star re  <->   exists s0 s1, xs = s0 ++ s1  /\  x :: s0 =~ re  /\  s1 =~ Star re.
+Proof.
+  intros.
+  split.
+  - intros.
+    remember (Star re) as re' eqn:E.
+    inversion H.
+    induction H.
+    + discriminate.
+    + discriminate.
+    + discriminate.
+    + discriminate.
+    + discriminate.
+    + discriminate.
+    + discriminate.
+    + rewrite E in H3.
+      discriminate.
+    + rewrite E in H2.
+      discriminate.
+    + rewrite E in H2.
+      discriminate.
+    + rewrite E in H3.
+      injection H3 as H3.
+      exists [], xs.
+      split.
+      * reflexivity.
+      *
+        (* maybe s0 = [x] s1 = xs *)
+        admit.
+  - intros.
+    destruct H as [s0 [s1 [h0 [h1 h2]]]].
+    rewrite h0.
+    assert (H': (x :: s0) ++ s1 = x :: s0 ++ s1).
+    + simpl. reflexivity.
+    + rewrite <- H'.
+      apply (MStarApp (x :: s0) s1 re h1 h2).
+Admitted.
+
+Definition refl_matches_eps m :=
+  forall re : reg_exp ascii, reflect ([] =~ re) (m re).
+
+Fixpoint match_eps (re: reg_exp ascii): bool :=
+  match re with
+  | EmptyStr
+  | Star _ => true
+  | Union l r => match_eps l || match_eps r
+  | App xs ys => match_eps xs && match_eps ys
+  | _ => false
+end.
+
+Lemma match_ps_refl:
+  refl_matches_eps match_eps.
+Proof.
+  unfold refl_matches_eps.
+  intros.
+  induction re.
+  - simpl.
+    apply ReflectF.
+    unfold not.
+    intros.
+    inversion H.
+  - simpl.
+    apply ReflectT.
+    apply MEmpty.
+  - simpl.
+    apply ReflectF.
+    unfold not.
+    intros.
+    inversion H.
+  - simpl.
+    inversion IHre1.
+    + inversion IHre2.
+      * simpl.
+        apply ReflectT.
+        apply (MApp [] re1 [] re2 H0 H2).
+      * simpl.
+        apply ReflectF.
+        unfold not.
+        intros.
+        inversion H3.
+        destruct s1.
+        -- apply H2. apply H8.
+        -- destruct s0. discriminate. discriminate.
+    + simpl.
+      apply ReflectF.
+      unfold not.
+      intros.
+      inversion H1.
+      destruct s0.
+      * apply H0. apply H5.
+      * destruct s1. discriminate. discriminate.
+  - simpl.
+    inversion IHre1.
+    + apply ReflectT.
+      apply (MUnionL [] re1 re2 H0).
+    + simpl.
+      inversion IHre2.
+      * apply ReflectT.
+        apply (MUnionR [] re1 re2 H2).
+      * apply ReflectF.
+        unfold not.
+        intros.
+        inversion H3.
+        -- apply H0.  apply H6.
+        -- apply H2.  apply H6.
+  - simpl.
+    apply ReflectT.
+    apply MStar0.
+Qed.
+
+Definition is_der re (x: ascii) re' :=
+  forall xs, x :: xs =~ re  <->  xs =~ re'.
+
+Definition derives d :=
+  forall x re, is_der re x (d x re).
