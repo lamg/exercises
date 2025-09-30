@@ -35,6 +35,7 @@ let rec prettyExpr (expr: Expr) =
     let body = ts |> List.map prettyExpr |> String.concat ", "
     $"({body})"
 
+
 // Alpha equivalence: the name of a bound variable is irrelevant, i.e. a
 // name like x in the following expression can be replaced by any other: (fun x -> x + 1)
 
@@ -64,6 +65,15 @@ type Type =
   | Int
   | Bool
   | Tuple of List<Type>
+
+let rec prettyType (ty: Type) =
+  match ty with
+  | Type.Var x -> x
+  | Type.Arrow(x, y) -> $"{prettyType x} -> {prettyType y}"
+  | Type.Int -> "Int"
+  | Type.Bool -> "Bool"
+  | Type.Tuple xs -> xs |> List.map prettyType |> String.concat " * "
+
 
 type Scheme =
   | Scheme of vars: List<string> * ty: Type // forall vars, ty
@@ -354,7 +364,29 @@ let rec infer
       return finalSubst, bodyType, tree
     }
 
-  let inferTuple expr exprs = failwith "not"
+  let inferTuple (st: StateResult<unit, InferenceError, InferenceState>) (expr: Expr) (exprs: Expr list) =
+    stateResult {
+      do! st
+      let! s = stateResult.Get()
+      let input = $"{prettyEnv s.ProgramVars} |- {prettyExpr expr}"
+
+      let! subst, types, trees =
+        exprs
+        |> stateResult.Fold
+          (fun acc x ->
+            stateResult {
+              let! subst, types, trees = acc
+              let! st = stateResult.Get()
+              let! s, ty, tree = infer st x
+              let nsubst = composeSubst s subst
+              return nsubst, ty :: types, tree :: trees
+            })
+          (StateResult(fun s -> Ok(Map.empty, [], []), s))
+
+      let resultType = Type.Tuple(List.rev types)
+      let tree = newBranch "T-Tuple" input (string resultType) trees
+      return subst, resultType, tree
+    }
 
   let inferLitInt expr =
     stateResult { return Map.empty, Type.Int, newLeaf "T-Int" $"{prettyEnv st.ProgramVars} {expr}" "Int" }
@@ -371,7 +403,7 @@ let rec infer
   | Expr.Let(var, value, body) -> inferLet expr var value body
   | Expr.Lit(Lit.Bool _) as expr -> inferLitBool expr
   | Expr.Lit(Lit.Int _) as expr -> inferLitInt expr
-  | Expr.Tuple exprs -> inferTuple expr exprs
+  | Expr.Tuple exprs -> inferTuple st expr exprs
 
 let runInference (expr: Expr) =
   stateResult {
