@@ -1,9 +1,10 @@
 module Monads
 
-type State<'s, 'a> = State of ('s -> 'a * 's)
+type State<'a, 's> = State of ('s -> 'a * 's)
 
 type StateBuilder() =
   member _.Return x = State(fun s -> x, s)
+  member _.ReturnFrom x = x
 
   member _.Bind(State m, f) =
     State(fun s ->
@@ -11,12 +12,12 @@ type StateBuilder() =
       let (State m0) = f a
       m0 s')
 
-  member _.Run s (State f) = f s
+  member _.Run(x: State<'b, 's>) = x
 
   member this.get() = State(fun s -> s, s)
   member _.put newState = State(fun _ -> (), newState)
 
-  member _.fold (f: State<'s, 'b> -> 'a -> State<'s, 'b>) (acc: State<'s, 'b>) (xs: List<'a>) =
+  member _.fold (f: State<'b, 's> -> 'a -> State<'b, 's>) (acc: State<'b, 's>) (xs: List<'a>) =
     let rec loop acc remaining =
       match remaining with
       | [] -> acc
@@ -46,3 +47,47 @@ type ResultBuilder() =
       | Error e -> Error e
 
 let result = ResultBuilder()
+
+type StateResult<'ok, 'err, 's> = StateResult of ('s -> Result<'ok, 'err> * 's)
+
+type StateResultBuilder() =
+  member _.Bind((StateResult x): StateResult<'ok, 'err, 's>, f: 'ok -> StateResult<'nok, 'err, 's>) =
+    StateResult(fun s ->
+      match x s with
+      | Ok y, ns ->
+        let (StateResult n) = f y
+        n ns
+      | Error e, ns -> Error e, ns)
+
+  member _.Return x = StateResult(fun s -> Ok x, s)
+
+  member _.Get() = StateResult(fun s -> Ok s, s)
+
+  member _.Put s = StateResult(fun _ -> Ok(), s)
+
+  member _.ReturnFrom(StateResult s) = StateResult s
+
+  member this.Fold
+    (f: StateResult<'ok, 'err, 's> -> 'a -> StateResult<'ok, 'err, 's>)
+    (acc: StateResult<'ok, 'err, 's>)
+    (xs: List<'a>)
+    =
+    match xs with
+    | [] -> acc
+    | y :: ys ->
+      StateResult(fun s ->
+        // Run one step: apply f to accumulator and current element
+        let (StateResult step) = f acc y
+
+        match step s with
+        | Ok v, s' ->
+          // Create a new accumulator that just returns v (state comes from input)
+          let newAcc = StateResult(fun s'' -> Ok v, s'')
+          // Recurse on the rest of the list
+          let (StateResult cont) = this.Fold f newAcc ys
+          cont s'
+        | Error e, s' -> Error e, s')
+
+
+
+let stateResult = StateResultBuilder()
