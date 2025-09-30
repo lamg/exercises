@@ -91,7 +91,13 @@ type TmVar = string // term variable (program variables that appear in expressio
 type Env = Map<TmVar, Scheme> // term variable -> type scheme
 type Subst = Map<TyVar, Type> // type variable -> inferred type
 
-type InferenceNode = InferenceNode of rule: string * input: string * output: string
+type InferenceNode =
+  | InferenceNode of rule: string * input: string * output: string
+
+  override this.ToString() =
+    let (InferenceNode(rule, input, output)) = this
+    $"{rule} {input} {output}"
+
 type InferenceTree = Tree<InferenceNode>
 
 let newLeaf rule input output : InferenceTree =
@@ -130,8 +136,11 @@ let rec applySubst (subst: Subst) (ty: Type) =
   match ty with
   | Type.Var name ->
     match subst.TryGetValue name with
+    | true, Type.Var n when n = name ->
+      // do not fall in an infinite loop when there's progress applying the substitition
+      ty
     | true, v -> applySubst subst v // ensures transitive substitution. Example `Map ["a", "b"; "b", "Int"]
-    | false, _ -> ty // leave unchanged, it means at this point there's no enough information
+    | _, _ -> ty // leave unchanged, it means at this point there's no enough information
   | Type.Arrow(t0, t1) -> Type.Arrow(applySubst subst t0, applySubst subst t1)
   | Type.Int -> ty
   | Type.Bool -> ty
@@ -276,6 +285,7 @@ let rec infer
             stateResult {
               let! subst = acc
               let! fresh = freshTyVar
+
               let nsubst = subst |> Map.add v (Type.Var fresh)
               return nsubst
             })
@@ -294,6 +304,7 @@ let rec infer
       return!
         match s.ProgramVars.TryGetValue name with
         | true, scheme ->
+
           stateResult {
             let! instantiated = instantiate (StateResult(fun _ -> Ok scheme, s))
             let output = $"{instantiated}"
@@ -395,9 +406,16 @@ let rec infer
     stateResult { return Map.empty, Type.Bool, newLeaf "T-Bool" $"{prettyEnv st.ProgramVars} {expr}" "Bool" }
 
   let st = StateResult(fun _ -> Ok(), st)
+  log $"{prettyExpr expr}"
 
   match expr with
-  | Expr.Var name -> inferVar st expr name
+  | Expr.Var name ->
+
+    stateResult {
+      let! subst, ty, tree = inferVar st expr name
+      return subst, ty, tree
+    }
+
   | Expr.Abs(parameter, body) -> inferAbs st expr parameter body
   | Expr.App(func, arg) -> inferApp st expr func arg
   | Expr.Let(var, value, body) -> inferLet expr var value body
