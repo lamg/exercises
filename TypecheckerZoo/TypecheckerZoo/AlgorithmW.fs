@@ -243,6 +243,12 @@ let rec unify t0 t1 : InferenceState<TypeVars * InferenceTree> =
 
 let prettyEnv (env: ExprVars) = prettyMap env
 
+// the generalization step is important because without it polimorphism is not possible
+// i.e. we wave
+// let id: t -> t = fun x -> x
+// (id 3, id true)
+// when `id 3` is typechecked, `id` is specialized to `int -> int`
+// and at after that `id true` will fail to check because `true` is not an `int`
 let generalize env ty =
   let rec freeTypeVarsScheme (scheme: QuantifiedType) =
     let schemeVars = set scheme.Vars
