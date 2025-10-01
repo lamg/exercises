@@ -133,29 +133,29 @@ let freshTyVar: InferenceState<string> =
     return $"t{s.Counter}"
   }
 
-let rec applySubst (subst: TypeVars) (ty: Type) =
+let rec substTypeVars (subst: TypeVars) (ty: Type) =
   match ty with
   | Type.Var name ->
     match subst.TryGetValue name with
     | true, Type.Var n when n = name ->
       // do not fall in an infinite loop when there's progress applying the substitition
       ty
-    | true, v -> applySubst subst v // ensures transitive substitution. Example `Map ["a", "b"; "b", "Int"]
+    | true, v -> substTypeVars subst v // ensures transitive substitution. Example `Map ["a", "b"; "b", "Int"]
     | _, _ -> ty // leave unchanged, it means at this point there's no enough information
-  | Type.Arrow(t0, t1) -> Type.Arrow(applySubst subst t0, applySubst subst t1)
+  | Type.Arrow(t0, t1) -> Type.Arrow(substTypeVars subst t0, substTypeVars subst t1)
   | Type.Int -> ty
   | Type.Bool -> ty
-  | Type.Tuple types -> types |> List.map (applySubst subst) |> Type.Tuple
+  | Type.Tuple types -> types |> List.map (substTypeVars subst) |> Type.Tuple
 
 let composeSubst subst0 subst1 =
   // merges subst1 into subst0. Each value of subst1 is has the type information from subst0 substituted
-  subst1 |> Map.fold (fun m k v -> m |> Map.add k (applySubst m v)) subst0
+  subst1 |> Map.fold (fun m k v -> m |> Map.add k (substTypeVars m v)) subst0
 
-let substTypeVarsInType (typeVars: TypeVars) (qType: QuantifiedType) =
-  QuantifiedType(qType.Vars, applySubst typeVars qType.Ty)
+let substTypeVarsQType (typeVars: TypeVars) (qType: QuantifiedType) =
+  QuantifiedType(qType.Vars, substTypeVars typeVars qType.Ty)
 
-let substTypeVars (typeVars: TypeVars) (env: ExprVars) =
-  env |> Map.map (fun _ -> substTypeVarsInType typeVars)
+let substTypeVarsExpr (typeVars: TypeVars) (env: ExprVars) =
+  env |> Map.map (fun _ -> substTypeVarsQType typeVars)
 
 
 let prettyMap (subst: Map<'k, 'v>) =
@@ -198,8 +198,8 @@ let rec unify t0 t1 : InferenceState<TypeVars * InferenceTree> =
   let unifyArrows ((x, y): Type * Type) ((w, z): Type * Type) =
     stateResult {
       let! s0, children0 = unify x w
-      let ySubst = applySubst s0 y
-      let zSubst = applySubst s0 z
+      let ySubst = substTypeVars s0 y
+      let zSubst = substTypeVars s0 z
       let! s1, children1 = unify ySubst zSubst
       let finalSubst = composeSubst s1 s0
       let output = prettySubst finalSubst
@@ -219,8 +219,8 @@ let rec unify t0 t1 : InferenceState<TypeVars * InferenceTree> =
             (fun acc (x, y) ->
               stateResult {
                 let! subst, trees = acc
-                let xsSubst = applySubst subst x
-                let ysSubst = applySubst subst y
+                let xsSubst = substTypeVars subst x
+                let ysSubst = substTypeVars subst y
                 let! s, tree = unify xsSubst ysSubst
                 return composeSubst s subst, tree :: trees
               })
@@ -286,7 +286,7 @@ let rec instantiate (scheme: InferenceState<QuantifiedType>) : InferenceState<Ty
 
         (StateResult(fun _ -> Ok Map.empty, st))
 
-    return applySubst subst s.Ty
+    return substTypeVars subst s.Ty
   }
 
 and inferVar (st: InferenceState<unit>) (expr: Expr) name : InferenceState<TypeVars * Type * InferenceTree> =
@@ -320,7 +320,7 @@ and inferAbs (st: InferenceState<unit>) expr (parameter: string) (body: Expr) =
     let paramScheme = QuantifiedType([], paramType)
     let newEnv = s.ProgramVars |> Map.add parameter paramScheme
     let! s0, bodyType, tree0 = infer (CounterVarState(s.Counter, newEnv)) body
-    let paramTypeSubst = applySubst s0 paramType
+    let paramTypeSubst = substTypeVars s0 paramType
     let resultType = Type.Arrow(paramTypeSubst, bodyType)
     let output = string resultType
     let tree = newBranch "T-Abs" input output [ tree0 ]
@@ -336,16 +336,16 @@ and inferApp (st: InferenceState<unit>) expr func arg =
     let resultType = Type.Var fresh
     let! s0, funcType, tree0 = infer s func
     let! s = stateResult.Get()
-    let envSubst = substTypeVars s0 s.ProgramVars
+    let envSubst = substTypeVarsExpr s0 s.ProgramVars
     let! s1, argType, tree1 = infer (CounterVarState(s.Counter, envSubst)) arg
 
-    let funcTypeSubst = applySubst s1 funcType
+    let funcTypeSubst = substTypeVars s1 funcType
     let expectedFuncType = Type.Arrow(argType, resultType)
 
     let! s2, tree2 = unify funcTypeSubst expectedFuncType
 
     let finalSubst = composeSubst s2 (composeSubst s1 s0)
-    let finalType = applySubst s2 resultType
+    let finalType = substTypeVars s2 resultType
     let output = string finalType
     let tree = newBranch "T-App" input output [ tree0; tree1; tree2 ]
     return finalSubst, finalType, tree
@@ -356,7 +356,7 @@ and inferLet (st: CounterVarState) expr var value body =
   stateResult {
     let input = $"{prettyEnv st.ProgramVars} ⊢ {expr} ⇒"
     let! s0, valueType, tree0 = infer st value
-    let envSubst = substTypeVars s0 st.ProgramVars
+    let envSubst = substTypeVarsExpr s0 st.ProgramVars
     let generalizedType = generalize envSubst valueType
 
     let newEnv = envSubst |> Map.add var generalizedType
