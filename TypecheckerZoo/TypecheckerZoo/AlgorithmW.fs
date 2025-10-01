@@ -69,7 +69,7 @@ type Type =
 let rec prettyType (ty: Type) =
   match ty with
   | Type.Var x -> x
-  | Type.Arrow(x, y) -> $"{prettyType x} -> {prettyType y}"
+  | Type.Arrow(x, y) -> $"{prettyType x} → {prettyType y}"
   | Type.Int -> "Int"
   | Type.Bool -> "Bool"
   | Type.Tuple xs -> xs |> List.map prettyType |> String.concat " * "
@@ -86,7 +86,7 @@ type Scheme =
     let (Scheme(_, ty)) = this
     ty
 
-type TyVar = string // type variable
+type TyVar = string // type variable (type variables we pass as parameters to functions)
 type TmVar = string // term variable (program variables that appear in expressions)
 type Env = Map<TmVar, Scheme> // term variable -> type scheme
 type Subst = Map<TyVar, Type> // type variable -> inferred type
@@ -131,7 +131,6 @@ let freshTyVar: StateResult<string, InferenceError, InferenceState> =
     return $"t{s.Counter}"
   }
 
-
 let rec applySubst (subst: Subst) (ty: Type) =
   match ty with
   | Type.Var name ->
@@ -157,12 +156,12 @@ let applySubstScheme (subst: Subst) (scheme: Scheme) =
   Scheme(scheme.Vars, applySubst filteredSubst scheme.Ty)
 
 let applySubstEnv (subst: Subst) (env: Env) =
-  env |> Map.map (fun _ v -> applySubstScheme subst v)
+  env |> Map.map (fun _ -> applySubstScheme subst)
 
 
 let prettyMap (subst: Map<'k, 'v>) =
   []
-  |> Map.foldBack (fun k v acc -> $"{k} |-> {v}" :: acc) subst
+  |> Map.foldBack (fun k v acc -> $"{k} ↦ {v}" :: acc) subst
   |> String.concat ", "
 
 let prettySubst (subst: Subst) = prettyMap subst
@@ -193,7 +192,7 @@ let rec unify t0 t1 : StateResult<Subst * InferenceTree, InferenceError, Inferen
     | _ when occursCheck v ty -> StateResult(fun s -> Error(OccursCheck(v, ty)), s)
     | _ ->
       let subst = Map.ofList [ v, ty ]
-      let output = $"{v} |-> {ty}"
+      let output = $"{v} ↦ {ty}"
       let tree = newLeaf "Unify-Var" input output
       stateResult { return subst, tree }
 
@@ -299,7 +298,7 @@ let rec infer
     stateResult {
       do! st
       let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} |- {expr}"
+      let input = $"{prettyEnv s.ProgramVars} ⊢ {expr}"
 
       return!
         match s.ProgramVars.TryGetValue name with
@@ -320,7 +319,7 @@ let rec infer
     stateResult {
       do! st
       let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} |- {expr} =>"
+      let input = $"{prettyEnv s.ProgramVars} ⊢ {expr} ⇒"
       let! fresh = freshTyVar
       let paramType = Type.Var fresh
       let paramScheme = Scheme([], paramType)
@@ -337,7 +336,7 @@ let rec infer
     stateResult {
       do! st
       let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} |- {expr}"
+      let input = $"{prettyEnv s.ProgramVars} ⊢ {expr}"
       let! fresh = freshTyVar
       let resultType = Type.Var fresh
       let! s0, funcType, tree0 = infer s func
@@ -360,7 +359,7 @@ let rec infer
 
   let inferLet expr var value body =
     stateResult {
-      let input = $"{prettyEnv st.ProgramVars} |- {expr} =>"
+      let input = $"{prettyEnv st.ProgramVars} ⊢ {expr} ⇒"
       let! s0, valueType, tree0 = infer st value
       let envSubst = applySubstEnv s0 st.ProgramVars
       let generalizedType = generalize envSubst valueType
@@ -379,7 +378,7 @@ let rec infer
     stateResult {
       do! st
       let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} |- {prettyExpr expr}"
+      let input = $"{prettyEnv s.ProgramVars} ⊢ {prettyExpr expr}"
 
       let! subst, types, trees =
         exprs
@@ -406,7 +405,6 @@ let rec infer
     stateResult { return Map.empty, Type.Bool, newLeaf "T-Bool" $"{prettyEnv st.ProgramVars} {expr}" "Bool" }
 
   let st = StateResult(fun _ -> Ok(), st)
-  log $"{prettyExpr expr}"
 
   match expr with
   | Expr.Var name ->
