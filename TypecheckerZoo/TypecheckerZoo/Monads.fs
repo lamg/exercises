@@ -14,10 +14,10 @@ type StateBuilder() =
 
   member _.Run(x: State<'b, 's>) = x
 
-  member this.get() = State(fun s -> s, s)
-  member _.put newState = State(fun _ -> (), newState)
+  member this.Get() = State(fun s -> s, s)
+  member _.Put newState = State(fun _ -> (), newState)
 
-  member _.fold (f: State<'b, 's> -> 'a -> State<'b, 's>) (acc: State<'b, 's>) (xs: List<'a>) =
+  member _.Fold (f: State<'b, 's> -> 'a -> State<'b, 's>) (acc: State<'b, 's>) (xs: List<'a>) =
     let rec loop acc remaining =
       match remaining with
       | [] -> acc
@@ -38,12 +38,12 @@ type ResultBuilder() =
     | Ok x -> f x
     | Error e -> Error e
 
-  member this.fold (f: 'b -> 'a -> Result<'b, 'c>) (acc: 'b) (xs: List<'a>) =
+  member this.Fold (f: 'b -> 'a -> Result<'b, 'c>) (acc: 'b) (xs: List<'a>) =
     match xs with
     | [] -> Ok acc
     | y :: ys ->
       match f acc y with
-      | Ok m -> this.fold f m ys
+      | Ok m -> this.Fold f m ys
       | Error e -> Error e
 
 let result = ResultBuilder()

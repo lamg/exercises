@@ -4,7 +4,7 @@ open Tree
 open Monads
 
 let log (s: string) =
-  System.IO.File.AppendAllText("algorithw.log", $"{s}\n")
+  System.IO.File.AppendAllText("algorithmw.log", $"{s}\n")
 
 // Lambda calculus three syntactic constructions (Var, Abs and App)
 // the additional constructions are added to make easier to the expression of
