@@ -50,6 +50,10 @@ let result = ResultBuilder()
 
 type StateResult<'ok, 'err, 's> = StateResult of ('s -> Result<'ok, 'err> * 's)
 
+let runStateResult (st: StateResult<'ok, 'err, 's>) (x: 's) =
+  let (StateResult f) = st
+  f x
+
 type StateResultBuilder() =
   member _.Bind((StateResult x): StateResult<'ok, 'err, 's>, f: 'ok -> StateResult<'nok, 'err, 's>) =
     StateResult(fun s ->
@@ -87,7 +91,5 @@ type StateResultBuilder() =
           let (StateResult cont) = this.Fold f newAcc ys
           cont s'
         | Error e, s' -> Error e, s')
-
-
 
 let stateResult = StateResultBuilder()

@@ -113,21 +113,23 @@ type InferenceError =
   | TupleLengthMismatch of lengthLeft: int * lengthRight: int
   | UnboundVariable of string
 
-type InferenceState =
-  | InferenceState of counter: int * programVars: Env
+type CounterVarState =
+  | CounterVarState of counter: int * programVars: Env
 
   member this.Counter =
-    let (InferenceState(counter, _)) = this
+    let (CounterVarState(counter, _)) = this
     counter
 
   member this.ProgramVars =
-    let (InferenceState(_, programVars)) = this
+    let (CounterVarState(_, programVars)) = this
     programVars
 
-let freshTyVar: StateResult<string, InferenceError, InferenceState> =
+type InferenceState<'a> = StateResult<'a, InferenceError, CounterVarState>
+
+let freshTyVar: InferenceState<string> =
   stateResult {
     let! s = stateResult.Get()
-    do! stateResult.Put(InferenceState(s.Counter + 1, s.ProgramVars))
+    do! stateResult.Put(CounterVarState(s.Counter + 1, s.ProgramVars))
     return $"t{s.Counter}"
   }
 
@@ -175,7 +177,7 @@ let prettySubst (subst: Subst) = prettyMap subst
 
 // tuple unification requires component-wise unification
 
-let rec unify t0 t1 : StateResult<Subst * InferenceTree, InferenceError, InferenceState> =
+let rec unify t0 t1 : InferenceState<Subst * InferenceTree> =
   let input = $"{t0} {t1}"
 
   // prevents infinite types by ensuring that a type variable doesn’t appear within the type it’s being unified with.
@@ -225,7 +227,7 @@ let rec unify t0 t1 : StateResult<Subst * InferenceTree, InferenceError, Inferen
                 let! s, tree = unify xsSubst ysSubst
                 return composeSubst s subst, tree :: trees
               })
-            (StateResult(fun _ -> Ok(Map.empty, []), InferenceState(0, Map.empty)))
+            (StateResult(fun _ -> Ok(Map.empty, []), CounterVarState(0, Map.empty)))
 
         let output = prettySubst subst
         let tree = newBranch "Unify-Tuple" input output children
@@ -268,147 +270,143 @@ let generalize env ty =
 
   Scheme(freeVars, ty)
 
-let rec infer
-  (st: InferenceState)
-  (expr: Expr)
-  : StateResult<Subst * Type * InferenceTree, InferenceError, InferenceState> =
-  let instantiate (scheme: StateResult<Scheme, InferenceError, InferenceState>) =
-    stateResult {
-      let! s = scheme
-      let! st = stateResult.Get()
+let rec instantiate (scheme: InferenceState<Scheme>) : InferenceState<Type> =
+  stateResult {
+    let! s = scheme
+    let! st = stateResult.Get()
 
-      let! subst =
-        s.Vars
-        |> stateResult.Fold
-          (fun (acc: StateResult<Subst, InferenceError, InferenceState>) v ->
-            stateResult {
-              let! subst = acc
-              let! fresh = freshTyVar
-
-              let nsubst = subst |> Map.add v (Type.Var fresh)
-              return nsubst
-            })
-
-          (StateResult(fun _ -> Ok Map.empty, st))
-
-      return applySubst subst s.Ty
-    }
-
-  let inferVar (st: StateResult<unit, InferenceError, InferenceState>) (expr: Expr) name =
-    stateResult {
-      do! st
-      let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} ⊢ {expr}"
-
-      return!
-        match s.ProgramVars.TryGetValue name with
-        | true, scheme ->
-
+    let! subst =
+      s.Vars
+      |> stateResult.Fold
+        (fun (acc: InferenceState<Subst>) v ->
           stateResult {
-            let! instantiated = instantiate (StateResult(fun _ -> Ok scheme, s))
-            let output = $"{instantiated}"
-            let tree = newLeaf "T-Var" input output
-            return Map.empty, instantiated, tree
-          }
+            let! subst = acc
+            let! fresh = freshTyVar
 
-        | _, _ -> StateResult(fun _ -> Error(InferenceError.UnboundVariable name), s)
-    }
+            let nsubst = subst |> Map.add v (Type.Var fresh)
+            return nsubst
+          })
 
+        (StateResult(fun _ -> Ok Map.empty, st))
 
-  let inferAbs (st: StateResult<unit, InferenceError, InferenceState>) expr (parameter: string) (body: Expr) =
-    stateResult {
-      do! st
-      let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} ⊢ {expr} ⇒"
-      let! fresh = freshTyVar
-      let paramType = Type.Var fresh
-      let paramScheme = Scheme([], paramType)
-      let newEnv = s.ProgramVars |> Map.add parameter paramScheme
-      let! s0, bodyType, tree0 = infer (InferenceState(s.Counter, newEnv)) body
-      let paramTypeSubst = applySubst s0 paramType
-      let resultType = Type.Arrow(paramTypeSubst, bodyType)
-      let output = string resultType
-      let tree = newBranch "T-Abs" input output [ tree0 ]
-      return s0, resultType, tree
-    }
+    return applySubst subst s.Ty
+  }
 
-  let inferApp (st: StateResult<unit, InferenceError, InferenceState>) expr func arg =
-    stateResult {
-      do! st
-      let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} ⊢ {expr}"
-      let! fresh = freshTyVar
-      let resultType = Type.Var fresh
-      let! s0, funcType, tree0 = infer s func
-      let! s = stateResult.Get()
-      let envSubst = applySubstEnv s0 s.ProgramVars
-      let! s1, argType, tree1 = infer (InferenceState(s.Counter, envSubst)) arg
+and inferVar (st: InferenceState<unit>) (expr: Expr) name : InferenceState<Subst * Type * InferenceTree> =
+  stateResult {
+    do! st
+    let! s = stateResult.Get()
+    let input = $"{prettyEnv s.ProgramVars} ⊢ {expr}"
 
-      let funcTypeSubst = applySubst s1 funcType
-      let expectedFuncType = Type.Arrow(argType, resultType)
+    return!
+      match s.ProgramVars.TryGetValue name with
+      | true, scheme ->
 
-      let! s2, tree2 = unify funcTypeSubst expectedFuncType
+        stateResult {
+          let! instantiated = instantiate (StateResult(fun _ -> Ok scheme, s))
+          let output = $"{instantiated}"
+          let tree = newLeaf "T-Var" input output
+          return Map.empty, instantiated, tree
+        }
 
-      let finalSubst = composeSubst s2 (composeSubst s1 s0)
-      let finalType = applySubst s2 resultType
-      let output = string finalType
-      let tree = newBranch "T-App" input output [ tree0; tree1; tree2 ]
-      return finalSubst, finalType, tree
-    }
+      | _, _ -> StateResult(fun _ -> Error(InferenceError.UnboundVariable name), s)
+  }
 
 
-  let inferLet expr var value body =
-    stateResult {
-      let input = $"{prettyEnv st.ProgramVars} ⊢ {expr} ⇒"
-      let! s0, valueType, tree0 = infer st value
-      let envSubst = applySubstEnv s0 st.ProgramVars
-      let generalizedType = generalize envSubst valueType
+and inferAbs (st: InferenceState<unit>) expr (parameter: string) (body: Expr) =
+  stateResult {
+    do! st
+    let! s = stateResult.Get()
+    let input = $"{prettyEnv s.ProgramVars} ⊢ {expr} ⇒"
+    let! fresh = freshTyVar
+    let paramType = Type.Var fresh
+    let paramScheme = Scheme([], paramType)
+    let newEnv = s.ProgramVars |> Map.add parameter paramScheme
+    let! s0, bodyType, tree0 = infer (CounterVarState(s.Counter, newEnv)) body
+    let paramTypeSubst = applySubst s0 paramType
+    let resultType = Type.Arrow(paramTypeSubst, bodyType)
+    let output = string resultType
+    let tree = newBranch "T-Abs" input output [ tree0 ]
+    return s0, resultType, tree
+  }
 
-      let newEnv = envSubst |> Map.add var generalizedType
+and inferApp (st: InferenceState<unit>) expr func arg =
+  stateResult {
+    do! st
+    let! s = stateResult.Get()
+    let input = $"{prettyEnv s.ProgramVars} ⊢ {expr}"
+    let! fresh = freshTyVar
+    let resultType = Type.Var fresh
+    let! s0, funcType, tree0 = infer s func
+    let! s = stateResult.Get()
+    let envSubst = applySubstEnv s0 s.ProgramVars
+    let! s1, argType, tree1 = infer (CounterVarState(s.Counter, envSubst)) arg
 
-      let! s1, bodyType, tree1 = infer (InferenceState(st.Counter, newEnv)) body
+    let funcTypeSubst = applySubst s1 funcType
+    let expectedFuncType = Type.Arrow(argType, resultType)
 
-      let finalSubst = composeSubst s1 s0
-      let output = string bodyType
-      let tree = newBranch "T-Let" input output [ tree0; tree1 ]
-      return finalSubst, bodyType, tree
-    }
+    let! s2, tree2 = unify funcTypeSubst expectedFuncType
 
-  let inferTuple (st: StateResult<unit, InferenceError, InferenceState>) (expr: Expr) (exprs: Expr list) =
-    stateResult {
-      do! st
-      let! s = stateResult.Get()
-      let input = $"{prettyEnv s.ProgramVars} ⊢ {prettyExpr expr}"
+    let finalSubst = composeSubst s2 (composeSubst s1 s0)
+    let finalType = applySubst s2 resultType
+    let output = string finalType
+    let tree = newBranch "T-App" input output [ tree0; tree1; tree2 ]
+    return finalSubst, finalType, tree
+  }
 
-      let! subst, types, trees =
-        exprs
-        |> stateResult.Fold
-          (fun acc x ->
-            stateResult {
-              let! subst, types, trees = acc
-              let! st = stateResult.Get()
-              let! s, ty, tree = infer st x
-              let nsubst = composeSubst s subst
-              return nsubst, ty :: types, tree :: trees
-            })
-          (StateResult(fun s -> Ok(Map.empty, [], []), s))
 
-      let resultType = Type.Tuple(List.rev types)
-      let tree = newBranch "T-Tuple" input (string resultType) trees
-      return subst, resultType, tree
-    }
+and inferLet (st: CounterVarState) expr var value body =
+  stateResult {
+    let input = $"{prettyEnv st.ProgramVars} ⊢ {expr} ⇒"
+    let! s0, valueType, tree0 = infer st value
+    let envSubst = applySubstEnv s0 st.ProgramVars
+    let generalizedType = generalize envSubst valueType
 
-  let inferLitInt expr =
-    stateResult { return Map.empty, Type.Int, newLeaf "T-Int" $"{prettyEnv st.ProgramVars} {expr}" "Int" }
+    let newEnv = envSubst |> Map.add var generalizedType
 
-  let inferLitBool expr =
-    stateResult { return Map.empty, Type.Bool, newLeaf "T-Bool" $"{prettyEnv st.ProgramVars} {expr}" "Bool" }
+    let! s1, bodyType, tree1 = infer (CounterVarState(st.Counter, newEnv)) body
 
-  let st = StateResult(fun _ -> Ok(), st)
+    let finalSubst = composeSubst s1 s0
+    let output = string bodyType
+    let tree = newBranch "T-Let" input output [ tree0; tree1 ]
+    return finalSubst, bodyType, tree
+  }
+
+and inferTuple (st: InferenceState<unit>) (expr: Expr) (exprs: Expr list) =
+  stateResult {
+    do! st
+    let! s = stateResult.Get()
+    let input = $"{prettyEnv s.ProgramVars} ⊢ {prettyExpr expr}"
+
+    let! subst, types, trees =
+      exprs
+      |> stateResult.Fold
+        (fun acc x ->
+          stateResult {
+            let! subst, types, trees = acc
+            let! st = stateResult.Get()
+            let! s, ty, tree = infer st x
+            let nsubst = composeSubst s subst
+            return nsubst, ty :: types, tree :: trees
+          })
+        (StateResult(fun s -> Ok(Map.empty, [], []), s))
+
+    let resultType = Type.Tuple(List.rev types)
+    let tree = newBranch "T-Tuple" input (string resultType) trees
+    return subst, resultType, tree
+  }
+
+and inferLitInt (st: CounterVarState) expr =
+  stateResult { return Map.empty, Type.Int, newLeaf "T-Int" $"{prettyEnv st.ProgramVars} {expr}" "Int" }
+
+and inferLitBool (st: CounterVarState) expr =
+  stateResult { return Map.empty, Type.Bool, newLeaf "T-Bool" $"{prettyEnv st.ProgramVars} {expr}" "Bool" }
+
+and infer (cvState: CounterVarState) (expr: Expr) : InferenceState<Subst * Type * InferenceTree> =
+  let st = StateResult(fun _ -> Ok(), cvState)
 
   match expr with
   | Expr.Var name ->
-
     stateResult {
       let! subst, ty, tree = inferVar st expr name
       return subst, ty, tree
@@ -416,19 +414,19 @@ let rec infer
 
   | Expr.Abs(parameter, body) -> inferAbs st expr parameter body
   | Expr.App(func, arg) -> inferApp st expr func arg
-  | Expr.Let(var, value, body) -> inferLet expr var value body
-  | Expr.Lit(Lit.Bool _) as expr -> inferLitBool expr
-  | Expr.Lit(Lit.Int _) as expr -> inferLitInt expr
+  | Expr.Let(var, value, body) -> inferLet cvState expr var value body
+  | Expr.Lit(Lit.Bool _) as expr -> inferLitBool cvState expr
+  | Expr.Lit(Lit.Int _) as expr -> inferLitInt cvState expr
   | Expr.Tuple exprs -> inferTuple st expr exprs
 
-let runInference (expr: Expr) =
+let runInference (expr: Expr) : InferenceState<InferenceTree> =
   stateResult {
-    let! _, _, tree = infer (InferenceState(0, Map.empty)) expr
+    let! _, _, tree = infer (CounterVarState(0, Map.empty)) expr
     return tree
   }
 
-let inferTypeOnly (expr: Expr) =
+let inferTypeOnly (expr: Expr) : InferenceState<Type> =
   stateResult {
-    let! _, ty, _ = infer (InferenceState(0, Map.empty)) expr
+    let! _, ty, _ = infer (CounterVarState(0, Map.empty)) expr
     return ty
   }
