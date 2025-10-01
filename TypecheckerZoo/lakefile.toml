@@ -1,0 +1,7 @@
+name = "TypecheckerZoo"
+version = "0.1.0"
+defaultTargets = ["TypecheckerZoo"]
+
+[[lean_lib]]
+name = "TypecheckerZoo"
+
