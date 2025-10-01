@@ -178,6 +178,15 @@ let rec unify t0 t1 : InferenceState<TypeVars * InferenceTree> =
   let input = $"{t0} {t1}"
 
   // prevents infinite types by ensuring that a type variable doesn’t appear within the type it’s being unified with.
+  // example unify `T` with `T -> int`
+  // would produce a map `[T, T -> int]`
+  // which later would be used to substite `T` without removing `T` from the target type
+  // thus making no progress towards unification. Example:
+  // T
+  // T -> int
+  // (T -> int) -> int
+  // ((T -> int) -> int) -> int
+  // ...
   let rec occursCheck (v: string) (ty: Type) =
     match ty with
     | Type.Var v' -> v = v'
