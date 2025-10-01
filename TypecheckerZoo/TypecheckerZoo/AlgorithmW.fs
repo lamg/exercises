@@ -75,21 +75,21 @@ let rec prettyType (ty: Type) =
   | Type.Tuple xs -> xs |> List.map prettyType |> String.concat " * "
 
 
-type Scheme =
-  | Scheme of vars: List<string> * ty: Type // forall vars, ty
+type QuantifiedType =
+  | QuantifiedType of vars: List<string> * ty: Type // forall vars, ty
 
   member this.Vars =
-    let (Scheme(vars, _)) = this
+    let (QuantifiedType(vars, _)) = this
     vars
 
   member this.Ty =
-    let (Scheme(_, ty)) = this
+    let (QuantifiedType(_, ty)) = this
     ty
 
 type TyVar = string // type variable (type variables we pass as parameters to functions)
-type TmVar = string // term variable (program variables that appear in expressions)
-type Env = Map<TmVar, Scheme> // term variable -> type scheme
-type Subst = Map<TyVar, Type> // type variable -> inferred type
+type ExprVar = string // term variable (program variables that appear in expressions)
+type ExprVars = Map<ExprVar, QuantifiedType> // term variable -> type scheme
+type TypeVars = Map<TyVar, Type> // type variable -> inferred type
 
 type InferenceNode =
   | InferenceNode of rule: string * input: string * output: string
@@ -114,7 +114,7 @@ type InferenceError =
   | UnboundVariable of string
 
 type CounterVarState =
-  | CounterVarState of counter: int * programVars: Env
+  | CounterVarState of counter: int * programVars: ExprVars
 
   member this.Counter =
     let (CounterVarState(counter, _)) = this
@@ -133,7 +133,7 @@ let freshTyVar: InferenceState<string> =
     return $"t{s.Counter}"
   }
 
-let rec applySubst (subst: Subst) (ty: Type) =
+let rec applySubst (subst: TypeVars) (ty: Type) =
   match ty with
   | Type.Var name ->
     match subst.TryGetValue name with
@@ -151,14 +151,11 @@ let composeSubst subst0 subst1 =
   // merges subst1 into subst0. Each value of subst1 is has the type information from subst0 substituted
   subst1 |> Map.fold (fun m k v -> m |> Map.add k (applySubst m v)) subst0
 
-let applySubstScheme (subst: Subst) (scheme: Scheme) =
-  let filteredSubst =
-    scheme.Vars |> List.fold (fun (acc: Subst) x -> acc.Remove x) subst
+let substTypeVarsInType (typeVars: TypeVars) (qType: QuantifiedType) =
+  QuantifiedType(qType.Vars, applySubst typeVars qType.Ty)
 
-  Scheme(scheme.Vars, applySubst filteredSubst scheme.Ty)
-
-let applySubstEnv (subst: Subst) (env: Env) =
-  env |> Map.map (fun _ -> applySubstScheme subst)
+let substTypeVars (typeVars: TypeVars) (env: ExprVars) =
+  env |> Map.map (fun _ -> substTypeVarsInType typeVars)
 
 
 let prettyMap (subst: Map<'k, 'v>) =
@@ -166,7 +163,7 @@ let prettyMap (subst: Map<'k, 'v>) =
   |> Map.foldBack (fun k v acc -> $"{k} ↦ {v}" :: acc) subst
   |> String.concat ", "
 
-let prettySubst (subst: Subst) = prettyMap subst
+let prettySubst (subst: TypeVars) = prettyMap subst
 
 // unification algorithm
 
@@ -177,7 +174,7 @@ let prettySubst (subst: Subst) = prettyMap subst
 
 // tuple unification requires component-wise unification
 
-let rec unify t0 t1 : InferenceState<Subst * InferenceTree> =
+let rec unify t0 t1 : InferenceState<TypeVars * InferenceTree> =
   let input = $"{t0} {t1}"
 
   // prevents infinite types by ensuring that a type variable doesn’t appear within the type it’s being unified with.
@@ -244,15 +241,15 @@ let rec unify t0 t1 : InferenceState<Subst * InferenceTree> =
   | Type.Tuple xs, Type.Tuple ys -> unifyTuples xs ys
   | _, _ -> StateResult(fun s -> Error(UnificationFailure(t0, t1)), s)
 
-let prettyEnv (env: Env) = prettyMap env
+let prettyEnv (env: ExprVars) = prettyMap env
 
 let generalize env ty =
-  let rec freeTypeVarsScheme (scheme: Scheme) =
+  let rec freeTypeVarsScheme (scheme: QuantifiedType) =
     let schemeVars = set scheme.Vars
     let typeVars = freeTypeVars scheme.Ty
     typeVars - schemeVars
 
-  and freeTypeVarsEnv (env: Env) =
+  and freeTypeVarsEnv (env: ExprVars) =
     env.Values |> Seq.map (freeTypeVarsScheme >> set) |> Set.unionMany
 
   and freeTypeVars ty =
@@ -268,9 +265,9 @@ let generalize env ty =
     |> Set.toList
     |> List.sort
 
-  Scheme(freeVars, ty)
+  QuantifiedType(freeVars, ty)
 
-let rec instantiate (scheme: InferenceState<Scheme>) : InferenceState<Type> =
+let rec instantiate (scheme: InferenceState<QuantifiedType>) : InferenceState<Type> =
   stateResult {
     let! s = scheme
     let! st = stateResult.Get()
@@ -278,7 +275,7 @@ let rec instantiate (scheme: InferenceState<Scheme>) : InferenceState<Type> =
     let! subst =
       s.Vars
       |> stateResult.Fold
-        (fun (acc: InferenceState<Subst>) v ->
+        (fun (acc: InferenceState<TypeVars>) v ->
           stateResult {
             let! subst = acc
             let! fresh = freshTyVar
@@ -292,7 +289,7 @@ let rec instantiate (scheme: InferenceState<Scheme>) : InferenceState<Type> =
     return applySubst subst s.Ty
   }
 
-and inferVar (st: InferenceState<unit>) (expr: Expr) name : InferenceState<Subst * Type * InferenceTree> =
+and inferVar (st: InferenceState<unit>) (expr: Expr) name : InferenceState<TypeVars * Type * InferenceTree> =
   stateResult {
     do! st
     let! s = stateResult.Get()
@@ -320,7 +317,7 @@ and inferAbs (st: InferenceState<unit>) expr (parameter: string) (body: Expr) =
     let input = $"{prettyEnv s.ProgramVars} ⊢ {expr} ⇒"
     let! fresh = freshTyVar
     let paramType = Type.Var fresh
-    let paramScheme = Scheme([], paramType)
+    let paramScheme = QuantifiedType([], paramType)
     let newEnv = s.ProgramVars |> Map.add parameter paramScheme
     let! s0, bodyType, tree0 = infer (CounterVarState(s.Counter, newEnv)) body
     let paramTypeSubst = applySubst s0 paramType
@@ -339,7 +336,7 @@ and inferApp (st: InferenceState<unit>) expr func arg =
     let resultType = Type.Var fresh
     let! s0, funcType, tree0 = infer s func
     let! s = stateResult.Get()
-    let envSubst = applySubstEnv s0 s.ProgramVars
+    let envSubst = substTypeVars s0 s.ProgramVars
     let! s1, argType, tree1 = infer (CounterVarState(s.Counter, envSubst)) arg
 
     let funcTypeSubst = applySubst s1 funcType
@@ -359,7 +356,7 @@ and inferLet (st: CounterVarState) expr var value body =
   stateResult {
     let input = $"{prettyEnv st.ProgramVars} ⊢ {expr} ⇒"
     let! s0, valueType, tree0 = infer st value
-    let envSubst = applySubstEnv s0 st.ProgramVars
+    let envSubst = substTypeVars s0 st.ProgramVars
     let generalizedType = generalize envSubst valueType
 
     let newEnv = envSubst |> Map.add var generalizedType
@@ -402,7 +399,7 @@ and inferLitInt (st: CounterVarState) expr =
 and inferLitBool (st: CounterVarState) expr =
   stateResult { return Map.empty, Type.Bool, newLeaf "T-Bool" $"{prettyEnv st.ProgramVars} {expr}" "Bool" }
 
-and infer (cvState: CounterVarState) (expr: Expr) : InferenceState<Subst * Type * InferenceTree> =
+and infer (cvState: CounterVarState) (expr: Expr) : InferenceState<TypeVars * Type * InferenceTree> =
   let st = StateResult(fun _ -> Ok(), cvState)
 
   match expr with

@@ -6,7 +6,7 @@ open AlgorithmW
 
 [<Fact>]
 let ``simple instantiate`` () =
-  let scheme = Scheme([ "a" ], Type.Tuple [ Type.Var "a"; Type.Int ])
+  let scheme = QuantifiedType([ "a" ], Type.Tuple [ Type.Var "a"; Type.Int ])
   let defaultCounter = CounterVarState(0, Map.empty)
   let st = StateResult(fun s -> Ok scheme, defaultCounter)
   let expected = Type.Tuple [ Type.Var "t0"; Type.Int ]
@@ -14,7 +14,7 @@ let ``simple instantiate`` () =
   match runStateResult (instantiate st) defaultCounter with
   | Ok actual, m ->
     let programVars = Map.toList m.ProgramVars
-    Assert.Equal<List<TmVar * Scheme>>([], programVars)
+    Assert.Equal<List<ExprVar * QuantifiedType>>([], programVars)
     Assert.Equal(expected, actual)
   | Error e, _ -> Assert.Fail $"error {e}"
 
