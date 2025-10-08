@@ -9,6 +9,15 @@ let boolType =
 
 let trueVal = ValueExpr.Const("True", boolType)
 let falseVal = ValueExpr.Const("False", boolType)
+let truePat = Pattern.Const("True", boolType)
+let falsePat = Pattern.Const("False", boolType)
+
+let notFun =
+  ValueExpr.Fun(
+    Pattern.Var("x", boolType),
+    ValueExpr.Match(ValueExpr.Var("x", boolType), [ Case(falsePat, trueVal); Case(truePat, falseVal) ], boolType),
+    TypeExpr.Arrow(boolType, boolType)
+  )
 
 [<Fact>]
 let ``eval literal behaves as id`` () =
@@ -26,13 +35,16 @@ let ``eval variable`` () =
 
 [<Fact>]
 let ``eval match`` () =
-  [ ValueExpr.Match(
-      ValueExpr.Var("x", boolType),
-      [ Case(Pattern.Const "True", trueVal); Case(Pattern.Const "False", falseVal) ],
-      boolType
-    ),
+  [ ValueExpr.Match(ValueExpr.Var("x", boolType), [ Case(truePat, trueVal); Case(falsePat, falseVal) ], boolType),
     [ "x", trueVal ],
     trueVal ]
   |> List.iter (fun (expr, decls, expected) ->
     let actual = eval (Map.ofList decls) expr
+    Assert.Equal(expected, actual))
+
+[<Fact>]
+let ``eval app`` () =
+  [ ValueExpr.Let("not", notFun, ValueExpr.App("not", trueVal, boolType)), falseVal ]
+  |> List.iter (fun (expr, expected) ->
+    let actual = eval Map.empty expr
     Assert.Equal(expected, actual))

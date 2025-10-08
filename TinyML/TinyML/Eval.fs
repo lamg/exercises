@@ -8,22 +8,28 @@ let rec substitute (var: string) (expr: ValueExpr) (inExpr: ValueExpr) =
   | ValueExpr.Var(v, ty) when v = var && ty <> expr.Type ->
     failwith $"cannot substitute variable {v} of type {ty} with value of type {expr.Type}"
   | ValueExpr.Var _ -> inExpr
-  | ValueExpr.Binary(op, left, right, ty) ->
-    ValueExpr.Binary(op, substitute var expr left, substitute var expr right, ty)
-  | ValueExpr.Unary(op, right, ty) -> ValueExpr.Unary(op, substitute var expr right, ty)
+  | ValueExpr.App(f, arg, ty) -> ValueExpr.App(f, substitute var expr arg, ty)
   | ValueExpr.Fun(arg, body, ty) -> ValueExpr.Fun(arg, substitute var expr body, ty)
   | ValueExpr.Let(var, varExpr, inExpr) -> ValueExpr.Let(var, varExpr, inExpr)
   | ValueExpr.Const(_, _) -> inExpr
-  | ValueExpr.ConstFun(_, _, _) -> failwith "Not Implemented"
-  | ValueExpr.Match(expr, cases, ty) -> failwith "Not Implemented"
+  | ValueExpr.ConstFun(ctor, arg, ty) -> ValueExpr.ConstFun(ctor, substitute var expr arg, ty)
+  | ValueExpr.Match(matchExpr, cases, ty) ->
+    let newExpr = substitute var expr matchExpr
+
+    let newCases =
+      cases
+      |> List.map (fun (Case(pat, guardedExpr)) -> Case(pat, substitute var expr guardedExpr))
+
+    ValueExpr.Match(newExpr, newCases, ty)
 
 let rec matchPattern (pat: Pattern) (expr: ValueExpr) =
   match pat, expr with
-  | Pattern.Const c, ValueExpr.Const(c', _) when c = c' -> Some []
-  | Pattern.ConstFun(c, Pattern.Var x), ValueExpr.ConstFun(c', e, _) when c = c' -> Some [ x, e ]
-  | Pattern.ConstFun(c, Pattern.All), ValueExpr.ConstFun(c', _, _) when c = c' -> Some []
-  | Pattern.ConstFun(c, f), ValueExpr.ConstFun(c', e, _) when c = c' -> matchPattern f e
-  | Pattern.All, _ -> Some []
+  | Pattern.Var(x, _), _ -> Some [ x, expr ]
+  | Pattern.Const(c, _), ValueExpr.Const(c', _) when c = c' -> Some []
+  | Pattern.ConstFun(c, Pattern.Var(x, _), _), ValueExpr.ConstFun(c', e, _) when c = c' -> Some [ x, e ]
+  | Pattern.ConstFun(c, Pattern.All _, _), ValueExpr.ConstFun(c', _, _) when c = c' -> Some []
+  | Pattern.ConstFun(c, f, _), ValueExpr.ConstFun(c', e, _) when c = c' -> matchPattern f e
+  | Pattern.All _, _ -> Some []
   | _, _ -> None
 
 
@@ -32,31 +38,27 @@ let rec eval (decls: Map<string, ValueExpr>) (expr: ValueExpr) =
   | ValueExpr.Var(x, ty) ->
     match decls.TryGetValue x with
     | true, v when v.Type = ty -> v
-    | true, v when v.Type <> ty ->
-      failwith $"value doesn't match with variable type: {x} has type {ty} in {expr}, but {v} has type {v.Type} "
-    | _, _ -> failwith $"failed to evaluate: undeclared {x}"
-  | ValueExpr.Binary(op, left, right, ty) ->
-    match decls.TryGetValue op with
+    | true, v ->
+      failwith $"value doesn't match with variable type: {x} has type {ty} in {expr}, but {v} has type {v.Type}"
+    | _, _ -> failwith $"failed to evaluate: undeclared {x} in map {Map.toList decls}"
+  | ValueExpr.App(f, arg, ty) ->
+    match decls.TryGetValue f with
     | true, tyExpr ->
       match tyExpr with
-      | ValueExpr.Fun(x, ValueExpr.Fun(y, body, _), TypeExpr.Arrow(ty_x, TypeExpr.Arrow(ty_y, t_result))) when
-        ty_x = left.Type && ty_y = right.Type && t_result = ty
-        ->
-        let subst0 = substitute y right body
-        let subst1 = substitute x left subst0
-        eval decls subst1
-      | _ -> failwith $"{op} has type {ty}, but for evaluating {expr} type {expr.Type} is required"
-    | false, _ -> failwith $"not found definition for {op}"
-  | ValueExpr.Unary(op, right, ty) ->
-    match decls.TryGetValue op with
-    | true, tyExpr ->
-      match tyExpr with
-      | ValueExpr.Fun(x, body, TypeExpr.Arrow(ty_x, t_result)) when ty_x = right.Type && t_result = ty ->
-        let subst = substitute x right body
-        eval decls subst
-      | _ -> failwith $"{op} has type {ty}, but for evaluating {expr} type {expr.Type} is required"
-    | false, _ -> failwith $"not found definition for {op}"
-  | ValueExpr.Fun _ -> expr
+      | ValueExpr.Fun(pat, body, TypeExpr.Arrow(ty_x, t_result)) when ty_x = arg.Type && t_result = ty ->
+        let newDecls =
+          matchPattern pat arg
+          |> Option.defaultValue []
+          |> List.fold (fun decls (var, expr) -> Map.add var expr decls) decls
+
+        assert (newDecls.Count = decls.Count + pat.DeclarationCount())
+
+        eval newDecls body
+      | _ -> failwith $"{f} has type {ty}, but for evaluating {expr} type {expr.Type} is required"
+    | false, _ -> failwith $"not found definition for {f}"
+  | ValueExpr.Fun(pat, body, ty) ->
+    let newBody = eval decls body
+    ValueExpr.Fun(pat, newBody, ty)
   | ValueExpr.Let(var, varExpr, inExpr) ->
     let newDecls = decls |> Map.add var varExpr
     eval newDecls inExpr
