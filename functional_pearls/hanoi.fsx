@@ -1,33 +1,11 @@
+#load "peano.fsx"
+open Peano
+
 [<RequireQualifiedAccess>]
 type Tower =
   | A
   | B
   | C
-
-type Nat =
-  | Zero
-  | Succ of Nat
-
-  member this.toInt() =
-    match this with
-    | Zero -> 0
-    | Succ n -> 1 + n.toInt ()
-
-  override this.ToString() = this.toInt().ToString()
-
-  static member ofInt =
-    function
-    | 0 -> Zero
-    | n when n > 0 -> Succ(Nat.ofInt (n - 1))
-    | n -> failwith $"{n} is not a natural number"
-
-#nowarn "86"
-
-let rec (<) (x: Nat) (y: Nat) =
-  match x, y with
-  | Zero, Succ _ -> true
-  | Succ n, Succ m -> n < m
-  | _ -> false
 
 type Hanoi = { src: Tower; dest: Tower; n: Nat }
 
