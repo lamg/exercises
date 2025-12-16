@@ -51,13 +51,15 @@ let rec solve (conf: Hanoi) =
     @ [ conf.src, conf.dest ]
     @ solve { conf with src = x; n = n' }
 
-let conf3 =
+let hanoi (n: int) =
   { src = Tower.A
     dest = Tower.C
-    n = Nat.ofInt 3 }
+    n = Nat.ofInt n }
 
-let s3 = solve conf3
-printfn $"conf {conf3.src} {conf3.dest} {conf3.n}"
+let hanoi3 = hanoi 3
+
+let s3 = solve hanoi3
+printfn $"conf {hanoi3.src} {hanoi3.dest} {hanoi3.n}"
 s3 |> List.iter (fun (x, y) -> printfn $"{x} -> {y}")
 printfn "-----------------------------------------"
 
@@ -91,9 +93,9 @@ let check (conf: Hanoi) (xs: list<Tower * Tower>) =
 
 printfn "conf N | ok "
 
-List.init 5 Nat.ofInt
-|> List.iter (fun n ->
-  let conf = { src = Tower.A; dest = Tower.C; n = n }
+hanoi
+|> Seq.init 5
+|> Seq.iter (fun conf ->
   let xs = solve conf
   let ok = check conf xs
-  printfn $"conf {n} | {ok}")
+  printfn $"conf {conf.n} | {ok}")
